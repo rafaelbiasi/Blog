@@ -1,0 +1,28 @@
+<!--/*@thymesVar id="post" type="br.com.rafaelbiasi.blog.model.Post"*/-->
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{base :: layout (~{:: div})}">
+<body>
+<main class="container mt-4">
+    <div>
+        <article class="post">
+            <header>
+                <img th:if="${not #strings.isEmpty(post.imageFilePath)}" th:src="@{'/images/' + ${post.imageFilePath}}"
+                     class="img-fluid" alt="Post image" loading="lazy"/>
+                <h1 th:text="${post.title}">Title</h1>
+                <p class="meta"
+                   th:text="'Written by ' + ${post.account.name} + ' | Published at ' + ${#temporals.format(post.creation, 'dd MMM yyyy HH:mm')} + ' | Updated at ' + ${#temporals.format(post.modified, 'dd MMM yyyy HH:mm')}">
+                    Metadata</p>
+            </header>
+            <section th:text="${post.body}">body text</section>
+        </article>
+        <div sec:authorize="isAuthenticated()">
+            <a th:href="@{'/posts/' + ${post.code} + '/edit'}" class="btn btn-primary">Edit</a>
+            <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{'/posts/' + ${post.code} + '/delete'}" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
+</main>
+</body>
+</html>

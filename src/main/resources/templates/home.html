@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base :: layout (~{:: div})}">
+<body>
+<main class="container mt-4">
+    <div>
+        <div class="posts-container">
+            <article th:each="post : ${posts}" class="post mb-3">
+                <img th:if="${not #strings.isEmpty(post.imageFilePath)}" th:src="@{'/images/' + ${post.imageFilePath}}"
+                     loading="lazy" alt="Post Image" class="img-fluid"/>
+                <h2><a th:href="@{'/posts/' + ${post.code}}" th:text="${post.title}">Title</a></h2>
+                <p class="meta"
+                   th:text="'Written by ' + ${post.account.name} + ' | Published at ' + ${#temporals.format(post.creation, 'dd MMM yyyy HH:mm')} + ' | Updated at ' + ${#temporals.format(post.modified, 'dd MMM yyyy HH:mm')}">
+                    Metadata</p>
+                <p th:text="${post.body}">body text</p>
+            </article>
+        </div>
+        <div class="pagination-container">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a class="page-link" th:href="@{|/page/1|}" aria-label="First">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a class="page-link" th:href="@{|/page/${currentPage == 0 ? 1 : currentPage}|}"
+                           aria-label="Previous">
+                            <span aria-hidden="true">&lsaquo;</span>
+                        </a>
+                    </li>
+                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" class="page-item"
+                        th:classappend="${i == currentPage} ? 'active'">
+                        <a class="page-link" th:href="@{'/page/' + ${i + 1}}" th:text="${i + 1}">1</a>
+                    </li>
+                    <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{|/page/${currentPage + 1 >= totalPages ? totalPages : currentPage + 2}|}"
+                           aria-label="Next">
+                            <span aria-hidden="true">&rsaquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">
+                        <a class="page-link" th:href="@{|/page/${totalPages}|}" aria-label="Last">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</main>
+</body>
+</html>

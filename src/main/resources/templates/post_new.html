@@ -1,0 +1,37 @@
+<!--/*@thymesVar id="post" type="br.com.rafaelbiasi.blog.model.Post"*/-->
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base :: layout (~{:: div})}">
+<body>
+<main class="container mt-4">
+    <div>
+        <form action="#"
+              th:action="@{'/posts/new'}"
+              th:object="${post}"
+              enctype="multipart/form-data"
+              method="post">
+            <input type="hidden" th:field="*{creation}"/>
+            <header>
+                <h2>Write New Post</h2>
+                <img th:if="${not #strings.isEmpty(post.imageFilePath)}" th:src="@{'/images/' + *{imageFilePath}}"
+                     class="img-fluid" alt="Post image" loading="lazy"/>
+            </header>
+            <div>
+                <input id="input-file" type="file" name="file" class="btn btn-outline-info"
+                       accept="image/png, image/jpeg, image/jpg, image/bmp"/>
+            </div>
+            <div>
+                <label for="new-post-title">Title</label>
+                <input id="new-post-title" type="text" th:field="*{title}" placeholder="Title"/>
+            </div>
+            <div>
+                <label for="new-post-body">Body</label>
+                <textarea id="new-post-body" th:field="*{body}"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Publish Post</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>

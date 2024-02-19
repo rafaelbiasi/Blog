@@ -1,0 +1,45 @@
+<!--/*@thymesVar id="account" type="br.com.rafaelbiasi.blog.model.Account"*/-->
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base :: layout (~{:: div})}">
+<body>
+<main class="container mt-4">
+    <div>
+        <h2>Register New Account</h2>
+        <form action="#"
+              th:action="@{/register}"
+              th:object="${account}"
+              method="POST">
+            <div>
+                <label for="firstname" class="form-label">First Name</label>
+                <input id="firstname" type="text" th:field="*{firstName}" placeholder="First Name"
+                       class="form-control"/>
+            </div>
+            <div>
+                <label for="lastname" class="form-label">Last Name</label>
+                <input id="lastname" type="text" th:field="*{lastName}" placeholder="Last Name" class="form-control"/>
+            </div>
+            <div>
+                <label for="username" class="form-label">Username</label>
+                <input id="username" type="text" th:field="*{username}" placeholder="Username" class="form-control"
+                       th:classappend="${usernameExists} ? 'is-invalid' : ''"/>
+                <div class="invalid-feedback" th:if="${usernameExists}">Username is already taken</div>
+            </div>
+            <div>
+                <label for="email" class="form-label">Email</label>
+                <input id="email" type="text" th:field="*{email}" placeholder="Email" class="form-control"
+                       th:classappend="${emailExists} ? 'is-invalid' : ''"/>
+                <div class="invalid-feedback" th:if="${emailExists}">E-mail is already taken</div>
+            </div>
+            <div>
+                <label for="password" class="form-label">Password</label>
+                <input id="password" type="password" th:field="*{password}" placeholder="Password"
+                       class="form-control"/>
+            </div>
+            <button type="submit" class="btn btn-primary">Register!</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>

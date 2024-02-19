@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="500 Error Page">
+    <meta name="keywords" content="blog,500,error,not found">
+    <title th:text="'Blog :: 500 Error'">Blog :: 500</title>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}"/>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}">Home</a>
+    </div>
+</nav>
+<main class="container mt-4">
+    <header>
+        <h1>500 Internal Server Error</h1>
+        <hr/>
+    </header>
+    <p>Sorry, an unexpected error occurred.</p>
+</main>
+</body>
+</html>
