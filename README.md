@@ -19,7 +19,7 @@ Esta aplicação de blog foi desenvolvida utilizando a linguagem de programaçã
 - Banco de dados MySQL
 
 ### Configurando o Ambiente
-1. Clone o repositório: `git clone ...`
+1. Clone o repositório: `git clone https://github.com/rafaelbiasi/Blog.git`
 2. Certifique-se de que o MySQL está em execução e um banco de dados para a aplicação está criado.
 3. Configure as propriedades da aplicação em `src/main/resources/application.properties` com suas credenciais de banco de dados e outras configurações específicas do ambiente.
 
