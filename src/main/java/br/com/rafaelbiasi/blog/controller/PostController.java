@@ -48,6 +48,24 @@ public class PostController {
     }
 
     /**
+     * Displays the form for editing an existing blog post identified by its code.
+     *
+     * @param code  the unique code of the post to edit
+     * @param model the Spring MVC {@link Model} for passing data to the view
+     * @return the name of the view template for editing the post
+     */
+    @GetMapping("/posts/{code}/edit")
+    @PreAuthorize("isAuthenticated()")
+    public String editPost(@PathVariable String code, Model model) {
+        String logId = LogId.logId();
+        log.info("#{}={}. Entering the post edit page. Parameters [{}={}]",
+                "LogID", logId,
+                "Code", code
+        );
+        return post(logId, code, "post_edit", model);
+    }
+
+    /**
      * Handles the submission of updated post, including an optional image file.
      *
      * @param code the unique code of the post being updated
@@ -125,24 +143,6 @@ public class PostController {
     }
 
     /**
-     * Displays the form for editing an existing blog post identified by its code.
-     *
-     * @param code  the unique code of the post to edit
-     * @param model the Spring MVC {@link Model} for passing data to the view
-     * @return the name of the view template for editing the post
-     */
-    @GetMapping("/posts/{code}/edit")
-    @PreAuthorize("isAuthenticated()")
-    public String editPost(@PathVariable String code, Model model) {
-        String logId = LogId.logId();
-        log.info("#{}={}. Entering the post edit page. Parameters [{}={}]",
-                "LogID", logId,
-                "Code", code
-        );
-        return post(logId, code, "post_edit", model);
-    }
-
-    /**
      * Deletes a blog post identified by its code.
      *
      * @param code the unique code of the post to delete
@@ -171,7 +171,7 @@ public class PostController {
                     model.addAttribute("post", post);
                     return view;
                 })
-                .orElse("404");
+                .orElse("error404");
     }
 
     private AccountData getAuthenticatedAccount(String logId, Principal principal) {
