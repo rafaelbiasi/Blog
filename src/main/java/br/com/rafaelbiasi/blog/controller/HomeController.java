@@ -28,8 +28,8 @@ public class HomeController {
 
     private final PostFacade postFacade;
 
-    @GetMapping({"/", "/page/{pageNumber}"})
-    public String home(@PathVariable(name = "pageNumber", required = false) Optional<Integer> pageNumberOpt,
+    @GetMapping({"/", "/page/{page}"})
+    public String home(@PathVariable(name = "page", required = false) Optional<Integer> pageNumberOpt,
                        @RequestParam(value = "size", defaultValue = "5") int size,
                        Model model) {
         String logId = LogId.logId();
