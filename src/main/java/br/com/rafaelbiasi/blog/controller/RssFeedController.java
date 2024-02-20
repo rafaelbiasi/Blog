@@ -68,10 +68,10 @@ public class RssFeedController {
     private Channel createChannel(String logId, String baseUrl) {
         Channel channel = new Channel("rss_2.0");
         channel.setTitle("Spring Boot Blog Application");
-        channel.setDescription("My Spring Boot Blog Demo App");
+        channel.setDescription("Spring Boot Blog Application");
         channel.setLink(baseUrl);
         channel.setUri(baseUrl);
-        channel.setGenerator("Custom Sauce");
+        channel.setGenerator("Rome Tools");
         channel.setPubDate(new Date());
         log.debug("#{}={}. RSS Channel created with title: {}", "LogID", logId, channel.getTitle());
         return channel;
