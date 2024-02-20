@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,7 +26,9 @@ public class AccountData {
     String firstName;
     String lastName;
     @JsonIgnore
-    List<PostData> posts;
+    @Builder.Default
+    List<PostData> posts = new ArrayList<>();
+    @Builder.Default
     Set<RoleData> roles = new HashSet<>();
     LocalDateTime creation;
     LocalDateTime modified;

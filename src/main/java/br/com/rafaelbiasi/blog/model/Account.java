@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,8 +32,10 @@ public class Account extends ItemEntity {
     @Column(nullable = false)
     String lastName;
     @JsonIgnore
+    @Builder.Default
     @OneToMany(mappedBy = "account")
-    List<Post> posts;
+    List<Post> posts = new ArrayList<>();
+    @Builder.Default
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "account_role",
