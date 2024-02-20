@@ -2,7 +2,9 @@ package br.com.rafaelbiasi.blog.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 /**
  * Controller for handling auth page requests.
@@ -25,4 +27,11 @@ public class AuthController {
         log.info("Entering the auth page.");
         return "auth";
     }
+
+    @PostMapping("/auth/error")
+    public String loginFailureHandler(Model model) {
+        model.addAttribute("errorMessage", "A sua senha ou o seu login estão errados");
+        return "auth";
+    }
+
 }

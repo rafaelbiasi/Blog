@@ -1,5 +1,7 @@
 package br.com.rafaelbiasi.blog.config;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -9,13 +11,18 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
+@RequiredArgsConstructor
 public class WebSecurityConfig {
 
+    @Value("${security.encoding-strength}")
+    int strength = 10;
     public static final String[] PERMIT_ALL = {
             "/css/**",
             "/js/**",
@@ -26,32 +33,39 @@ public class WebSecurityConfig {
             "/page/**",
             "/rss/**",
             "/register/**",
-            "/posts/**"
+            "/posts/**",
+            "/auth",
+            "/auth/**"
     };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(WebSecurityConfig::authorizeHttpRequests)
-                .formLogin(WebSecurityConfig::formAuth)
+                .authorizeHttpRequests(this::authorizeHttpRequests)
+                .formLogin(this::formAuth)
                 .logout(LogoutConfigurer::permitAll)
                 .build();
     }
 
-    private static void authorizeHttpRequests(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auth) {
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(strength);
+    }
+
+    private void authorizeHttpRequests(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auth) {
         auth.requestMatchers(PERMIT_ALL)
                 .permitAll()
                 .anyRequest()
                 .authenticated();
     }
 
-    private static void formAuth(FormLoginConfigurer<HttpSecurity> form) {
+    private void formAuth(FormLoginConfigurer<HttpSecurity> form) {
         form.loginPage("/auth")
                 .loginProcessingUrl("/auth")
                 .usernameParameter("user")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/")
-                .failureUrl("/auth?error")
+                .failureForwardUrl("/auth/error")
                 .permitAll();
     }
 }

@@ -7,6 +7,9 @@
         <section>
             <h2>Authentication</h2>
             <form th:action="@{/auth}" method="POST" class="needs-validation" novalidate>
+                <div th:text="${errorMessage}" th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                    This is a danger alert—check it out!
+                </div>
                 <div class="mb-3">
                     <label for="user" class="form-label">Email/Username</label>
                     <input id="user" type="text" name="user" class="form-control" placeholder="Email" required>
