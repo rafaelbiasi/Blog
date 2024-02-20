@@ -48,8 +48,8 @@ A aplicação segue uma abordagem modular dividida em vários pacotes:
 Textos e imagens de exemplos gerados por IA.
 
 ## TODO
-- Testes de unidade
-- Dockerize (DockerFile/Compose)
+- Testes de unidade: em andamento
+- ~~Dockerize (DockerFile/Compose)~~
 - Comentários
 - Tags
 - Busca
