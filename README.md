@@ -49,6 +49,7 @@ Textos e imagens de exemplos gerados por IA.
 
 ## TODO
 - Testes de unidade
+- Dockerize (DockerFile/Compose)
 - Comentários
 - Tags
 - Busca
