@@ -56,7 +56,7 @@ public class PostController {
      */
     @GetMapping("/posts/{code}/edit")
     @PreAuthorize("isAuthenticated()")
-    public String editPost(@PathVariable String code, Model model) {
+    public String updatePost(@PathVariable String code, Model model) {
         String logId = LogId.logId();
         log.info("#{}={}. Entering the post edit page. Parameters [{}={}]",
                 "LogID", logId,
@@ -127,7 +127,16 @@ public class PostController {
                 "Principal", principal
         );
         try {
-            AccountData account = getAuthenticatedAccount(logId, principal);
+            log.info("#{}={}. Fetching principal. Parameters [{}={}]",
+                    "LogID", logId,
+                    "Principal", principal
+            );
+            String authUsername = principal != null ? principal.getName() : "anonymousUser";
+            AccountData account = accountFacade.findOneByEmail(authUsername)
+                    .orElseThrow(() -> {
+                        log.error("Account not found for username: {}", authUsername);
+                        return new IllegalArgumentException("Account not found");
+                    });
             log.debug("#{}={}. Principal fetched. Parameters [{}={}, {}={}]",
                     "LogID", logId,
                     "Account", account,
@@ -172,19 +181,6 @@ public class PostController {
                     return view;
                 })
                 .orElse("error404");
-    }
-
-    private AccountData getAuthenticatedAccount(String logId, Principal principal) {
-        log.info("#{}={}. Fetching principal. Parameters [{}={}]",
-                "LogID", logId,
-                "Principal", principal
-        );
-        String authUsername = principal != null ? principal.getName() : "anonymousUser";
-        return accountFacade.findOneByEmail(authUsername)
-                .orElseThrow(() -> {
-                    log.error("Account not found for username: {}", authUsername);
-                    return new IllegalArgumentException("Account not found");
-                });
     }
 
     private void processAndSavePost(String logId, PostData post, MultipartFile file) {
