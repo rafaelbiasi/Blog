@@ -20,7 +20,8 @@
         </article>
         <div sec:authorize="isAuthenticated()">
             <a th:href="@{'/posts/' + ${post.code} + '/edit'}" class="btn btn-primary">Edit</a>
-            <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{'/posts/' + ${post.code} + '/delete'}" class="btn btn-danger">Delete</a>
+            <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{'/posts/' + ${post.code} + '/delete'}"
+               class="btn btn-danger">Delete</a>
         </div>
     </div>
 </main>

@@ -27,9 +27,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Objects.requireNonNull(username, "Username or E-mail is null.");
-        Optional<Account> accountOptional = accountService.findOneByEmail(username);
+        Optional<Account> accountOptional = accountService.findOneByUsername(username);
         if (accountOptional.isEmpty()) {
-            accountOptional = accountService.findOneByUsername(username);
+            accountOptional = accountService.findOneByEmail(username);
         }
         return accountOptional.map(account -> {
                     List<GrantedAuthority> grantedAuthorities = account

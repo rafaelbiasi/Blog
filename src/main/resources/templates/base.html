@@ -18,7 +18,8 @@
         <ul class="navbar-nav ml-auto">
             <li sec:authorize="isAuthenticated()">
                 <form th:action="@{/logout}" method="POST">
-                    <button type="submit" class="nav-link btn btn-primary">Logout <span sec:authentication="name">Username</span></button>
+                    <button type="submit" class="nav-link btn btn-primary">Logout <span sec:authentication="name">Username</span>
+                    </button>
                 </form>
             </li>
             <li class="nav-item" sec:authorize="!isAuthenticated()"><a class="nav-link"

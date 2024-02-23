@@ -19,5 +19,5 @@ public interface EntityService<T> {
      * @param id the identifier of the entity to retrieve
      * @return an {@link Optional} containing the found entity or empty if no entity is found
      */
-    Optional<T> getById(long id);
+    Optional<T> findById(long id);
 }

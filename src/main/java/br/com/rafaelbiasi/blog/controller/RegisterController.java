@@ -1,8 +1,8 @@
 package br.com.rafaelbiasi.blog.controller;
 
 import br.com.rafaelbiasi.blog.data.AccountData;
+import br.com.rafaelbiasi.blog.data.RegistrationResponseData;
 import br.com.rafaelbiasi.blog.facade.AccountFacade;
-import br.com.rafaelbiasi.blog.service.impl.RegistrationResponse;
 import br.com.rafaelbiasi.blog.util.LogId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ public class RegisterController {
      * @return the name of the view template for the registration form
      */
     @GetMapping("/register")
-    public String registerForm(Model model) {
+    public String register(Model model) {
         String logId = LogId.logId();
         log.info("#{}={}. Entering register page.", "LogID", logId);
         model.addAttribute("account", new AccountData());
@@ -48,12 +48,12 @@ public class RegisterController {
      * @return a redirect URL to the home page upon successful registration, or the registration form view upon failure
      */
     @PostMapping("/register")
-    public String registerNewUser(@ModelAttribute AccountData account, Model model) {
+    public String register(@ModelAttribute AccountData account, Model model) {
         String logId = LogId.logId();
         log.info("#{}={}. Saving new user. Parameters: [{}={}]", "LogID", logId, "Account", account);
         try {
-            RegistrationResponse registrationResponse = accountFacade.attemptUserRegistration(account);
-            if (registrationResponse.failed()) {
+            RegistrationResponseData registrationResponse = accountFacade.attemptUserRegistration(account);
+            if (registrationResponse.fail()) {
                 model.addAttribute("usernameExists", registrationResponse.usernameExists());
                 model.addAttribute("emailExists", registrationResponse.emailExists());
                 model.addAttribute("account", new AccountData());

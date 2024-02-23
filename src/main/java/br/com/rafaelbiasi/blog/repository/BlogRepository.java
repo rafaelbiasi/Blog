@@ -10,7 +10,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  * This interface is marked with {@link NoRepositoryBean} to indicate that Spring Data JPA
  * should not create an implementation instance at runtime. Instead, it serves as a base
  * for other repository interfaces for specific entity types.
- *
+ * <p>
  * By extending both {@link JpaRepository} and {@link PagingAndSortingRepository},
  * it provides CRUD operations, pagination, and sorting capabilities for entity management.
  *

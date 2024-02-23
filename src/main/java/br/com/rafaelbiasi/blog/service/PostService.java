@@ -21,7 +21,7 @@ public interface PostService extends EntityService<Post> {
      *
      * @return a {@link List} of {@link Post} entities
      */
-    List<Post> getAll();
+    List<Post> findAll();
 
     /**
      * Retrieves a page of {@link Post} entities according to the given {@link Pageable} object.
@@ -30,7 +30,7 @@ public interface PostService extends EntityService<Post> {
      * @param pageable a {@link Pageable} instance specifying the pagination and sorting criteria
      * @return a {@link Page} of {@link Post} entities
      */
-    Page<Post> getAll(Pageable pageable);
+    Page<Post> findAll(Pageable pageable);
 
     /**
      * Saves a {@link Post} entity to the persistent store.
@@ -47,9 +47,9 @@ public interface PostService extends EntityService<Post> {
      * Implementations should ensure that the post, along with any associated entities, is properly removed
      * from the persistent store.
      *
-     * @param post the {@link Post} entity to delete
+     * @param code the {@link Post} entity to delete
      */
-    void delete(Post post);
+    void delete(String code);
 
     /**
      * Retrieves a {@link Post} entity by its unique code.
@@ -58,5 +58,5 @@ public interface PostService extends EntityService<Post> {
      * @param code the unique code of the post to retrieve
      * @return an {@link Optional} containing the found {@link Post} or empty if none found
      */
-    Optional<Post> getByCode(String code);
+    Optional<Post> findByCode(String code);
 }

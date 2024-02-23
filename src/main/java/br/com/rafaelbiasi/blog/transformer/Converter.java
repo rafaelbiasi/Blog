@@ -19,6 +19,7 @@ public interface Converter<S, T> {
 
     default List<T> convertAll(List<S> sources) {
         log.debug("Converting list of sources. Total elements: {}", sources == null ? 0 : sources.size());
+
         if (sources == null) {
             return new ArrayList<>();
         }

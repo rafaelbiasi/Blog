@@ -18,6 +18,6 @@ public class AccountCodeMapper implements Mapper<AccountData, Account> {
 
     @Override
     public void map(AccountData source, Account target) throws ConversionException {
-        accountCodeBidiMapper.reverseMap(source,target);
+        accountCodeBidiMapper.reverseMap(source, target);
     }
 }

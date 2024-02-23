@@ -1,16 +1,17 @@
-package br.com.rafaelbiasi.blog.service.impl;
+package br.com.rafaelbiasi.blog.data;
 
-public record RegistrationResponse(
+import lombok.Builder;
+
+@Builder
+public record RegistrationResponseData(
         boolean usernameExists,
         boolean emailExists
 ) {
-
     public boolean success() {
         return !usernameExists && !emailExists;
     }
 
-    public boolean failed() {
+    public boolean fail() {
         return usernameExists || emailExists;
     }
-
 }

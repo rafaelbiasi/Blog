@@ -7,6 +7,7 @@ import br.com.rafaelbiasi.blog.service.AccountService;
 import br.com.rafaelbiasi.blog.service.FileService;
 import br.com.rafaelbiasi.blog.service.PostService;
 import br.com.rafaelbiasi.blog.service.RoleService;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -33,7 +34,7 @@ public class InitialData implements CommandLineRunner {
     @Override
     public void run(String... args) {
         try {
-            if (postService.getAll().isEmpty()) {
+            if (postService.findAll().isEmpty()) {
                 log.info("Starting application data initialization");
                 fileService.init();
                 log.info("File service initialization completed");
@@ -52,14 +53,14 @@ public class InitialData implements CommandLineRunner {
         log.info("Creating default roles");
         Role role1 = createRole("ROLE_USER");
         Role role2 = createRole("ROLE_ADMIN");
-        return new RolesResult(role1, role2);
+        return RolesResult.builder().role1(role1).role2(role2).build();
     }
 
     private AccountsResult createAccounts(RolesResult roles) {
         log.info("Creating default accounts");
         Account account1 = createAccount("User", "Resu", "user@domain.com", "user", "resu", roles.role1());
         Account account2 = createAccount("Admin", "Nimda", "admin@domain.com", "admin", "nimda", roles.role2());
-        return new AccountsResult(account1, account2);
+        return AccountsResult.builder().account1(account1).account2(account2).build();
     }
 
     private void createPosts(AccountsResult result) {
@@ -123,9 +124,11 @@ public class InitialData implements CommandLineRunner {
 
     }
 
+    @Builder
     record AccountsResult(Account account1, Account account2) {
     }
 
+    @Builder
     record RolesResult(Role role1, Role role2) {
     }
 }

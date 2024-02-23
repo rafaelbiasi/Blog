@@ -12,18 +12,19 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class ImageControllerTest {
 
     private ImageController imageController;
+    private AutoCloseable closeable;
     @Mock
     private FileFacade fileFacade;
     @Mock
     private ServletContext servletContext;
     @Mock
     private Resource resource;
-    private AutoCloseable closeable;
 
     @BeforeEach
     void setUp() {
@@ -46,6 +47,7 @@ class ImageControllerTest {
         ResponseEntity<Resource> image = imageController.image(imageURI);
         //THEN
         Assertions.assertEquals(resource, image.getBody());
+        verify(fileFacade).load(imageURI);
     }
 
     @Test
@@ -77,5 +79,13 @@ class ImageControllerTest {
         ResponseEntity<Resource> image = imageController.image(imageURI);
         //THEN
         Assertions.assertEquals(HttpStatusCode.valueOf(500), image.getStatusCode());
+        verify(fileFacade).load(imageURI);
+    }
+
+    //@Test
+    void template() {
+        //GIVEN
+        //WHEN
+        //THEN
     }
 }

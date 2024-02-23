@@ -3,13 +3,17 @@ package br.com.rafaelbiasi.blog.model;
 import br.com.rafaelbiasi.blog.entity.ItemEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
 @Setter
+@SuperBuilder
 @NoArgsConstructor
-@Builder
 @AllArgsConstructor
 @Table(name = "post")
 @DiscriminatorValue("post")

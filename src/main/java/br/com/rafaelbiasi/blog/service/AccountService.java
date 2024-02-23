@@ -1,7 +1,7 @@
 package br.com.rafaelbiasi.blog.service;
 
 import br.com.rafaelbiasi.blog.model.Account;
-import br.com.rafaelbiasi.blog.service.impl.RegistrationResponse;
+import br.com.rafaelbiasi.blog.model.RegistrationResponse;
 
 import java.util.Optional;
 

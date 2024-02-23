@@ -1,7 +1,7 @@
 package br.com.rafaelbiasi.blog.service.impl;
 
 import br.com.rafaelbiasi.blog.model.Account;
-import br.com.rafaelbiasi.blog.model.Role;
+import br.com.rafaelbiasi.blog.model.RegistrationResponse;
 import br.com.rafaelbiasi.blog.repository.AccountRepository;
 import br.com.rafaelbiasi.blog.repository.RoleRepository;
 import br.com.rafaelbiasi.blog.service.AccountService;
@@ -14,10 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 @Slf4j
 @Service
@@ -33,7 +32,7 @@ public class AccountServiceImpl implements AccountService {
     private final RoleRepository roleRepository;
 
     @Override
-    public Optional<Account> getById(long id) {
+    public Optional<Account> findById(long id) {
         return accountRepository.findById(id);
     }
 
@@ -41,9 +40,7 @@ public class AccountServiceImpl implements AccountService {
     public Account save(Account account) {
         Objects.requireNonNull(account, "Account is null.");
         if (isNewAccountSpec.andNot(hasRolesSpec).isSatisfiedBy(account)) {
-            Set<Role> roles = new HashSet<>();
-            roleRepository.findByName("ROLE_USER").ifPresent(roles::add);
-            account.setRoles(roles);
+            roleRepository.findByName("ROLE_USER").map(Collections::singleton).ifPresent(account::setRoles);
         }
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         return accountRepository.save(account);
@@ -64,10 +61,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public RegistrationResponse attemptUserRegistration(Account account) {
         Objects.requireNonNull(account, "Account is null.");
-        RegistrationResponse registrationResponse = new RegistrationResponse(
-                usernameExistsSpec.isSatisfiedBy(account),
-                emailExistsSpec.isSatisfiedBy(account)
-        );
+        RegistrationResponse registrationResponse = RegistrationResponse.builder()
+                .emailExists(usernameExistsSpec.isSatisfiedBy(account))
+                .usernameExists(emailExistsSpec.isSatisfiedBy(account))
+                .build();
         if (registrationResponse.success()) {
             save(account);
         }

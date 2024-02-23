@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS entity
 (
-    type     VARCHAR(31) NOT NULL,
-    id       BIGINT      NOT NULL,
+    type VARCHAR(31) NOT NULL,
+    id   BIGINT      NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -32,8 +32,8 @@ CREATE TABLE IF NOT EXISTS post
 
 CREATE TABLE IF NOT EXISTS role
 (
-    id       BIGINT    NOT NULL UNIQUE,
-    name     VARCHAR(16) UNIQUE,
+    id   BIGINT NOT NULL UNIQUE,
+    name VARCHAR(16) UNIQUE,
     PRIMARY KEY (id),
     FOREIGN KEY (id) REFERENCES entity (id)
 );

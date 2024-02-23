@@ -56,7 +56,7 @@ public class PostController {
      */
     @GetMapping("/posts/{code}/edit")
     @PreAuthorize("isAuthenticated()")
-    public String updatePost(@PathVariable String code, Model model) {
+    public String update(@PathVariable String code, Model model) {
         String logId = LogId.logId();
         log.info("#{}={}. Entering the post edit page. Parameters [{}={}]",
                 "LogID", logId,
@@ -75,7 +75,7 @@ public class PostController {
      */
     @PostMapping("/posts/{code}")
     @PreAuthorize("isAuthenticated()")
-    public String updatePost(@PathVariable String code, PostData post, @RequestParam("file") MultipartFile file) {
+    public String update(@PathVariable String code, PostData post, @RequestParam("file") MultipartFile file) {
         String logId = LogId.logId();
         log.info("#{}={}. Updating the post. Parameters [{}={}, {}={}]",
                 "LogID", logId,
@@ -99,7 +99,7 @@ public class PostController {
      */
     @GetMapping("/posts/new")
     @PreAuthorize("isAuthenticated()")
-    public String createNewPost(Model model) {
+    public String createNew(Model model) {
         String logId = LogId.logId();
         log.info("#{}={}. Entering the new post page.",
                 "LogID", logId
@@ -118,7 +118,7 @@ public class PostController {
      */
     @PostMapping("/posts/new")
     @PreAuthorize("isAuthenticated()")
-    public String createNewPost(@ModelAttribute PostData post, @RequestParam("file") MultipartFile file, Principal principal) {
+    public String createNew(@ModelAttribute PostData post, @RequestParam("file") MultipartFile file, Principal principal) {
         String logId = LogId.logId();
         log.info("#{}={}. Saving the new post. Parameters [{}={}, {}={}, {}={}]",
                 "LogID", logId,
@@ -159,13 +159,13 @@ public class PostController {
      */
     @GetMapping("/posts/{code}/delete")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String deletePost(@PathVariable String code) {
+    public String delete(@PathVariable String code) {
         String logId = LogId.logId();
         log.info("#{}={}. Deleting the post. Parameters [{}={}]",
                 "LogID", logId,
                 "Code", code
         );
-        postFacade.getByCode(code).ifPresent(postFacade::delete);
+        postFacade.delete(code);
         return "redirect:/";
     }
 

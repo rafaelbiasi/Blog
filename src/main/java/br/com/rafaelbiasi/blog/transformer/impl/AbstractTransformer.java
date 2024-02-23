@@ -51,7 +51,10 @@ public abstract class AbstractTransformer<S, T> implements Converter<S, T>, Mapp
             T instance = targetClass.getDeclaredConstructor().newInstance();
             log.debug("Created new instance of target class: {}", targetClass.getSimpleName());
             return instance;
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+        } catch (InstantiationException
+                 | IllegalAccessException
+                 | NoSuchMethodException
+                 | InvocationTargetException e) {
             log.error("Error creating instance of target class: {}", targetClass.getSimpleName(), e);
             throw new RuntimeException(e);
         }

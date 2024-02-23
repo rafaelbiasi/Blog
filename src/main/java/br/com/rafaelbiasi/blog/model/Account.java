@@ -4,6 +4,7 @@ import br.com.rafaelbiasi.blog.entity.ItemEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,12 +14,12 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@SuperBuilder
 @NoArgsConstructor
-@ToString(exclude = "password")
-@Builder
 @AllArgsConstructor
 @Table(name = "account")
 @DiscriminatorValue("account")
+@ToString(exclude = "password")
 public class Account extends ItemEntity {
 
     @Column(unique = true, nullable = false)

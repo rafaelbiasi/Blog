@@ -12,21 +12,23 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.ui.Model;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class HomeControllerTest {
 
 
     private HomeController homeController;
+    private AutoCloseable closeable;
     @Mock
     private PostFacade postFacade;
     @Mock
     private Model model;
-    private AutoCloseable closeable;
 
     @BeforeEach
     void setUp() {
@@ -43,12 +45,18 @@ class HomeControllerTest {
     @Test
     void home() {
         //GIVEN
-        Page<PostData> page = new PageImpl<>(new ArrayList<>());
+        List<PostData> postDatas = Collections.singletonList(PostData.builder().code("code").build());
+        Page<PostData> page = new PageImpl<>(postDatas);
         when(postFacade.getAll(any())).thenReturn(page);
         //WHEN
         String view = homeController.home(Optional.empty(), 5, model);
         //THEN
         Assertions.assertEquals("home", view);
+        verify(postFacade).getAll(any());
+        verify(model).addAttribute("posts", postDatas);
+        verify(model).addAttribute("currentPage", 0);
+        verify(model).addAttribute("totalPages", 1);
+        verify(model).addAttribute("size", 5);
     }
 
     @Test
@@ -59,5 +67,13 @@ class HomeControllerTest {
         String view = homeController.home(Optional.empty(), 5, model);
         //THEN
         Assertions.assertEquals("error403", view);
+        verify(postFacade).getAll(any());
+    }
+
+    //@Test
+    void template() {
+        //GIVEN
+        //WHEN
+        //THEN
     }
 }

@@ -55,9 +55,9 @@ public interface PostFacade {
      * Deletes a given blog post.
      * This method removes the post from the system, along with any associated data.
      *
-     * @param post the {@link PostData} representing the blog post to delete
+     * @param code the unique code of the post to delete
      */
-    void delete(PostData post);
+    void delete(String code);
 
     /**
      * Retrieves a blog post by its unique code.

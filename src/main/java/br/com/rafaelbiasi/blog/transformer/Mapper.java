@@ -29,9 +29,9 @@ public interface Mapper<S, T> {
     /**
      * Maps a value retrieved by a {@link Supplier} to a {@link Consumer}, typically used for setting a value on the target object.
      *
-     * @param <TT>    the type of the value to be mapped
-     * @param getter  a {@link Supplier} that provides the value to be mapped
-     * @param setter  a {@link Consumer} that accepts the mapped value
+     * @param <TT>   the type of the value to be mapped
+     * @param getter a {@link Supplier} that provides the value to be mapped
+     * @param setter a {@link Consumer} that accepts the mapped value
      */
     default <TT> void mapGet(Supplier<TT> getter, Consumer<TT> setter) {
         Optional.ofNullable(getter.get()).ifPresent(setter);
@@ -40,10 +40,10 @@ public interface Mapper<S, T> {
     /**
      * Maps a value retrieved by a {@link Supplier} to a {@link Consumer}, with an additional {@link Runnable} executed if the value is null.
      *
-     * @param <TT>    the type of the value to be mapped
-     * @param getter  a {@link Supplier} that provides the value to be mapped
-     * @param setter  a {@link Consumer} that accepts the mapped value
-     * @param orElse  a {@link Runnable} to be executed if the value provided by getter is null
+     * @param <TT>   the type of the value to be mapped
+     * @param getter a {@link Supplier} that provides the value to be mapped
+     * @param setter a {@link Consumer} that accepts the mapped value
+     * @param orElse a {@link Runnable} to be executed if the value provided by getter is null
      */
     default <TT> void mapGet(Supplier<TT> getter, Consumer<TT> setter, Runnable orElse) {
         Optional.ofNullable(getter.get()).ifPresentOrElse(setter, orElse);
@@ -52,11 +52,11 @@ public interface Mapper<S, T> {
     /**
      * Maps a value retrieved by a {@link Supplier}, transforms it using a {@link Function}, and then applies it to a {@link Consumer}.
      *
-     * @param <ST>           the source type of the value to be mapped
-     * @param <TT>           the target type of the mapped value
-     * @param getter         a {@link Supplier} that provides the source value
+     * @param <ST>            the source type of the value to be mapped
+     * @param <TT>            the target type of the mapped value
+     * @param getter          a {@link Supplier} that provides the source value
      * @param getterConverter a {@link Function} that transforms the source value to the target value type
-     * @param setter         a {@link Consumer} that accepts the transformed value
+     * @param setter          a {@link Consumer} that accepts the transformed value
      */
     default <ST, TT> void mapGet(Supplier<ST> getter, Function<ST, TT> getterConverter, Consumer<TT> setter) {
         Optional.ofNullable(getter.get()).map(getterConverter).ifPresent(setter);
@@ -66,12 +66,12 @@ public interface Mapper<S, T> {
      * Maps a value retrieved by a {@link Supplier}, transforms it using a {@link Function}, and then applies it to a {@link Consumer}.
      * If the value is null, an additional {@link Runnable} is executed.
      *
-     * @param <ST>           the source type of the value to be mapped
-     * @param <TT>           the target type of the mapped value
-     * @param getter         a {@link Supplier} that provides the source value
+     * @param <ST>            the source type of the value to be mapped
+     * @param <TT>            the target type of the mapped value
+     * @param getter          a {@link Supplier} that provides the source value
      * @param getterConverter a {@link Function} that transforms the source value to the target value type
-     * @param setter         a {@link Consumer} that accepts the transformed value
-     * @param orElse         a {@link Runnable} to be executed if the value provided by getter is null
+     * @param setter          a {@link Consumer} that accepts the transformed value
+     * @param orElse          a {@link Runnable} to be executed if the value provided by getter is null
      */
     default <ST, TT> void mapGet(Supplier<ST> getter, Function<ST, TT> getterConverter, Consumer<TT> setter, Runnable orElse) {
         Optional.ofNullable(getter.get()).map(getterConverter).ifPresentOrElse(setter, orElse);

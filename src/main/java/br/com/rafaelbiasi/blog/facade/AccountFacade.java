@@ -1,7 +1,8 @@
 package br.com.rafaelbiasi.blog.facade;
 
 import br.com.rafaelbiasi.blog.data.AccountData;
-import br.com.rafaelbiasi.blog.service.impl.RegistrationResponse;
+import br.com.rafaelbiasi.blog.data.RegistrationResponseData;
+import br.com.rafaelbiasi.blog.model.RegistrationResponse;
 
 import java.util.Optional;
 
@@ -37,5 +38,5 @@ public interface AccountFacade {
      * @param account the {@link AccountData} containing the registration information
      * @return a {@link RegistrationResponse} containing the outcome of the registration attempt, including success status.
      */
-    RegistrationResponse attemptUserRegistration(AccountData account);
+    RegistrationResponseData attemptUserRegistration(AccountData account);
 }

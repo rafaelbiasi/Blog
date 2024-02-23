@@ -19,7 +19,7 @@ import java.util.Set;
 public class AccountData {
 
     @EqualsAndHashCode.Include
-    long code;
+    Long code;
     String email;
     String username;
     String password;
@@ -36,5 +36,4 @@ public class AccountData {
     public String getName() {
         return getFirstName() + " " + getLastName();
     }
-
 }

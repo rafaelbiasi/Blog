@@ -52,76 +52,75 @@ class PostControllerTest {
     @Test
     void post() {
         //GIVEN
-        String code = "title-code";
-        when(postFacade.getByCode(code)).thenReturn(Optional.of(PostData.builder().code(code).build()));
+        when(postFacade.getByCode("title-code")).thenReturn(Optional.of(PostData.builder().code("title-code").build()));
         //WHEN
-        String view = postController.post(code, model);
+        String view = postController.post("title-code", model);
         //THEN
         Assertions.assertEquals("post", view);
+        verify(postFacade).getByCode("title-code");
     }
 
     @Test
     void postNotFound() {
         //GIVEN
-        String code = "title-code";
-        when(postFacade.getByCode(code)).thenReturn(Optional.empty());
+        when(postFacade.getByCode("title-code")).thenReturn(Optional.empty());
         //WHEN
-        String view = postController.post(code, model);
+        String view = postController.post("title-code", model);
         //THEN
         Assertions.assertEquals("error404", view);
+        verify(postFacade).getByCode("title-code");
     }
 
     @Test
     void updatePostEdit() {
         //GIVEN
-        String code = "title-code";
-        when(postFacade.getByCode(code)).thenReturn(Optional.of(PostData.builder().code(code).build()));
+        when(postFacade.getByCode("title-code")).thenReturn(Optional.of(PostData.builder().code("title-code").build()));
         //WHEN
-        String view = postController.updatePost(code, model);
+        String view = postController.update("title-code", model);
         //THEN
         Assertions.assertEquals("post_edit", view);
+        verify(postFacade).getByCode("title-code");
     }
 
     @Test
     void updatePostEditNotFound() {
         //GIVEN
-        String code = "title-code";
-        when(postFacade.getByCode(code)).thenReturn(Optional.empty());
+        when(postFacade.getByCode("title-code")).thenReturn(Optional.empty());
         //WHEN
-        String view = postController.updatePost(code, model);
+        String view = postController.update("title-code", model);
         //THEN
         Assertions.assertEquals("error404", view);
+        verify(postFacade).getByCode("title-code");
     }
 
     @Test
     void updatePostSave() {
         //GIVEN
-        String code = "title-code";
-        PostData post = PostData.builder().code(code).build();
-        doNothing().when(postFacade).save(post);
+        PostData post = PostData.builder().code("title-code").build();
         //WHEN
-        String view = postController.updatePost(code, post, file);
+        String view = postController.update("title-code", post, file);
         //THEN
-        Assertions.assertEquals("redirect:/posts/" + code, view);
+        Assertions.assertEquals("redirect:/posts/" + "title-code", view);
+        verify(postFacade).save(post);
     }
 
     @Test
     void updatePostSaveExceptionErro500() {
         //GIVEN
-        String code = "title-code";
-        PostData post = PostData.builder().code(code).build();
+        PostData post = PostData.builder().code("title-code").build();
         doThrow(RuntimeException.class).when(postFacade).save(post);
         //WHEN
-        String view = postController.updatePost(code, post, file);
+        String view = postController.update("title-code", post, file);
         //THEN
         Assertions.assertEquals("error500", view);
+        verify(postFacade).save(post);
     }
 
     @Test
     void createNewPost() {
         //GIVEN
         //WHEN
-        String view = postController.createNewPost(model);
+        String view = postController.createNew(model);
         //THEN
         Assertions.assertEquals("post_new", view);
     }
@@ -129,47 +128,54 @@ class PostControllerTest {
     @Test
     void createNewPostSave() {
         //GIVEN
-        String code = "title-code";
-        String email = "user@domain.com";
-        PostData post = PostData.builder().code(code).build();
+        PostData post = PostData.builder().code("title-code").build();
         AccountData account = AccountData.builder().build();
-        when(user.getName()).thenReturn(email);
-        when(accountFacade.findOneByEmail(email)).thenReturn(Optional.of(account));
-        doNothing().when(postFacade).save(post);
+        when(user.getName()).thenReturn("user@domain.com");
+        when(accountFacade.findOneByEmail("user@domain.com")).thenReturn(Optional.of(account));
         //WHEN
-        String view = postController.createNewPost(post, file, user);
+        String view = postController.createNew(post, file, user);
         //THEN
         Assertions.assertEquals("redirect:/", view);
+        verify(user).getName();
+        verify(accountFacade).findOneByEmail("user@domain.com");
+        verify(postFacade).save(post);
     }
 
     @Test
     void createNewPostSaveAccountNotFoundError500() {
         //GIVEN
-        String code = "title-code";
-        String email = "user@domain.com";
-        PostData post = PostData.builder().code(code).build();
-        when(user.getName()).thenReturn(email);
-        when(accountFacade.findOneByEmail(email)).thenReturn(Optional.empty());
-        doNothing().when(postFacade).save(post);
+        PostData post = PostData.builder().code("title-code").build();
+        when(user.getName()).thenReturn("user@domain.com");
+        when(accountFacade.findOneByEmail("user@domain.com")).thenReturn(Optional.empty());
         //WHEN
-        String view = postController.createNewPost(post, file, user);
+        String view = postController.createNew(post, file, user);
         //THEN
         Assertions.assertEquals("error500", view);
+        verify(user).getName();
+        verify(accountFacade).findOneByEmail("user@domain.com");
     }
 
     @Test
     void createNewPostSaveAccountExceptionError500() {
         //GIVEN
-        String code = "title-code";
-        String email = "user@domain.com";
-        PostData post = PostData.builder().code(code).build();
+        PostData post = PostData.builder().code("title-code").build();
         AccountData account = AccountData.builder().build();
-        when(user.getName()).thenReturn(email);
-        when(accountFacade.findOneByEmail(email)).thenReturn(Optional.of(account));
+        when(user.getName()).thenReturn("user@domain.com");
+        when(accountFacade.findOneByEmail("user@domain.com")).thenReturn(Optional.of(account));
         doThrow(RuntimeException.class).when(postFacade).save(post);
         //WHEN
-        String view = postController.createNewPost(post, file, user);
+        String view = postController.createNew(post, file, user);
         //THEN
         Assertions.assertEquals("error500", view);
+        verify(user).getName();
+        verify(accountFacade).findOneByEmail("user@domain.com");
+        verify(postFacade).save(post);
+    }
+
+    //@Test
+    void template() {
+        //GIVEN
+        //WHEN
+        //THEN
     }
 }

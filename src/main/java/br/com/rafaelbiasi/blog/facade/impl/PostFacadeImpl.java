@@ -37,38 +37,49 @@ public class PostFacadeImpl implements PostFacade {
 
     @Override
     public List<PostData> getAll() {
-        return postDataTransformer.convertAll(postService.getAll());
+        return postDataTransformer.convertAll(postService.findAll());
     }
 
     @Override
     public Page<PostData> getAll(Pageable pageable) {
         Objects.requireNonNull(pageable, "Pageable is null.");
-        return postService.getAll(pageable).map(postDataTransformer::convert);
+        return postService.findAll(pageable).map(postDataTransformer::convert);
     }
 
     @Override
     public Optional<PostData> getById(long id) {
-        return postService.getById(id).map(postDataTransformer::convert);
+        return postService.findById(id).map(postDataTransformer::convert);
     }
 
     @Override
     public void save(PostData postData) {
         Objects.requireNonNull(postData, "AccountData is null.");
-        postService.getByCode(postData.getCode())
-                .ifPresentOrElse(post -> postService.save(postTransformer.convertTo(postData, post)),
-                        () -> postService.save(postTransformer.convert(postData)));
+        String code = postData.getCode();
+        if (code == null) {
+            newPost(postData);
+        } else {
+            postService.findByCode(code).ifPresentOrElse(post -> updatePost(postData, post), () -> newPost(postData));
+        }
     }
 
     @Override
-    public void delete(PostData postData) {
-        Objects.requireNonNull(postData, "PostData is null.");
-        postService.getByCode(postData.getCode())
-                .ifPresent(post -> postService.delete(postTransformer.convertTo(postData, post)));
+    public void delete(String code) {
+        Objects.requireNonNull(code, "Code is null.");
+        postService.delete(code);
     }
 
     @Override
     public Optional<PostData> getByCode(String code) {
         Objects.requireNonNull(code, "Code is null.");
-        return postService.getByCode(code).map(postDataTransformer::convert);
+        return postService.findByCode(code).map(postDataTransformer::convert);
     }
+
+    private void newPost(PostData postData) {
+        postService.save(postTransformer.convert(postData));
+    }
+
+    private void updatePost(PostData postData, Post post) {
+        postService.save(postTransformer.convertTo(postData, post));
+    }
+
 }

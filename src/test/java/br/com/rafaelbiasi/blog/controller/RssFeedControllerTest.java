@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class RssFeedControllerTest {
@@ -85,6 +86,11 @@ class RssFeedControllerTest {
         Assertions.assertEquals("title1", item2.getTitle());
         Assertions.assertEquals("body1", item2.getDescription().getValue());
         Assertions.assertEquals(Date.from(date.atZone(ZoneId.systemDefault()).toInstant()), item2.getPubDate());
+        verify(postFacade).getAll(any());
+        verify(request).getRequestURI();
+        verify(request).getServerName();
+        verify(request).getServerPort();
+        verify(request).getScheme();
     }
 
     private List<PostData> createPosts(int size, LocalDateTime date) {
@@ -102,5 +108,12 @@ class RssFeedControllerTest {
                     .build());
         }
         return posts;
+    }
+
+    //@Test
+    void template() {
+        //GIVEN
+        //WHEN
+        //THEN
     }
 }
