@@ -10,24 +10,32 @@
               th:action="@{'/posts/new'}"
               th:object="${post}"
               enctype="multipart/form-data"
-              method="post">
+              method="post"
+              th:class="${#fields.hasAnyErrors()}? 'was-validated'">
             <input type="hidden" th:field="*{creation}"/>
             <header>
                 <h2>Write New Post</h2>
                 <img th:if="${not #strings.isEmpty(post.imageFilePath)}" th:src="@{'/images/' + *{imageFilePath}}"
                      class="img-fluid" alt="Post image" loading="lazy"/>
             </header>
-            <div>
+            <div class="col-md-4">
                 <input id="input-file" type="file" name="file" class="btn btn-outline-info"
                        accept="image/png, image/jpeg, image/jpg, image/bmp"/>
             </div>
-            <div>
+            <div class="col-md-4">
                 <label for="new-post-title">Title</label>
-                <input id="new-post-title" type="text" th:field="*{title}" placeholder="Title"/>
+                <input id="new-post-title" type="text" th:field="*{title}" th:errorclass="is-invalid"
+                       placeholder="Title"/>
+                <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" th:errorclass="invalid-feedback">
+                    Title error
+                </div>
             </div>
-            <div>
+            <div class="col-md-4">
                 <label for="new-post-body">Body</label>
-                <textarea id="new-post-body" th:field="*{body}"></textarea>
+                <textarea id="new-post-body" th:errorclass="is-invalid" th:field="*{body}"></textarea>
+                <div th:if="${#fields.hasErrors('body')}" th:errors="*{body}" th:errorclass="invalid-feedback">
+                    Body error
+                </div>
             </div>
             <button type="submit" class="btn btn-primary">Publish Post</button>
         </form>

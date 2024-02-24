@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
@@ -60,7 +61,7 @@ class RssFeedControllerTest {
         Pageable pageable = PageRequest.of(0, 20);
         Page<PostData> page = new PageImpl<>(posts, pageable, size);
         URI url = new URI("https://127.0.0.1/rss");
-        when(postFacade.getAll(any())).thenReturn(page);
+        when(postFacade.getAll(pageable)).thenReturn(page);
         when(request.getRequestURI()).thenReturn(url.toString());
         when(request.getServerName()).thenReturn(url.getHost());
         when(request.getServerPort()).thenReturn(url.getPort());
@@ -91,6 +92,17 @@ class RssFeedControllerTest {
         verify(request).getServerName();
         verify(request).getServerPort();
         verify(request).getScheme();
+    }
+
+    @Test
+    void rssFeedException() {
+        //GIVEN
+        when(postFacade.getAll(any())).thenThrow(new RuntimeException());
+        //WHEN
+        Executable executable = () -> rssFeedController.rssFeed(request);
+        //GIVEN
+        Assertions.assertThrows(RuntimeException.class, executable);
+        verify(postFacade).getAll(any());
     }
 
     private List<PostData> createPosts(int size, LocalDateTime date) {

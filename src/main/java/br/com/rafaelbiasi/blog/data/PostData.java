@@ -1,5 +1,6 @@
 package br.com.rafaelbiasi.blog.data;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -15,7 +16,9 @@ public class PostData {
 
     @EqualsAndHashCode.Include
     String code;
+    @NotBlank(message = "Title is mandatory")
     String title;
+    @NotBlank(message = "Body is mandatory")
     String body;
     String imageFilePath;
     AccountData account;

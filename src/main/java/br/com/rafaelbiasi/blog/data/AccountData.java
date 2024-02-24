@@ -1,6 +1,8 @@
 package br.com.rafaelbiasi.blog.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -20,10 +22,15 @@ public class AccountData {
 
     @EqualsAndHashCode.Include
     Long code;
+    @Email
     String email;
+    @NotBlank
     String username;
+    @NotBlank
     String password;
+    @NotBlank
     String firstName;
+    @NotBlank
     String lastName;
     @JsonIgnore
     @Builder.Default

@@ -6,11 +6,13 @@ import br.com.rafaelbiasi.blog.facade.AccountFacade;
 import br.com.rafaelbiasi.blog.facade.FileFacade;
 import br.com.rafaelbiasi.blog.facade.PostFacade;
 import br.com.rafaelbiasi.blog.util.LogId;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,7 +46,11 @@ public class PostController {
                 "LogID", logId,
                 "Code", code
         );
-        return post(logId, code, "post", model);
+        if (post(logId, code, model)) {
+            return "post";
+        } else {
+            return "error404";
+        }
     }
 
     /**
@@ -62,7 +68,11 @@ public class PostController {
                 "LogID", logId,
                 "Code", code
         );
-        return post(logId, code, "post_edit", model);
+        if (post(logId, code, model)) {
+            return "post_edit";
+        } else {
+            return "error404";
+        }
     }
 
     /**
@@ -75,13 +85,23 @@ public class PostController {
      */
     @PostMapping("/posts/{code}")
     @PreAuthorize("isAuthenticated()")
-    public String update(@PathVariable String code, PostData post, @RequestParam("file") MultipartFile file) {
+    public String update(
+            @Valid @ModelAttribute("post") PostData post,
+            BindingResult result,
+            Model model,
+            @PathVariable String code,
+            @RequestParam("file") MultipartFile file
+    ) {
         String logId = LogId.logId();
         log.info("#{}={}. Updating the post. Parameters [{}={}, {}={}]",
                 "LogID", logId,
                 "Code", code,
                 "File name", file.getName()
         );
+        if (result.hasErrors()) {
+            model.addAttribute("post", post);
+            return "post_edit";
+        }
         try {
             processAndSavePost(logId, post, file);
             return "redirect:/posts/" + code;
@@ -99,7 +119,7 @@ public class PostController {
      */
     @GetMapping("/posts/new")
     @PreAuthorize("isAuthenticated()")
-    public String createNew(Model model) {
+    public String create(Model model) {
         String logId = LogId.logId();
         log.info("#{}={}. Entering the new post page.",
                 "LogID", logId
@@ -118,7 +138,13 @@ public class PostController {
      */
     @PostMapping("/posts/new")
     @PreAuthorize("isAuthenticated()")
-    public String createNew(@ModelAttribute PostData post, @RequestParam("file") MultipartFile file, Principal principal) {
+    public String create(
+            @Valid @ModelAttribute("post") PostData post,
+            BindingResult result,
+            Model model,
+            @RequestParam("file") MultipartFile file,
+            Principal principal
+    ) {
         String logId = LogId.logId();
         log.info("#{}={}. Saving the new post. Parameters [{}={}, {}={}, {}={}]",
                 "LogID", logId,
@@ -126,6 +152,10 @@ public class PostController {
                 "File name", file.getName(),
                 "Principal", principal
         );
+        if (result.hasErrors()) {
+            model.addAttribute("post", post);
+            return "post_new";
+        }
         try {
             log.info("#{}={}. Fetching principal. Parameters [{}={}]",
                     "LogID", logId,
@@ -169,18 +199,17 @@ public class PostController {
         return "redirect:/";
     }
 
-    private String post(String logId, String code, String view, Model model) {
-        log.info("#{}={}. Fetching post. Parameters [{}={}, {}={}]",
+    private boolean post(String logId, String code, Model model) {
+        log.info("#{}={}. Fetching post. Parameters [{}={}]",
                 "LogID", logId,
-                "Code", code,
-                "View", view
+                "Code", code
         );
         return postFacade.getByCode(code)
                 .map(post -> {
                     model.addAttribute("post", post);
-                    return view;
+                    return true;
                 })
-                .orElse("error404");
+                .orElse(false);
     }
 
     private void processAndSavePost(String logId, PostData post, MultipartFile file) {
@@ -188,16 +217,17 @@ public class PostController {
                 "LogID", logId,
                 "Post", post,
                 "File name", file.getName());
+        //TODO: move save file and save post to Facade and add Transaction
         String originalFilename = file.getOriginalFilename();
+        post.setImageFilePath(originalFilename);
+        postFacade.save(post);
         if (originalFilename != null && !originalFilename.isEmpty()) {
             try {
                 fileFacade.save(file);
-                post.setImageFilePath(originalFilename);
             } catch (Exception e) {
                 log.error("Error processing file: {}", originalFilename, e);
                 throw e;
             }
         }
-        postFacade.save(post);
     }
 }
