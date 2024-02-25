@@ -49,4 +49,6 @@ public interface AccountService extends EntityService<Account> {
      * @return a {@link RegistrationResponse} indicating the result of the registration attempt
      */
     RegistrationResponse attemptUserRegistration(Account account);
+
+    RegistrationResponse checkEmailAndUsernameExists(Account account);
 }

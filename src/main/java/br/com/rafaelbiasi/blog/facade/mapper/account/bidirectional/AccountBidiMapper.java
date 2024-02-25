@@ -9,10 +9,12 @@ import br.com.rafaelbiasi.blog.model.Role;
 import br.com.rafaelbiasi.blog.transformer.BidirectionalMapper;
 import br.com.rafaelbiasi.blog.transformer.impl.ConversionException;
 import br.com.rafaelbiasi.blog.transformer.impl.Transformer;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class AccountBidiMapper implements BidirectionalMapper<Account, AccountData> {
 
@@ -51,6 +53,7 @@ public class AccountBidiMapper implements BidirectionalMapper<Account, AccountDa
         mapGet(source::getUsername, target::setUsername);
         mapGet(source::getFirstName, target::setFirstName);
         mapGet(source::getLastName, target::setLastName);
+        mapGet(source::getPassword, target::setPassword);
         mapGet(source::getCreation, target::setCreation);
         mapGet(source::getModified, target::setModified);
         mapGet(source::getRoles, roleTransformer::convertAll, target::setRoles);

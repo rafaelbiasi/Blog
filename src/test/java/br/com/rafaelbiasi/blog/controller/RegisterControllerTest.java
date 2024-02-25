@@ -13,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class RegisterControllerTest {
@@ -56,31 +57,14 @@ class RegisterControllerTest {
                 .emailExists(false)
                 .usernameExists(false)
                 .build();
+        when(accountFacade.checkEmailAndUsernameExists(accountData)).thenReturn(registrationResponse);
         when(accountFacade.attemptUserRegistration(accountData)).thenReturn(registrationResponse);
         //WHEN
         String view = registerController.register(accountData, bindingResult, model);
         //THEN
         Assertions.assertEquals("redirect:/", view);
-        Mockito.verify(accountFacade).attemptUserRegistration(accountData);
-    }
-
-    @Test
-    void registerEmailExist() {
-        //GIVEN
-        AccountData accountData = AccountData.builder().build();
-        RegistrationResponseData registrationResponse = RegistrationResponseData.builder()
-                .emailExists(true)
-                .usernameExists(false)
-                .build();
-        when(accountFacade.attemptUserRegistration(accountData)).thenReturn(registrationResponse);
-        //WHEN
-        String view = registerController.register(accountData, bindingResult, model);
-        //THEN
-        Assertions.assertEquals("register", view);
-        Mockito.verify(accountFacade).attemptUserRegistration(accountData);
-        Mockito.verify(model).addAttribute("usernameExists", registrationResponse.usernameExists());
-        Mockito.verify(model).addAttribute("emailExists", registrationResponse.emailExists());
-        Mockito.verify(model).addAttribute("account", new AccountData());
+        verify(accountFacade).checkEmailAndUsernameExists(accountData);
+        verify(accountFacade).attemptUserRegistration(accountData);
     }
 
     @Test
@@ -91,15 +75,34 @@ class RegisterControllerTest {
                 .emailExists(false)
                 .usernameExists(true)
                 .build();
-        when(accountFacade.attemptUserRegistration(accountData)).thenReturn(registrationResponse);
+        when(accountFacade.checkEmailAndUsernameExists(accountData)).thenReturn(registrationResponse);
+        when(bindingResult.hasErrors()).thenReturn(true);
         //WHEN
         String view = registerController.register(accountData, bindingResult, model);
         //THEN
         Assertions.assertEquals("register", view);
-        Mockito.verify(accountFacade).attemptUserRegistration(accountData);
-        Mockito.verify(model).addAttribute("usernameExists", registrationResponse.usernameExists());
-        Mockito.verify(model).addAttribute("emailExists", registrationResponse.emailExists());
-        Mockito.verify(model).addAttribute("account", new AccountData());
+        verify(accountFacade).checkEmailAndUsernameExists(accountData);
+        verify(bindingResult).hasErrors();
+        verify(model).addAttribute("account", accountData);
+    }
+
+    @Test
+    void registerEmailExist() {
+        //GIVEN
+        AccountData accountData = AccountData.builder().build();
+        RegistrationResponseData registrationResponse = RegistrationResponseData.builder()
+                .emailExists(true)
+                .usernameExists(false)
+                .build();
+        when(accountFacade.checkEmailAndUsernameExists(accountData)).thenReturn(registrationResponse);
+        when(bindingResult.hasErrors()).thenReturn(true);
+        //WHEN
+        String view = registerController.register(accountData, bindingResult, model);
+        //THEN
+        Assertions.assertEquals("register", view);
+        verify(accountFacade).checkEmailAndUsernameExists(accountData);
+        verify(bindingResult).hasErrors();
+        verify(model).addAttribute("account", accountData);
     }
 
     @Test
@@ -110,27 +113,33 @@ class RegisterControllerTest {
                 .emailExists(true)
                 .usernameExists(true)
                 .build();
-        when(accountFacade.attemptUserRegistration(accountData)).thenReturn(registrationResponse);
+        when(accountFacade.checkEmailAndUsernameExists(accountData)).thenReturn(registrationResponse);
+        when(bindingResult.hasErrors()).thenReturn(true);
         //WHEN
         String view = registerController.register(accountData, bindingResult, model);
         //THEN
         Assertions.assertEquals("register", view);
-        Mockito.verify(accountFacade).attemptUserRegistration(accountData);
-        Mockito.verify(model).addAttribute("usernameExists", registrationResponse.usernameExists());
-        Mockito.verify(model).addAttribute("emailExists", registrationResponse.emailExists());
-        Mockito.verify(model).addAttribute("account", new AccountData());
+        verify(accountFacade).checkEmailAndUsernameExists(accountData);
+        verify(bindingResult).hasErrors();
+        verify(model).addAttribute("account", accountData);
     }
 
     @Test
     void registerException() {
         //GIVEN
         AccountData accountData = AccountData.builder().build();
+        RegistrationResponseData registrationResponse = RegistrationResponseData.builder()
+                .emailExists(false)
+                .usernameExists(false)
+                .build();
+        when(accountFacade.checkEmailAndUsernameExists(accountData)).thenReturn(registrationResponse);
         when(accountFacade.attemptUserRegistration(accountData)).thenThrow(RuntimeException.class);
         //WHEN
         String view = registerController.register(accountData, bindingResult, model);
         //THEN
         Assertions.assertEquals("error403", view);
-        Mockito.verify(accountFacade).attemptUserRegistration(accountData);
+        verify(accountFacade).checkEmailAndUsernameExists(accountData);
+        verify(accountFacade).attemptUserRegistration(accountData);
     }
 
     //@Test

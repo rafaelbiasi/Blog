@@ -39,4 +39,6 @@ public interface AccountFacade {
      * @return a {@link RegistrationResponse} containing the outcome of the registration attempt, including success status.
      */
     RegistrationResponseData attemptUserRegistration(AccountData account);
+
+    RegistrationResponseData checkEmailAndUsernameExists(AccountData account);
 }

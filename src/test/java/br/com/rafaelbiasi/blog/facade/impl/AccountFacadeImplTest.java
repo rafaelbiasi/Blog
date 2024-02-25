@@ -101,6 +101,23 @@ class AccountFacadeImplTest {
         verify(accountService).attemptUserRegistration(account);
     }
 
+    @Test()
+    void checkEmailAndUsernameExists() {
+        //GIVENs
+        AccountData accountData = new AccountData();
+        Account account = new Account();
+        RegistrationResponseData resultData = new RegistrationResponseData(true, true);
+        RegistrationResponse result = new RegistrationResponse(true, true);
+        when(accountTransformer.convert(accountData)).thenReturn(account);
+        when(accountService.checkEmailAndUsernameExists(account)).thenReturn(result);
+        //WHEN
+        RegistrationResponseData registrationResponse = accountFacade.checkEmailAndUsernameExists(accountData);
+        //THEN
+        Assertions.assertEquals(resultData, registrationResponse);
+        verify(accountTransformer).convert(accountData);
+        verify(accountService).checkEmailAndUsernameExists(account);
+    }
+
     //@Test
     void template() {
         //GIVEN

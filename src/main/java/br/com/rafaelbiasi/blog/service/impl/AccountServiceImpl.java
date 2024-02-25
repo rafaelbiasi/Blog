@@ -61,13 +61,18 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public RegistrationResponse attemptUserRegistration(Account account) {
         Objects.requireNonNull(account, "Account is null.");
-        RegistrationResponse registrationResponse = RegistrationResponse.builder()
-                .emailExists(usernameExistsSpec.isSatisfiedBy(account))
-                .usernameExists(emailExistsSpec.isSatisfiedBy(account))
-                .build();
+        RegistrationResponse registrationResponse = checkEmailAndUsernameExists(account);
         if (registrationResponse.success()) {
             save(account);
         }
         return registrationResponse;
+    }
+
+    @Override
+    public RegistrationResponse checkEmailAndUsernameExists(Account account) {
+        return RegistrationResponse.builder()
+                .emailExists(emailExistsSpec.isSatisfiedBy(account))
+                .usernameExists(usernameExistsSpec.isSatisfiedBy(account))
+                .build();
     }
 }

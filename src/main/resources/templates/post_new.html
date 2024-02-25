@@ -10,8 +10,7 @@
               th:action="@{'/posts/new'}"
               th:object="${post}"
               enctype="multipart/form-data"
-              method="post"
-              th:class="${#fields.hasAnyErrors()}? 'was-validated'">
+              method="post">
             <input type="hidden" th:field="*{creation}"/>
             <header>
                 <h2>Write New Post</h2>

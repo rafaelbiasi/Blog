@@ -4,8 +4,8 @@ import br.com.rafaelbiasi.blog.data.AccountData;
 import br.com.rafaelbiasi.blog.data.RegistrationResponseData;
 import br.com.rafaelbiasi.blog.facade.AccountFacade;
 import br.com.rafaelbiasi.blog.model.Account;
-import br.com.rafaelbiasi.blog.service.AccountService;
 import br.com.rafaelbiasi.blog.model.RegistrationResponse;
+import br.com.rafaelbiasi.blog.service.AccountService;
 import br.com.rafaelbiasi.blog.transformer.impl.Transformer;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -48,7 +48,18 @@ public class AccountFacadeImpl implements AccountFacade {
     @Override
     public RegistrationResponseData attemptUserRegistration(AccountData account) {
         Objects.requireNonNull(account, "AccountData is null.");
-        RegistrationResponse registrationResponse = accountService.attemptUserRegistration(accountTransformer.convert(account));
+        Account convert = accountTransformer.convert(account);
+        RegistrationResponse registrationResponse = accountService.attemptUserRegistration(convert);
+        return RegistrationResponseData.builder()
+                .emailExists(registrationResponse.emailExists())
+                .usernameExists(registrationResponse.usernameExists())
+                .build();
+    }
+
+    @Override
+    public RegistrationResponseData checkEmailAndUsernameExists(AccountData account) {
+        Objects.requireNonNull(account, "AccountData is null.");
+        RegistrationResponse registrationResponse = accountService.checkEmailAndUsernameExists(accountTransformer.convert(account));
         return RegistrationResponseData.builder()
                 .emailExists(registrationResponse.emailExists())
                 .usernameExists(registrationResponse.usernameExists())

@@ -22,15 +22,16 @@ public class AccountData {
 
     @EqualsAndHashCode.Include
     Long code;
-    @Email
+    @Email(message = "Invalid e-mail")
+    @NotBlank(message = "E-mail is mandatory")
     String email;
-    @NotBlank
+    @NotBlank(message = "Username is mandatory")
     String username;
-    @NotBlank
+    @NotBlank(message = "Password is mandatory")
     String password;
-    @NotBlank
+    @NotBlank(message = "First name is mandatory")
     String firstName;
-    @NotBlank
+    @NotBlank(message = "Last name is mandatory")
     String lastName;
     @JsonIgnore
     @Builder.Default

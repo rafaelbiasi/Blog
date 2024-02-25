@@ -172,17 +172,16 @@ class AccountServiceImplTest {
     @Test
     void attemptUserRegistration() {
         //GIVEN
-        RegistrationResponse registrationResponse = RegistrationResponse.builder()
-                .usernameExists(false)
-                .emailExists(false)
-                .build();
         Account account = Account.builder().username("username").email("user@domain.com").build();
         when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(Optional.empty());
         when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(Optional.empty());
         //WHEN
         RegistrationResponse registrationResponseResponse = accountService.attemptUserRegistration(account);
         //THEN
-        Assertions.assertEquals(registrationResponse, registrationResponseResponse);
+        Assertions.assertEquals(RegistrationResponse.builder()
+                .usernameExists(false)
+                .emailExists(false)
+                .build(), registrationResponseResponse);
         verify(accountRepository).findOneByEmailIgnoreCase("user@domain.com");
         verify(accountRepository).findOneByUsernameIgnoreCase("username");
     }
@@ -190,17 +189,16 @@ class AccountServiceImplTest {
     @Test
     void attemptUserRegistrationUsernameExists() {
         //GIVEN
-        RegistrationResponse registrationResponse = RegistrationResponse.builder()
-                .usernameExists(false)
-                .emailExists(true)
-                .build();
         Account account = Account.builder().username("username").email("user@domain.com").build();
         when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(Optional.of(account));
         when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(Optional.empty());
         //WHEN
         RegistrationResponse registrationResponseResponse = accountService.attemptUserRegistration(account);
         //THEN
-        Assertions.assertEquals(registrationResponse, registrationResponseResponse);
+        Assertions.assertEquals(RegistrationResponse.builder()
+                .usernameExists(true)
+                .emailExists(false)
+                .build(), registrationResponseResponse);
         verify(accountRepository).findOneByEmailIgnoreCase("user@domain.com");
         verify(accountRepository).findOneByUsernameIgnoreCase("username");
     }
@@ -208,17 +206,16 @@ class AccountServiceImplTest {
     @Test
     void attemptUserRegistrationEmailExists() {
         //GIVEN
-        RegistrationResponse registrationResponse = RegistrationResponse.builder()
-                .usernameExists(true)
-                .emailExists(false)
-                .build();
         Account account = Account.builder().username("username").email("user@domain.com").build();
         when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(Optional.empty());
         when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(Optional.of(account));
         //WHEN
         RegistrationResponse registrationResponseResponse = accountService.attemptUserRegistration(account);
         //THEN
-        Assertions.assertEquals(registrationResponse, registrationResponseResponse);
+        Assertions.assertEquals(RegistrationResponse.builder()
+                .usernameExists(false)
+                .emailExists(true)
+                .build(), registrationResponseResponse);
         verify(accountRepository).findOneByEmailIgnoreCase("user@domain.com");
         verify(accountRepository).findOneByUsernameIgnoreCase("username");
     }
@@ -226,17 +223,84 @@ class AccountServiceImplTest {
     @Test
     void attemptUserRegistrationUsernameAndEmailExists() {
         //GIVEN
-        RegistrationResponse registrationResponse = RegistrationResponse.builder()
-                .usernameExists(true)
-                .emailExists(true)
-                .build();
         Account account = Account.builder().username("username").email("user@domain.com").build();
         when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(Optional.of(account));
         when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(Optional.of(account));
         //WHEN
         RegistrationResponse registrationResponseResponse = accountService.attemptUserRegistration(account);
         //THEN
-        Assertions.assertEquals(registrationResponse, registrationResponseResponse);
+        Assertions.assertEquals(RegistrationResponse.builder()
+                .usernameExists(true)
+                .emailExists(true)
+                .build(), registrationResponseResponse);
+        verify(accountRepository).findOneByEmailIgnoreCase("user@domain.com");
+        verify(accountRepository).findOneByUsernameIgnoreCase("username");
+    }
+
+   @Test
+    void checkEmailAndUsernameExists() {
+        //GIVEN
+       Account account = Account.builder().username("username").email("user@domain.com").build();
+        when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(Optional.empty());
+        when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(Optional.empty());
+        //WHEN
+        RegistrationResponse registrationResponseResponse = accountService.checkEmailAndUsernameExists(account);
+        //THEN
+        Assertions.assertEquals(RegistrationResponse.builder()
+                .usernameExists(false)
+                .emailExists(false)
+                .build(), registrationResponseResponse);
+        verify(accountRepository).findOneByEmailIgnoreCase("user@domain.com");
+        verify(accountRepository).findOneByUsernameIgnoreCase("username");
+    }
+
+   @Test
+    void checkEmailAndUsernameExistsUsernameExists() {
+        //GIVEN
+       Account account = Account.builder().username("username").email("user@domain.com").build();
+        when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(Optional.ofNullable(account));
+        when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(Optional.empty());
+        //WHEN
+        RegistrationResponse registrationResponseResponse = accountService.checkEmailAndUsernameExists(account);
+        //THEN
+        Assertions.assertEquals(RegistrationResponse.builder()
+                .usernameExists(true)
+                .emailExists(false)
+                .build(), registrationResponseResponse);
+        verify(accountRepository).findOneByEmailIgnoreCase("user@domain.com");
+        verify(accountRepository).findOneByUsernameIgnoreCase("username");
+    }
+
+   @Test
+    void checkEmailAndUsernameExistsEmailExists() {
+        //GIVEN
+        Account account = Account.builder().username("username").email("user@domain.com").build();
+       when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(Optional.empty());
+       when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(Optional.ofNullable(account));
+       //WHEN
+       RegistrationResponse registrationResponseResponse = accountService.checkEmailAndUsernameExists(account);
+       //THEN
+       Assertions.assertEquals(RegistrationResponse.builder()
+               .usernameExists(false)
+               .emailExists(true)
+               .build(), registrationResponseResponse);
+        verify(accountRepository).findOneByEmailIgnoreCase("user@domain.com");
+        verify(accountRepository).findOneByUsernameIgnoreCase("username");
+    }
+
+   @Test
+    void checkEmailAndUsernameExistsUsernameAndEmailExists() {
+        //GIVEN
+        Account account = Account.builder().username("username").email("user@domain.com").build();
+       when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(Optional.ofNullable(account));
+       when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(Optional.ofNullable(account));
+       //WHEN
+       RegistrationResponse registrationResponseResponse = accountService.checkEmailAndUsernameExists(account);
+       //THEN
+       Assertions.assertEquals(RegistrationResponse.builder()
+               .usernameExists(true)
+               .emailExists(true)
+               .build(), registrationResponseResponse);
         verify(accountRepository).findOneByEmailIgnoreCase("user@domain.com");
         verify(accountRepository).findOneByUsernameIgnoreCase("username");
     }

@@ -15,27 +15,38 @@
                 <label for="firstname" class="form-label">First Name</label>
                 <input id="firstname" type="text" th:field="*{firstName}" placeholder="First Name"
                        class="form-control"/>
+                <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" th:errorclass="invalid-feedback">
+                    Fist name error
+                </div>
             </div>
             <div>
                 <label for="lastname" class="form-label">Last Name</label>
-                <input id="lastname" type="text" th:field="*{lastName}" placeholder="Last Name" class="form-control"/>
+                <input id="lastname" type="text" th:field="*{lastName}" placeholder="Last Name" th:errorclass="is-invalid" class="form-control"/>
+                <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" th:errorclass="invalid-feedback">
+                    Last name error
+                </div>
             </div>
             <div>
                 <label for="username" class="form-label">Username</label>
-                <input id="username" type="text" th:field="*{username}" placeholder="Username" class="form-control"
-                       th:classappend="${usernameExists} ? 'is-invalid' : ''"/>
-                <div class="invalid-feedback" th:if="${usernameExists}">Username is already taken</div>
+                <input id="username" type="text" th:field="*{username}" placeholder="Username" th:errorclass="is-invalid" class="form-control"/>
+                <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" th:errorclass="invalid-feedback">
+                    Username error
+                </div>
             </div>
             <div>
                 <label for="email" class="form-label">Email</label>
-                <input id="email" type="text" th:field="*{email}" placeholder="Email" class="form-control"
-                       th:classappend="${emailExists} ? 'is-invalid' : ''"/>
-                <div class="invalid-feedback" th:if="${emailExists}">E-mail is already taken</div>
+                <input id="email" type="text" th:field="*{email}" placeholder="Email" th:errorclass="is-invalid" class="form-control"/>
+                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" th:errorclass="invalid-feedback">
+                    E-mail error
+                </div>
             </div>
             <div>
                 <label for="password" class="form-label">Password</label>
-                <input id="password" type="password" th:field="*{password}" placeholder="Password"
+                <input id="password" type="password" th:field="*{password}" th:errorclass="is-invalid" placeholder="Password"
                        class="form-control"/>
+                <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" th:errorclass="invalid-feedback">
+                    Password error
+                </div>
             </div>
             <button type="submit" class="btn btn-primary">Register!</button>
         </form>

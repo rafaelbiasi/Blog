@@ -10,8 +10,7 @@
               th:action="@{'/posts/{id}'(id=${post.code})}"
               th:object="${post}"
               enctype="multipart/form-data"
-              method="post"
-              th:class="${#fields.hasAnyErrors()}? 'was-validated'">
+              method="post">
             <input type="hidden" th:field="*{creation}"/>
             <header>
                 <h2>Update Post</h2>

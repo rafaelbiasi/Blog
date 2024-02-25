@@ -38,7 +38,7 @@ class PostControllerTest {
     @Mock
     private Principal user;
     @Mock
-    private BindingResult bindingResults;
+    private BindingResult bindingResult;
 
     @BeforeEach
     void setUp() {
@@ -100,13 +100,13 @@ class PostControllerTest {
     void updateSave() {
         //GIVEN
         PostData post = PostData.builder().code("title-code").build();
-        when(bindingResults.hasErrors()).thenReturn(false);
+        when(bindingResult.hasErrors()).thenReturn(false);
         when(file.getOriginalFilename()).thenReturn("filename.png");
         //WHEN
-        String view = postController.update(post, bindingResults, model, "code", file);
+        String view = postController.update(post, bindingResult, model, "code", file);
         //THEN
         Assertions.assertEquals("redirect:/posts/code", view);
-        verify(bindingResults).hasErrors();
+        verify(bindingResult).hasErrors();
         verify(postFacade).save(post);
         verify(file).getOriginalFilename();
         verify(fileFacade).save(file);
@@ -116,14 +116,14 @@ class PostControllerTest {
     void updateSaveFileSaveException() {
         //GIVEN
         PostData post = PostData.builder().code("title-code").build();
-        when(bindingResults.hasErrors()).thenReturn(false);
+        when(bindingResult.hasErrors()).thenReturn(false);
         when(file.getOriginalFilename()).thenReturn("filename.png");
         doThrow(RuntimeException.class).when(fileFacade).save(file);
         //WHEN
-        String view = postController.update(post, bindingResults, model, "code", file);
+        String view = postController.update(post, bindingResult, model, "code", file);
         //THEN
         Assertions.assertEquals("error500", view);
-        verify(bindingResults).hasErrors();
+        verify(bindingResult).hasErrors();
         verify(postFacade).save(post);
         verify(file).getOriginalFilename();
         verify(fileFacade).save(file);
@@ -133,13 +133,13 @@ class PostControllerTest {
     void updateSaveExceptionErro500() {
         //GIVEN
         PostData post = PostData.builder().code("title-code").build();
-        when(bindingResults.hasErrors()).thenReturn(false);
+        when(bindingResult.hasErrors()).thenReturn(false);
         doThrow(RuntimeException.class).when(postFacade).save(post);
         //WHEN
-        String view = postController.update(post, bindingResults, model, "title-code", file);
+        String view = postController.update(post, bindingResult, model, "title-code", file);
         //THEN
         Assertions.assertEquals("error500", view);
-        verify(bindingResults).hasErrors();
+        verify(bindingResult).hasErrors();
         verify(postFacade).save(post);
     }
 
@@ -147,12 +147,12 @@ class PostControllerTest {
     void updateSaveHasErrors() {
         //GIVEN
         PostData post = PostData.builder().code("title-code").build();
-        when(bindingResults.hasErrors()).thenReturn(true);
+        when(bindingResult.hasErrors()).thenReturn(true);
         //WHEN
-        String view = postController.update(post, bindingResults, model, "title-code", file);
+        String view = postController.update(post, bindingResult, model, "title-code", file);
         //THEN
         Assertions.assertEquals("post_edit", view);
-        verify(bindingResults).hasErrors();
+        verify(bindingResult).hasErrors();
     }
 
     @Test
@@ -169,15 +169,15 @@ class PostControllerTest {
         //GIVEN
         PostData post = PostData.builder().code("title-code").build();
         AccountData account = AccountData.builder().build();
-        when(bindingResults.hasErrors()).thenReturn(false);
+        when(bindingResult.hasErrors()).thenReturn(false);
         when(user.getName()).thenReturn("user@domain.com");
         when(accountFacade.findOneByEmail("user@domain.com")).thenReturn(Optional.of(account));
         when(file.getOriginalFilename()).thenReturn("filename.png");
         //WHEN
-        String view = postController.create(post, bindingResults, model, file, user);
+        String view = postController.create(post, bindingResult, model, file, user);
         //THEN
         Assertions.assertEquals("redirect:/", view);
-        verify(bindingResults).hasErrors();
+        verify(bindingResult).hasErrors();
         verify(user).getName();
         verify(accountFacade).findOneByEmail("user@domain.com");
         verify(postFacade).save(post);
@@ -190,16 +190,16 @@ class PostControllerTest {
         //GIVEN
         PostData post = PostData.builder().code("title-code").build();
         AccountData account = AccountData.builder().build();
-        when(bindingResults.hasErrors()).thenReturn(false);
+        when(bindingResult.hasErrors()).thenReturn(false);
         when(user.getName()).thenReturn("user@domain.com");
         when(accountFacade.findOneByEmail("user@domain.com")).thenReturn(Optional.of(account));
         when(file.getOriginalFilename()).thenReturn("filename.png");
         doThrow(RuntimeException.class).when(fileFacade).save(file);
         //WHEN
-        String view = postController.create(post, bindingResults, model, file, user);
+        String view = postController.create(post, bindingResult, model, file, user);
         //THEN
         Assertions.assertEquals("error500", view);
-        verify(bindingResults).hasErrors();
+        verify(bindingResult).hasErrors();
         verify(user).getName();
         verify(accountFacade).findOneByEmail("user@domain.com");
         verify(postFacade).save(post);
@@ -211,14 +211,14 @@ class PostControllerTest {
     void createSaveAccountNotFoundError500() {
         //GIVEN
         PostData post = PostData.builder().code("title-code").build();
-        when(bindingResults.hasErrors()).thenReturn(false);
+        when(bindingResult.hasErrors()).thenReturn(false);
         when(user.getName()).thenReturn("user@domain.com");
         when(accountFacade.findOneByEmail("user@domain.com")).thenReturn(Optional.empty());
         //WHEN
-        String view = postController.create(post, bindingResults, model, file, user);
+        String view = postController.create(post, bindingResult, model, file, user);
         //THEN
         Assertions.assertEquals("error500", view);
-        verify(bindingResults).hasErrors();
+        verify(bindingResult).hasErrors();
         verify(user).getName();
         verify(accountFacade).findOneByEmail("user@domain.com");
     }
@@ -228,15 +228,15 @@ class PostControllerTest {
         //GIVEN
         PostData post = PostData.builder().code("title-code").build();
         AccountData account = AccountData.builder().build();
-        when(bindingResults.hasErrors()).thenReturn(false);
+        when(bindingResult.hasErrors()).thenReturn(false);
         when(user.getName()).thenReturn("user@domain.com");
         when(accountFacade.findOneByEmail("user@domain.com")).thenReturn(Optional.of(account));
         doThrow(RuntimeException.class).when(postFacade).save(post);
         //WHEN
-        String view = postController.create(post, bindingResults, model, file, user);
+        String view = postController.create(post, bindingResult, model, file, user);
         //THEN
         Assertions.assertEquals("error500", view);
-        verify(bindingResults).hasErrors();
+        verify(bindingResult).hasErrors();
         verify(user).getName();
         verify(accountFacade).findOneByEmail("user@domain.com");
         verify(postFacade).save(post);
@@ -246,12 +246,12 @@ class PostControllerTest {
     void createSaveHasErrors() {
         //GIVEN
         PostData post = PostData.builder().code("title-code").build();
-        when(bindingResults.hasErrors()).thenReturn(true);
+        when(bindingResult.hasErrors()).thenReturn(true);
         //WHEN
-        String view = postController.create(post, bindingResults, model, file, user);
+        String view = postController.create(post, bindingResult, model, file, user);
         //THEN
         Assertions.assertEquals("post_new", view);
-        verify(bindingResults).hasErrors();
+        verify(bindingResult).hasErrors();
     }
 
     @Test
