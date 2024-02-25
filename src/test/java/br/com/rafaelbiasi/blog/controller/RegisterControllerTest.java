@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
 import static org.mockito.Mockito.when;
 
@@ -22,6 +23,8 @@ class RegisterControllerTest {
     private AccountFacade accountFacade;
     @Mock
     private Model model;
+    @Mock
+    private BindingResult bindingResult;
 
     @BeforeEach
     void setUp() {
@@ -55,7 +58,7 @@ class RegisterControllerTest {
                 .build();
         when(accountFacade.attemptUserRegistration(accountData)).thenReturn(registrationResponse);
         //WHEN
-        String view = registerController.register(accountData, model);
+        String view = registerController.register(accountData, bindingResult, model);
         //THEN
         Assertions.assertEquals("redirect:/", view);
         Mockito.verify(accountFacade).attemptUserRegistration(accountData);
@@ -71,7 +74,7 @@ class RegisterControllerTest {
                 .build();
         when(accountFacade.attemptUserRegistration(accountData)).thenReturn(registrationResponse);
         //WHEN
-        String view = registerController.register(accountData, model);
+        String view = registerController.register(accountData, bindingResult, model);
         //THEN
         Assertions.assertEquals("register", view);
         Mockito.verify(accountFacade).attemptUserRegistration(accountData);
@@ -90,7 +93,7 @@ class RegisterControllerTest {
                 .build();
         when(accountFacade.attemptUserRegistration(accountData)).thenReturn(registrationResponse);
         //WHEN
-        String view = registerController.register(accountData, model);
+        String view = registerController.register(accountData, bindingResult, model);
         //THEN
         Assertions.assertEquals("register", view);
         Mockito.verify(accountFacade).attemptUserRegistration(accountData);
@@ -109,7 +112,7 @@ class RegisterControllerTest {
                 .build();
         when(accountFacade.attemptUserRegistration(accountData)).thenReturn(registrationResponse);
         //WHEN
-        String view = registerController.register(accountData, model);
+        String view = registerController.register(accountData, bindingResult, model);
         //THEN
         Assertions.assertEquals("register", view);
         Mockito.verify(accountFacade).attemptUserRegistration(accountData);
@@ -124,7 +127,7 @@ class RegisterControllerTest {
         AccountData accountData = AccountData.builder().build();
         when(accountFacade.attemptUserRegistration(accountData)).thenThrow(RuntimeException.class);
         //WHEN
-        String view = registerController.register(accountData, model);
+        String view = registerController.register(accountData, bindingResult, model);
         //THEN
         Assertions.assertEquals("error403", view);
         Mockito.verify(accountFacade).attemptUserRegistration(accountData);

@@ -4,10 +4,13 @@ import br.com.rafaelbiasi.blog.data.AccountData;
 import br.com.rafaelbiasi.blog.data.RegistrationResponseData;
 import br.com.rafaelbiasi.blog.facade.AccountFacade;
 import br.com.rafaelbiasi.blog.util.LogId;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,15 +51,25 @@ public class RegisterController {
      * @return a redirect URL to the home page upon successful registration, or the registration form view upon failure
      */
     @PostMapping("/register")
-    public String register(@ModelAttribute AccountData account, Model model) {
+    public String register(@Valid @ModelAttribute("account") AccountData account, BindingResult result , Model model) {
         String logId = LogId.logId();
         log.info("#{}={}. Saving new user. Parameters: [{}={}]", "LogID", logId, "Account", account);
+        if (result.hasErrors()) {
+            model.addAttribute("account", account);
+            return "register";
+        }
         try {
             RegistrationResponseData registrationResponse = accountFacade.attemptUserRegistration(account);
             if (registrationResponse.fail()) {
-                model.addAttribute("usernameExists", registrationResponse.usernameExists());
-                model.addAttribute("emailExists", registrationResponse.emailExists());
-                model.addAttribute("account", new AccountData());
+                if(registrationResponse.usernameExists()) {
+                    result.addError(new ObjectError("account.username","Username is already taken"));
+                }
+                if(registrationResponse.emailExists()) {
+                    result.addError(new ObjectError("account.email","E-mail is already taken"));
+                }
+            }
+            if (result.hasErrors()) {
+                model.addAttribute("account", account);
                 return "register";
             }
         } catch (Exception e) {
