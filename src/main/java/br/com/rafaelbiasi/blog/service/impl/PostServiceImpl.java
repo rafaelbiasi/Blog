@@ -22,8 +22,7 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final IsNewPostSpecification isNewPostSpecification;
-    private final Slugify slugify = new Slugify();
-
+    private final Slugify slugify = Slugify.builder().build();
 
     @Override
     public Optional<Post> findById(long id) {
