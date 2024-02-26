@@ -1,4 +1,4 @@
-package br.com.rafaelbiasi.blog.entity;
+package br.com.rafaelbiasi.blog.model;
 
 import jakarta.persistence.*;
 import lombok.*;

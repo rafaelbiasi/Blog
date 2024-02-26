@@ -49,13 +49,12 @@ A aplicação segue uma abordagem modular dividida em vários pacotes:
 - `config`: Contém classes de configuração para a aplicação, segurança e configuração de dados iniciais.
 - `controller`: Controladores da Web que lidam com solicitações e respostas HTTP.
 - `data`: Objetos de transferência de dados para transferir dados entre processos.
-- `entity`: Entidades JPA representando tabelas do banco de dados.
 - `facade`: Implementações do padrão Facade para abstrair subsistemas complexos.
 - `facade.mapper`: Implementações para transformar entidades em modelos/DTOs e vice-versa.
-- `model`: Modelos de domínio representando a lógica de negócios central.
+- `model`: Entidades JPA representando tabelas do banco de dados.
 - `repository`: Repositórios Spring Data JPA para acesso ao banco de dados.
 - `service`: Camada de serviço contendo lógica de negócios.
-- `specification`: Especificações para DSL de consulta.
+- `specification`: Especificações de regras de negócios.
 - `transformer`: Classes para transformar entidades em modelos/DTOs e vice-versa.
 - `util`: Classes de utilidade.
 
@@ -68,7 +67,7 @@ Textos e imagens de exemplos gerados por IA.
 - ~~Dockerize (DockerFile/Compose)~~
 - ~~Validações~~
 - ~~Internacionalização/localização~~
-- Testes de unidade: em andamento
+- ~~Testes de unidade~~
 - Comentários
 - Tags
 - Busca

@@ -1,6 +1,5 @@
 package br.com.rafaelbiasi.blog.model;
 
-import br.com.rafaelbiasi.blog.entity.ItemEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;

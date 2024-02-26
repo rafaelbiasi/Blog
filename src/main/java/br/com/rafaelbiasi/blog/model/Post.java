@@ -1,6 +1,5 @@
 package br.com.rafaelbiasi.blog.model;
 
-import br.com.rafaelbiasi.blog.entity.ItemEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
