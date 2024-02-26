@@ -5,27 +5,30 @@
 <main class="container mt-5">
     <div>
         <section>
-            <h2>Authentication</h2>
+            <h2 th:text="#{auth.title}">Authentication</h2>
             <form th:action="@{/auth}" method="POST" class="needs-validation" novalidate>
-                <div th:text="${errorMessage}" th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                <div th:if="${authError}" th:text="#{auth.error}" class="alert alert-danger" role="alert">
                     This is a danger alert—check it out!
                 </div>
                 <div class="mb-3">
-                    <label for="user" class="form-label">Email/Username</label>
-                    <input id="user" type="text" name="user" class="form-control" placeholder="Email" required>
-                    <div class="invalid-feedback">
-                        Please enter your email or username.
+                    <label for="user" class="form-label" th:text="#{auth.username.email.label}">Email/Username</label>
+                    <input id="user" type="text" name="user" class="form-control"
+                           th:placeholder="#{auth.email.placeholder}" placeholder="E-mail" required>
+                    <div class="invalid-feedback" th:text="#{auth.blank.user.email}">
+                        Please enter your e-mail or username.
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input id="password" type="password" name="password" class="form-control" placeholder="Password"
-                           required>
-                    <div class="invalid-feedback">
+                    <label for="password" class="form-label" th:text="#{auth.password.label}">Password</label>
+                    <input id="password" type="password" name="password" class="form-control"
+                           th:placeholder="#{auth.password.placeholder}" placeholder="Password" required>
+                    <div class="invalid-feedback" th:text="#{auth.blank.password}">
                         Please enter your password.
                     </div>
                 </div>
-                <button type="submit" class="btn btn-success">Authentication</button>
+                <button type="submit" class="btn btn-success" th:text="#{auth.authenticate.button}">
+                    Authenticate
+                </button>
             </form>
         </section>
         <script>

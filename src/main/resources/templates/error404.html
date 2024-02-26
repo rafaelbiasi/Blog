@@ -13,15 +13,15 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
-        <a class="navbar-brand" th:href="@{/}">Home</a>
+        <a class="navbar-brand" th:href="@{/}" th:text="#{base.home}">Home</a>
     </div>
 </nav>
 <main class="container mt-4">
     <header>
-        <h1>404 Post Not Found</h1>
+        <h1 th:text="#{error.not.found.title}">404 Post Not Found</h1>
         <hr/>
     </header>
-    <p>Sorry, the post you are looking for could not be found.</p>
+    <p th:text="#{error.not.found.text}">Sorry, the post you are looking for could not be found.</p>
 </main>
 </body>
 </html>

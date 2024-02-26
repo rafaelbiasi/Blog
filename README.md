@@ -65,10 +65,10 @@ Textos e imagens de exemplos gerados por IA.
 
 ## TODO
 
-- ~~Testes de unidade~~
 - ~~Dockerize (DockerFile/Compose)~~
 - ~~Validações~~
-- Internacionalização/localização: em andamento
+- ~~Internacionalização/localização~~
+- Testes de unidade: em andamento
 - Comentários
 - Tags
 - Busca

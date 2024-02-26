@@ -12,16 +12,20 @@
                 <img th:if="${not #strings.isEmpty(post.imageFilePath)}" th:src="@{'/images/' + ${post.imageFilePath}}"
                      class="img-fluid" alt="Post image" loading="lazy"/>
                 <h1 th:text="${post.title}">Title</h1>
-                <p class="meta"
-                   th:text="'Written by ' + ${post.account.name} + ' | Published at ' + ${#temporals.format(post.creation, 'dd MMM yyyy HH:mm')} + ' | Updated at ' + ${#temporals.format(post.modified, 'dd MMM yyyy HH:mm')}">
-                    Metadata</p>
+                <p class="meta">
+                    <span th:text="#{post.metadata.author(${post.account.name})}">Written by Author</span>
+                    <span th:text="#{post.metadata.separator}"> | </span>
+                    <span th:text="#{post.metadata.published(${#temporals.format(post.creation, 'dd MMM yyyy HH:mm')})}">Published at 01 Jan 2024 00:00</span>
+                    <span th:text="#{post.metadata.separator}"> | </span>
+                    <span th:text="#{post.metadata.updated(${#temporals.format(post.modified, 'dd MMM yyyy HH:mm')})}">Updated at 01 Jan 2024 00:00</span>
+                </p>
             </header>
-            <section th:text="${post.body}">body text</section>
+            <section th:text="${post.body}">Body text</section>
         </article>
         <div sec:authorize="isAuthenticated()">
-            <a th:href="@{'/posts/' + ${post.code} + '/edit'}" class="btn btn-primary">Edit</a>
+            <a th:href="@{'/posts/' + ${post.code} + '/edit'}" class="btn btn-primary" th:text="#{post.edit}">Edit</a>
             <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{'/posts/' + ${post.code} + '/delete'}"
-               class="btn btn-danger">Delete</a>
+               class="btn btn-danger" th:text="#{post.delete}">Delete</a>
         </div>
     </div>
 </main>

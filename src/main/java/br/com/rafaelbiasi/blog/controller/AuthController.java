@@ -30,7 +30,7 @@ public class AuthController {
 
     @PostMapping("/auth/error")
     public String error(Model model) {
-        model.addAttribute("errorMessage", "A sua senha ou o seu login estão errados");
+        model.addAttribute("authError", true);
         return "auth";
     }
 
