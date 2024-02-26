@@ -11,12 +11,12 @@
                 <h2><a th:href="@{'/posts/' + ${post.code}}" th:text="${post.title}">Title</a></h2>
                 <p class="meta">
                     <span th:text="#{post.metadata.author(${post.account.name})}">Written by Author </span>
-                    <span th:text="#{separator}"> | </span>
+                    <span th:text="#{post.metadata.separator}"> | </span>
                     <span th:text="#{post.metadata.published(${#temporals.format(post.creation, 'dd MMM yyyy HH:mm')})}">Published at 01 Jan 2024 00:00</span>
-                    <span th:text="#{separator}"> | </span>
+                    <span th:text="#{post.metadata.separator}"> | </span>
                     <span th:text="#{post.metadata.updated(${#temporals.format(post.modified, 'dd MMM yyyy HH:mm')})}">Updated at 01 Jan 2024 00:00</span>
                 </p>
-                <p th:text="${post.body}">body text</p>
+                <p th:text="${post.body}">Body text</p>
             </article>
         </div>
         <div class="pagination-container">

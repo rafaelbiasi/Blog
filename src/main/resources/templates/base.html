@@ -14,28 +14,32 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
-        <a class="navbar-brand" th:href="@{/}">Home</a>
+        <a class="navbar-brand" th:href="@{/}" th:text="#{base.home}">Home</a>
         <ul class="navbar-nav ml-auto">
             <li sec:authorize="isAuthenticated()">
                 <form th:action="@{/logout}" method="POST">
-                    <button type="submit" class="nav-link btn btn-primary">Logout <span sec:authentication="name">Username</span>
+                    <button type="submit" class="nav-link btn btn-primary">
+                        <span th:text="#{base.logout}">Logout</span> <span sec:authentication="name">Username</span>
                     </button>
                 </form>
             </li>
-            <li class="nav-item" sec:authorize="!isAuthenticated()"><a class="nav-link"
-                                                                       th:href="@{/register}">Register</a></li>
-            <li class="nav-item" sec:authorize="!isAuthenticated()"><a class="nav-link" th:href="@{/auth}">Authentication</a>
+            <li class="nav-item" sec:authorize="!isAuthenticated()">
+                <a class="nav-link" th:href="@{/register}" th:text="#{base.register}">Register</a>
             </li>
-            <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link" th:href="@{/posts/new}">New
-                Post</a></li>
+            <li class="nav-item" sec:authorize="!isAuthenticated()">
+                <a class="nav-link" th:href="@{/auth}" th:text="#{base.authentication}">Authentication</a>
+            </li>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="nav-link" th:href="@{/posts/new}" th:text="#{base.newPost}">New Post</a>
+            </li>
         </ul>
     </div>
 </nav>
 <main class="container mt-4">
     <header class="mb-4">
-        <h1>Spring Boot Blog Application</h1>
+        <h1 th:text="#{base.blog.name}">Spring Boot Blog Application</h1>
     </header>
-    <div th:insert="${contet}">>
+    <div th:insert="${contet}">
 
     </div>
 </main>
