@@ -68,7 +68,7 @@ Textos e imagens de exemplos gerados por IA.
 - ~~Testes de unidade~~
 - ~~Dockerize (DockerFile/Compose)~~
 - ~~Validações~~
-- Internacionalização/localização
+- Internacionalização/localização: em andamento
 - Comentários
 - Tags
 - Busca
