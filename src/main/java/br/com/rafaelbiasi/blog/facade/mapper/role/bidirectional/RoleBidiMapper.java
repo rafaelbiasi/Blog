@@ -19,7 +19,5 @@ public class RoleBidiMapper implements BidirectionalMapper<Role, RoleData> {
     @Override
     public void map(Role source, RoleData target) throws ConversionException {
         mapGet(source::getName, target::setName);
-        mapGet(source::getCreation, target::setCreation);
-        mapGet(source::getModified, target::setModified);
     }
 }

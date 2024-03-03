@@ -12,8 +12,7 @@ public class RoleDataCodeMapper implements Mapper<Role, RoleData> {
 
     private final RoleCodeBidiMapper roleCodeBidiMapper;
 
-    public RoleDataCodeMapper(RoleCodeBidiMapper roleCodeBidiMapper
-    ) {
+    public RoleDataCodeMapper(RoleCodeBidiMapper roleCodeBidiMapper) {
         this.roleCodeBidiMapper = roleCodeBidiMapper;
     }
 

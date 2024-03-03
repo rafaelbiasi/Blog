@@ -11,8 +11,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
 import java.util.Optional;
+
+import static java.util.Objects.requireNonNull;
 
 @Component
 @Transactional
@@ -25,8 +26,7 @@ public class AccountFacadeImpl implements AccountFacade {
     public AccountFacadeImpl(
             AccountService accountService,
             @Qualifier("accountDataTransformer") Transformer<Account, AccountData> accountDataTransformer,
-            @Qualifier("accountTransformer") Transformer<AccountData, Account> accountTransformer
-    ) {
+            @Qualifier("accountTransformer") Transformer<AccountData, Account> accountTransformer) {
         this.accountService = accountService;
         this.accountDataTransformer = accountDataTransformer;
         this.accountTransformer = accountTransformer;
@@ -34,20 +34,27 @@ public class AccountFacadeImpl implements AccountFacade {
 
     @Override
     public Optional<AccountData> findOneByEmail(String email) {
-        Objects.requireNonNull(email, "E-mail is null.");
+        requireNonNull(email, "E-mail is null.");
         return accountService.findOneByEmail(email)
                 .map(accountDataTransformer::convert);
     }
 
     @Override
+    public Optional<AccountData> findOneByUsername(String username) {
+        requireNonNull(username, "Username is null.");
+        return accountService.findOneByUsername(username)
+                .map(accountDataTransformer::convert);
+    }
+
+    @Override
     public void save(AccountData account) {
-        Objects.requireNonNull(account, "AccountData is null.");
+        requireNonNull(account, "AccountData is null.");
         accountService.save(accountTransformer.convert(account));
     }
 
     @Override
     public RegistrationResponseData attemptUserRegistration(AccountData account) {
-        Objects.requireNonNull(account, "AccountData is null.");
+        requireNonNull(account, "AccountData is null.");
         Account convert = accountTransformer.convert(account);
         RegistrationResponse registrationResponse = accountService.attemptUserRegistration(convert);
         return RegistrationResponseData.builder()
@@ -58,7 +65,7 @@ public class AccountFacadeImpl implements AccountFacade {
 
     @Override
     public RegistrationResponseData checkEmailAndUsernameExists(AccountData account) {
-        Objects.requireNonNull(account, "AccountData is null.");
+        requireNonNull(account, "AccountData is null.");
         RegistrationResponse registrationResponse = accountService.checkEmailAndUsernameExists(accountTransformer.convert(account));
         return RegistrationResponseData.builder()
                 .emailExists(registrationResponse.emailExists())

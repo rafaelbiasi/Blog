@@ -7,8 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
 import java.util.Optional;
+
+import static java.util.Objects.requireNonNull;
 
 @Slf4j
 @Service
@@ -23,8 +24,18 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public void delete(Role role) {
+        roleRepository.delete(role);
+    }
+
+    @Override
     public Role save(Role role) {
-        Objects.requireNonNull(role, "Role is null.");
+        requireNonNull(role, "Role is null.");
         return roleRepository.save(role);
+    }
+
+    @Override
+    public Optional<Role> findByName(String name) {
+        return roleRepository.findByName(name);
     }
 }

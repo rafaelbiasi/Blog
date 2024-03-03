@@ -8,9 +8,9 @@
             <article th:each="post : ${posts}" class="post mb-3">
                 <img th:if="${not #strings.isEmpty(post.imageFilePath)}" th:src="@{'/images/' + ${post.imageFilePath}}"
                      loading="lazy" alt="Post Image" class="img-fluid"/>
-                <h2><a th:href="@{'/posts/' + ${post.code}}" th:text="${post.title}">Title</a></h2>
+                <h2><a th:href="@{'/post/' + ${post.code}}" th:text="${post.title}">Title</a></h2>
                 <p class="meta">
-                    <span th:text="#{post.metadata.author(${post.account.name})}">Written by Author </span>
+                    <span th:text="#{post.metadata.author(${post.getAuthor.name})}">Written by Author </span>
                     <span th:text="#{post.metadata.separator}"> | </span>
                     <span th:text="#{post.metadata.published(${#temporals.format(post.creation, 'dd MMM yyyy HH:mm')})}">Published at 01 Jan 2024 00:00</span>
                     <span th:text="#{post.metadata.separator}"> | </span>

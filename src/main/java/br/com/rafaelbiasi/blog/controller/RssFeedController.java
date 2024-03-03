@@ -20,12 +20,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Controller for generating an RSS feed for the blog posts.
- * This controller uses the {@link PostFacade} to fetch all blog posts and formats them as an RSS feed
- * using Rome Tools, a library for working with RSS and Atom feeds. The feed includes basic metadata for each post,
- * such as title, link, author, and publication date.
- */
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -33,12 +27,6 @@ public class RssFeedController {
 
     private final PostFacade postFacade;
 
-    /**
-     * Generates an RSS feed for all blog posts.
-     *
-     * @param request the {@link HttpServletRequest} used to construct base URLs for the feed and posts
-     * @return a {@link Channel} object representing the RSS feed, including metadata and items for each post
-     */
     @GetMapping(path = "/rss")
     public Channel rssFeed(HttpServletRequest request) {
         try {
@@ -51,7 +39,7 @@ public class RssFeedController {
 
             Channel channel = createChannel(logId, baseUrl);
             Pageable pageable = PageRequest.of(0, 20);
-            List<Item> items = postFacade.getAll(pageable).stream()
+            List<Item> items = postFacade.findAll(pageable).stream()
                     .map(post -> createItem(logId, post, baseUrl))
                     .collect(Collectors.toList());
 
@@ -80,8 +68,8 @@ public class RssFeedController {
     private Item createItem(String logId, PostData post, String baseUrl) {
         log.debug("#{}={}. Creating RSS item for post: {}", "LogID", logId, post.getTitle());
         Item item = new Item();
-        item.setAuthor(post.getAccount().getName());
-        item.setLink(baseUrl + "/posts/" + post.getCode());
+        item.setAuthor(post.getAuthor().getName());
+        item.setLink(baseUrl + "/post/" + post.getCode());
         item.setTitle(post.getTitle());
         item.setPubDate(Date.from(post.getModified().atZone(ZoneId.systemDefault()).toInstant()));
         Description description = new Description();

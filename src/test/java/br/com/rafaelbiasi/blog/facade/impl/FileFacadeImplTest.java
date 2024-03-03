@@ -3,7 +3,6 @@ package br.com.rafaelbiasi.blog.facade.impl;
 import br.com.rafaelbiasi.blog.facade.FileFacade;
 import br.com.rafaelbiasi.blog.service.FileService;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -11,20 +10,20 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class FileFacadeImplTest {
 
     private FileFacade fileFacade;
-
-    private AutoCloseable closeable;
     @Mock
     private FileService fileService;
     @Mock
     private Resource resource;
     @Mock
     private MultipartFile file;
+    private AutoCloseable closeable;
 
     @BeforeEach
     void setUp() {
@@ -46,7 +45,7 @@ class FileFacadeImplTest {
         //WHEN
         Resource load = fileFacade.load(imageURI);
         //THEN
-        Assertions.assertEquals(resource, load);
+        assertEquals(resource, load);
         verify(fileService).load(imageURI);
     }
 
@@ -60,9 +59,9 @@ class FileFacadeImplTest {
     }
 
     //@Test
-    void template() {
-        //GIVEN
-        //WHEN
-        //THEN
-    }
+    //void template() {
+    //    //GIVEN
+    //    //WHEN
+    //    //THEN
+    //}
 }

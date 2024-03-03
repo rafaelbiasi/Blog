@@ -5,9 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,24 +20,38 @@ import java.util.Set;
 public class Account extends ItemEntity {
 
     @Column(unique = true, nullable = false)
-    String email;
+    private String email;
     @Column(unique = true, nullable = false)
-    String username;
+    private String username;
     @Column(nullable = false)
-    String password;
+    private String password;
     @Column(nullable = false)
-    String firstName;
+    private String firstName;
     @Column(nullable = false)
-    String lastName;
+    private String lastName;
     @JsonIgnore
     @Builder.Default
-    @OneToMany(mappedBy = "account")
-    List<Post> posts = new ArrayList<>();
+    @OneToMany(mappedBy = "author")
+    private Set<Post> posts = new HashSet<>();
     @Builder.Default
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "account_role",
             joinColumns = {@JoinColumn(name = "account_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
-    Set<Role> roles = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
+
+    public boolean isNew() {
+        return this.getId() == null;
+    }
+
+    public boolean hasNoHoles() {
+        return this.getRoles().isEmpty();
+    }
+
+    public boolean isAdmin() {
+        return getRoles()
+                .parallelStream()
+                .anyMatch(role -> role.getName().equals("ROLE_ADMIN"));
+    }
 }

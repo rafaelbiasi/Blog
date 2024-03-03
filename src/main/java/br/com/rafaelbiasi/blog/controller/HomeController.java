@@ -16,11 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
-/**
- * Controller for handling the home page requests.
- * This controller uses the {@link PostFacade} to fetch paginated blog posts to display on the home page.
- * It supports dynamic pagination through request parameters and path variables.
- */
 @Slf4j
 @Controller
 @RequiredArgsConstructor
@@ -44,7 +39,7 @@ public class HomeController {
             log.debug("#{}={}. Fetching page posts. [{}={}]",
                     "LogID", logId,
                     "Pageable", pageable);
-            Page<PostData> postsPage = postFacade.getAll(pageable);
+            Page<PostData> postsPage = postFacade.findAll(pageable);
             log.info("#{}={}. Fetched posts. [{}={}, {}={}, {}={}]",
                     "LogID", logId,
                     "Total Pages", postsPage.getTotalPages(),

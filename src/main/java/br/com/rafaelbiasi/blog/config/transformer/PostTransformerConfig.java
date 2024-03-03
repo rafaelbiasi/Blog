@@ -7,25 +7,20 @@ import br.com.rafaelbiasi.blog.facade.mapper.post.PostDataMapper;
 import br.com.rafaelbiasi.blog.facade.mapper.post.PostMapper;
 import br.com.rafaelbiasi.blog.model.Post;
 import br.com.rafaelbiasi.blog.transformer.impl.Transformer;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
 @Configuration
+@RequiredArgsConstructor
 public class PostTransformerConfig {
 
     private final PostDataMapper postDataMapper;
     private final PostMapper postMapper;
     private final PostDataCodeMapper postDataCodeMapper;
     private final PostCodeMapper postCodeMapper;
-
-    public PostTransformerConfig(PostDataMapper postDataMapper, PostMapper postMapper, PostDataCodeMapper postDataCodeMapper, PostCodeMapper postCodeMapper) {
-        this.postDataMapper = postDataMapper;
-        this.postMapper = postMapper;
-        this.postDataCodeMapper = postDataCodeMapper;
-        this.postCodeMapper = postCodeMapper;
-    }
 
     @Bean("postDataTransformer")
     public Transformer<Post, PostData> postDataTransformer() {

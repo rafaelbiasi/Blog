@@ -4,14 +4,9 @@ import br.com.rafaelbiasi.blog.model.Account;
 import br.com.rafaelbiasi.blog.model.RegistrationResponse;
 import br.com.rafaelbiasi.blog.model.Role;
 import br.com.rafaelbiasi.blog.repository.AccountRepository;
-import br.com.rafaelbiasi.blog.repository.RoleRepository;
 import br.com.rafaelbiasi.blog.service.AccountService;
-import br.com.rafaelbiasi.blog.specification.impl.EmailExistsSpecification;
-import br.com.rafaelbiasi.blog.specification.impl.HasRolesSpecification;
-import br.com.rafaelbiasi.blog.specification.impl.IsNewAccountSpecification;
-import br.com.rafaelbiasi.blog.specification.impl.UsernameExistsSpecification;
+import br.com.rafaelbiasi.blog.service.RoleService;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -21,35 +16,30 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Collections;
 import java.util.Optional;
 
+import static java.util.Optional.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 class AccountServiceImplTest {
 
     private AccountService accountService;
-    private AutoCloseable closeable;
     @Mock
     private PasswordEncoder passwordEncoder;
     @Mock
     private AccountRepository accountRepository;
     @Mock
-    private RoleRepository roleRepository;
+    private RoleService roleService;
+    private AutoCloseable closeable;
 
     @BeforeEach
     void setUp() {
         //GIVEN
         closeable = MockitoAnnotations.openMocks(this);
-        UsernameExistsSpecification usernameExistsSpec = new UsernameExistsSpecification(accountRepository);
-        EmailExistsSpecification emailExistsSpec = new EmailExistsSpecification(accountRepository);
-        HasRolesSpecification hasRolesSpec = new HasRolesSpecification();
-        IsNewAccountSpecification isNewAccountSpec = new IsNewAccountSpecification();
         accountService = new AccountServiceImpl(
-                usernameExistsSpec,
-                emailExistsSpec,
-                isNewAccountSpec,
-                hasRolesSpec,
                 passwordEncoder,
                 accountRepository,
-                roleRepository
+                roleService
         );
     }
 
@@ -62,12 +52,12 @@ class AccountServiceImplTest {
     void getById() {
         //GIVEN
         Account account = Account.builder().build();
-        when(accountRepository.findById(1L)).thenReturn(Optional.of(account));
+        when(accountRepository.findById(1L)).thenReturn(of(account));
         //WHEN
         Optional<Account> respondeAccount = accountService.findById(1);
         //THEN
-        Assertions.assertTrue(respondeAccount.isPresent());
-        Assertions.assertEquals(account, respondeAccount.get());
+        assertTrue(respondeAccount.isPresent());
+        assertEquals(account, respondeAccount.get());
         verify(accountRepository).findById(1L);
     }
 
@@ -77,16 +67,16 @@ class AccountServiceImplTest {
         Account account = Account.builder().password("password").build();
         Role roleUser = Role.builder().id(1L).build();
         when(accountRepository.save(account)).thenReturn(account);
-        when(roleRepository.findByName("ROLE_USER")).thenReturn(Optional.of(roleUser));
+        when(roleService.findByName("ROLE_USER")).thenReturn(of(roleUser));
         when(passwordEncoder.encode("password")).thenReturn("drowssap");
         //WHEN
         Account accountResponse = accountService.save(account);
         //THEN
-        Assertions.assertEquals(account, accountResponse);
-        Assertions.assertEquals(Collections.singleton(roleUser), accountResponse.getRoles());
-        Assertions.assertEquals("drowssap", accountResponse.getPassword());
+        assertEquals(account, accountResponse);
+        assertEquals(Collections.singleton(roleUser), accountResponse.getRoles());
+        assertEquals("drowssap", accountResponse.getPassword());
         verify(accountRepository).save(account);
-        verify(roleRepository).findByName("ROLE_USER");
+        verify(roleService).findByName("ROLE_USER");
     }
 
     @Test
@@ -100,11 +90,11 @@ class AccountServiceImplTest {
         //WHEN
         Account accountResponse = accountService.save(account);
         //THEN
-        Assertions.assertEquals(account, accountResponse);
-        Assertions.assertEquals(Collections.singleton(roleUser), accountResponse.getRoles());
-        Assertions.assertEquals("drowssap", accountResponse.getPassword());
+        assertEquals(account, accountResponse);
+        assertEquals(Collections.singleton(roleUser), accountResponse.getRoles());
+        assertEquals("drowssap", accountResponse.getPassword());
         verify(accountRepository).save(account);
-        verify(roleRepository, never()).findByName("ROLE_USER");
+        verify(roleService, never()).findByName("ROLE_USER");
     }
 
     @Test
@@ -113,16 +103,16 @@ class AccountServiceImplTest {
         Account account = Account.builder().id(1L).password("password").build();
         Role roleUser = Role.builder().id(1L).build();
         when(accountRepository.save(account)).thenReturn(account);
-        when(roleRepository.findByName("ROLE_USER")).thenReturn(Optional.of(roleUser));
+        when(roleService.findByName("ROLE_USER")).thenReturn(of(roleUser));
         when(passwordEncoder.encode("password")).thenReturn("drowssap");
         //WHEN
         Account accountResponse = accountService.save(account);
         //THEN
-        Assertions.assertEquals(account, accountResponse);
-        Assertions.assertTrue(accountResponse.getRoles().isEmpty());
-        Assertions.assertEquals("drowssap", accountResponse.getPassword());
+        assertEquals(account, accountResponse);
+        assertTrue(accountResponse.getRoles().isEmpty());
+        assertEquals("drowssap", accountResponse.getPassword());
         verify(accountRepository).save(account);
-        verify(roleRepository, never()).findByName("ROLE_USER");
+        verify(roleService, never()).findByName("ROLE_USER");
     }
 
     @Test
@@ -136,23 +126,23 @@ class AccountServiceImplTest {
         //WHEN
         Account accountResponse = accountService.save(account);
         //THEN
-        Assertions.assertEquals(account, accountResponse);
-        Assertions.assertEquals(Collections.singleton(roleUser), accountResponse.getRoles());
-        Assertions.assertEquals("drowssap", accountResponse.getPassword());
+        assertEquals(account, accountResponse);
+        assertEquals(Collections.singleton(roleUser), accountResponse.getRoles());
+        assertEquals("drowssap", accountResponse.getPassword());
         verify(accountRepository).save(account);
-        verify(roleRepository, never()).findByName("ROLE_USER");
+        verify(roleService, never()).findByName("ROLE_USER");
     }
 
     @Test
     void findOneByEmail() {
         //GIVEN
         Account account = Account.builder().id(1L).build();
-        when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(Optional.of(account));
+        when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(of(account));
         //WHEN
         Optional<Account> accountResponse = accountService.findOneByEmail("user@domain.com");
         //THEN
-        Assertions.assertTrue(accountResponse.isPresent());
-        Assertions.assertEquals(account, accountResponse.get());
+        assertTrue(accountResponse.isPresent());
+        assertEquals(account, accountResponse.get());
         verify(accountRepository).findOneByEmailIgnoreCase("user@domain.com");
     }
 
@@ -160,12 +150,12 @@ class AccountServiceImplTest {
     void findOneByUsername() {
         //GIVEN
         Account account = Account.builder().id(1L).build();
-        when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(Optional.of(account));
+        when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(of(account));
         //WHEN
         Optional<Account> accountResponse = accountService.findOneByUsername("username");
         //THEN
-        Assertions.assertTrue(accountResponse.isPresent());
-        Assertions.assertEquals(account, accountResponse.get());
+        assertTrue(accountResponse.isPresent());
+        assertEquals(account, accountResponse.get());
         verify(accountRepository).findOneByUsernameIgnoreCase("username");
     }
 
@@ -173,12 +163,12 @@ class AccountServiceImplTest {
     void attemptUserRegistration() {
         //GIVEN
         Account account = Account.builder().username("username").email("user@domain.com").build();
-        when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(Optional.empty());
-        when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(Optional.empty());
+        when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(empty());
+        when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(empty());
         //WHEN
         RegistrationResponse registrationResponseResponse = accountService.attemptUserRegistration(account);
         //THEN
-        Assertions.assertEquals(RegistrationResponse.builder()
+        assertEquals(RegistrationResponse.builder()
                 .usernameExists(false)
                 .emailExists(false)
                 .build(), registrationResponseResponse);
@@ -190,12 +180,12 @@ class AccountServiceImplTest {
     void attemptUserRegistrationUsernameExists() {
         //GIVEN
         Account account = Account.builder().username("username").email("user@domain.com").build();
-        when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(Optional.of(account));
-        when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(Optional.empty());
+        when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(of(account));
+        when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(empty());
         //WHEN
         RegistrationResponse registrationResponseResponse = accountService.attemptUserRegistration(account);
         //THEN
-        Assertions.assertEquals(RegistrationResponse.builder()
+        assertEquals(RegistrationResponse.builder()
                 .usernameExists(true)
                 .emailExists(false)
                 .build(), registrationResponseResponse);
@@ -207,12 +197,12 @@ class AccountServiceImplTest {
     void attemptUserRegistrationEmailExists() {
         //GIVEN
         Account account = Account.builder().username("username").email("user@domain.com").build();
-        when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(Optional.empty());
-        when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(Optional.of(account));
+        when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(empty());
+        when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(of(account));
         //WHEN
         RegistrationResponse registrationResponseResponse = accountService.attemptUserRegistration(account);
         //THEN
-        Assertions.assertEquals(RegistrationResponse.builder()
+        assertEquals(RegistrationResponse.builder()
                 .usernameExists(false)
                 .emailExists(true)
                 .build(), registrationResponseResponse);
@@ -224,12 +214,12 @@ class AccountServiceImplTest {
     void attemptUserRegistrationUsernameAndEmailExists() {
         //GIVEN
         Account account = Account.builder().username("username").email("user@domain.com").build();
-        when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(Optional.of(account));
-        when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(Optional.of(account));
+        when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(of(account));
+        when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(of(account));
         //WHEN
         RegistrationResponse registrationResponseResponse = accountService.attemptUserRegistration(account);
         //THEN
-        Assertions.assertEquals(RegistrationResponse.builder()
+        assertEquals(RegistrationResponse.builder()
                 .usernameExists(true)
                 .emailExists(true)
                 .build(), registrationResponseResponse);
@@ -237,16 +227,16 @@ class AccountServiceImplTest {
         verify(accountRepository).findOneByUsernameIgnoreCase("username");
     }
 
-   @Test
+    @Test
     void checkEmailAndUsernameExists() {
         //GIVEN
-       Account account = Account.builder().username("username").email("user@domain.com").build();
-        when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(Optional.empty());
-        when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(Optional.empty());
+        Account account = Account.builder().username("username").email("user@domain.com").build();
+        when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(empty());
+        when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(empty());
         //WHEN
         RegistrationResponse registrationResponseResponse = accountService.checkEmailAndUsernameExists(account);
         //THEN
-        Assertions.assertEquals(RegistrationResponse.builder()
+        assertEquals(RegistrationResponse.builder()
                 .usernameExists(false)
                 .emailExists(false)
                 .build(), registrationResponseResponse);
@@ -254,16 +244,16 @@ class AccountServiceImplTest {
         verify(accountRepository).findOneByUsernameIgnoreCase("username");
     }
 
-   @Test
+    @Test
     void checkEmailAndUsernameExistsUsernameExists() {
         //GIVEN
-       Account account = Account.builder().username("username").email("user@domain.com").build();
-        when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(Optional.ofNullable(account));
-        when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(Optional.empty());
+        Account account = Account.builder().username("username").email("user@domain.com").build();
+        when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(ofNullable(account));
+        when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(empty());
         //WHEN
         RegistrationResponse registrationResponseResponse = accountService.checkEmailAndUsernameExists(account);
         //THEN
-        Assertions.assertEquals(RegistrationResponse.builder()
+        assertEquals(RegistrationResponse.builder()
                 .usernameExists(true)
                 .emailExists(false)
                 .build(), registrationResponseResponse);
@@ -271,44 +261,54 @@ class AccountServiceImplTest {
         verify(accountRepository).findOneByUsernameIgnoreCase("username");
     }
 
-   @Test
+    @Test
     void checkEmailAndUsernameExistsEmailExists() {
         //GIVEN
         Account account = Account.builder().username("username").email("user@domain.com").build();
-       when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(Optional.empty());
-       when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(Optional.ofNullable(account));
-       //WHEN
-       RegistrationResponse registrationResponseResponse = accountService.checkEmailAndUsernameExists(account);
-       //THEN
-       Assertions.assertEquals(RegistrationResponse.builder()
-               .usernameExists(false)
-               .emailExists(true)
-               .build(), registrationResponseResponse);
+        when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(empty());
+        when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(ofNullable(account));
+        //WHEN
+        RegistrationResponse registrationResponseResponse = accountService.checkEmailAndUsernameExists(account);
+        //THEN
+        assertEquals(RegistrationResponse.builder()
+                .usernameExists(false)
+                .emailExists(true)
+                .build(), registrationResponseResponse);
         verify(accountRepository).findOneByEmailIgnoreCase("user@domain.com");
         verify(accountRepository).findOneByUsernameIgnoreCase("username");
     }
 
-   @Test
+    @Test
     void checkEmailAndUsernameExistsUsernameAndEmailExists() {
         //GIVEN
         Account account = Account.builder().username("username").email("user@domain.com").build();
-       when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(Optional.ofNullable(account));
-       when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(Optional.ofNullable(account));
-       //WHEN
-       RegistrationResponse registrationResponseResponse = accountService.checkEmailAndUsernameExists(account);
-       //THEN
-       Assertions.assertEquals(RegistrationResponse.builder()
-               .usernameExists(true)
-               .emailExists(true)
-               .build(), registrationResponseResponse);
+        when(accountRepository.findOneByUsernameIgnoreCase("username")).thenReturn(ofNullable(account));
+        when(accountRepository.findOneByEmailIgnoreCase("user@domain.com")).thenReturn(ofNullable(account));
+        //WHEN
+        RegistrationResponse registrationResponseResponse = accountService.checkEmailAndUsernameExists(account);
+        //THEN
+        assertEquals(RegistrationResponse.builder()
+                .usernameExists(true)
+                .emailExists(true)
+                .build(), registrationResponseResponse);
         verify(accountRepository).findOneByEmailIgnoreCase("user@domain.com");
         verify(accountRepository).findOneByUsernameIgnoreCase("username");
     }
 
-    //@Test
+    @Test
     void template() {
         //GIVEN
+        Account account = Account.builder().id(1L).build();
         //WHEN
+        accountService.delete(account);
         //THEN
+        verify(accountRepository).delete(account);
     }
+
+    //@Test
+    //void template() {
+    //    //GIVEN
+    //    //WHEN
+    //    //THEN
+    //}
 }

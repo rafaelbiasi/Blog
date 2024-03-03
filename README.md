@@ -54,7 +54,6 @@ A aplicação segue uma abordagem modular dividida em vários pacotes:
 - `model`: Entidades JPA representando tabelas do banco de dados.
 - `repository`: Repositórios Spring Data JPA para acesso ao banco de dados.
 - `service`: Camada de serviço contendo lógica de negócios.
-- `specification`: Especificações de regras de negócios.
 - `transformer`: Classes para transformar entidades em modelos/DTOs e vice-versa.
 - `util`: Classes de utilidade.
 
@@ -68,7 +67,7 @@ Textos e imagens de exemplos gerados por IA.
 - ~~Validações~~
 - ~~Internacionalização/localização~~
 - ~~Testes de unidade~~
-- Comentários
+- ~~Comentários~~
 - Tags
 - Busca
 - Painel Administrativo

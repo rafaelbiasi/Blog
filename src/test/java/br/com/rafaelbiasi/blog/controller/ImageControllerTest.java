@@ -3,7 +3,6 @@ package br.com.rafaelbiasi.blog.controller;
 import br.com.rafaelbiasi.blog.facade.FileFacade;
 import jakarta.servlet.ServletContext;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -12,19 +11,20 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class ImageControllerTest {
 
     private ImageController imageController;
-    private AutoCloseable closeable;
     @Mock
     private FileFacade fileFacade;
     @Mock
     private ServletContext servletContext;
     @Mock
     private Resource resource;
+    private AutoCloseable closeable;
 
     @BeforeEach
     void setUp() {
@@ -46,7 +46,7 @@ class ImageControllerTest {
         //WHEN
         ResponseEntity<Resource> image = imageController.image(imageURI);
         //THEN
-        Assertions.assertEquals(resource, image.getBody());
+        assertEquals(resource, image.getBody());
         verify(fileFacade).load(imageURI);
     }
 
@@ -57,7 +57,7 @@ class ImageControllerTest {
         //WHEN
         ResponseEntity<Resource> image = imageController.image(imageURI);
         //THEN
-        Assertions.assertEquals(HttpStatusCode.valueOf(404), image.getStatusCode());
+        assertEquals(HttpStatusCode.valueOf(404), image.getStatusCode());
     }
 
     @Test
@@ -67,7 +67,7 @@ class ImageControllerTest {
         //WHEN
         ResponseEntity<Resource> image = imageController.image(imageURI);
         //THEN
-        Assertions.assertEquals(HttpStatusCode.valueOf(404), image.getStatusCode());
+        assertEquals(HttpStatusCode.valueOf(404), image.getStatusCode());
     }
 
     @Test
@@ -78,14 +78,14 @@ class ImageControllerTest {
         //WHEN
         ResponseEntity<Resource> image = imageController.image(imageURI);
         //THEN
-        Assertions.assertEquals(HttpStatusCode.valueOf(500), image.getStatusCode());
+        assertEquals(HttpStatusCode.valueOf(500), image.getStatusCode());
         verify(fileFacade).load(imageURI);
     }
 
     //@Test
-    void template() {
-        //GIVEN
-        //WHEN
-        //THEN
-    }
+    //void template() {
+    //    //GIVEN
+    //    //WHEN
+    //    //THEN
+    //}
 }

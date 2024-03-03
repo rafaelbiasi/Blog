@@ -2,10 +2,7 @@ package br.com.rafaelbiasi.blog.service.impl;
 
 import br.com.rafaelbiasi.blog.repository.FileRepository;
 import br.com.rafaelbiasi.blog.service.FileService;
-import br.com.rafaelbiasi.blog.specification.impl.ResourceExistsSpecification;
-import br.com.rafaelbiasi.blog.specification.impl.ResourceIsReadableSpecification;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -19,12 +16,13 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.nio.file.Path;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class FileServiceImplTest {
 
     private FileService fileService;
-    private AutoCloseable closeable;
     @Mock
     private FileRepository fileRepository;
     @Mock
@@ -35,14 +33,13 @@ class FileServiceImplTest {
     private Path path;
     @Mock
     private URI uri;
+    private AutoCloseable closeable;
 
     @BeforeEach
     void setUp() {
         //GIVEN
         closeable = MockitoAnnotations.openMocks(this);
-        ResourceExistsSpecification resourceExistsSpec = new ResourceExistsSpecification();
-        ResourceIsReadableSpecification resourceIsReadableSpec = new ResourceIsReadableSpecification();
-        fileService = new FileServiceImpl(fileRepository, resourceExistsSpec, resourceIsReadableSpec);
+        fileService = new FileServiceImpl(fileRepository);
     }
 
     @AfterEach
@@ -81,7 +78,7 @@ class FileServiceImplTest {
         //WHEN
         Resource resourceResponse = fileService.load("filename.png");
         //THEN
-        Assertions.assertEquals(resource, resourceResponse);
+        assertEquals(resource, resourceResponse);
         verify(fileRepository).resolve("filename.png");
         verify(path).toUri();
         verify(fileRepository).getUrlResource(uri);
@@ -99,7 +96,7 @@ class FileServiceImplTest {
         //WHEN
         Resource resourceResponse = fileService.load("filename.png");
         //THEN
-        Assertions.assertEquals(resource, resourceResponse);
+        assertEquals(resource, resourceResponse);
         verify(fileRepository).resolve("filename.png");
         verify(path).toUri();
         verify(fileRepository).getUrlResource(uri);
@@ -118,8 +115,8 @@ class FileServiceImplTest {
         //WHEN
         Executable executable = () -> fileService.load("filename.png");
         //THEN
-        RuntimeException runtimeException = Assertions.assertThrows(RuntimeException.class, executable);
-        Assertions.assertEquals("Could not read the file!", runtimeException.getMessage());
+        RuntimeException runtimeException = assertThrows(RuntimeException.class, executable);
+        assertEquals("Could not read the file!", runtimeException.getMessage());
         verify(fileRepository).resolve("filename.png");
         verify(path).toUri();
         verify(fileRepository).getUrlResource(uri);
@@ -136,17 +133,17 @@ class FileServiceImplTest {
         //WHEN
         Executable executable = () -> fileService.load("filename.png");
         //THEN
-        RuntimeException runtimeException = Assertions.assertThrows(RuntimeException.class, executable);
-        Assertions.assertEquals("Error: message", runtimeException.getMessage());
+        RuntimeException runtimeException = assertThrows(RuntimeException.class, executable);
+        assertEquals("Error: message", runtimeException.getMessage());
         verify(fileRepository).resolve("filename.png");
         verify(path).toUri();
         verify(fileRepository).getUrlResource(uri);
     }
 
     //@Test
-    void template() {
-        //GIVEN
-        //WHEN
-        //THEN
-    }
+    //void template() {
+    //    //GIVEN
+    //    //WHEN
+    //    //THEN
+    //}
 }

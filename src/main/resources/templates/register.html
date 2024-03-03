@@ -13,36 +13,44 @@
               method="POST">
             <div>
                 <label for="firstname" class="form-label" th:text="#{register.firstname.label}">First Name</label>
-                <input id="firstname" type="text" th:field="*{firstName}" th:placeholder="#{register.firstname.placeholder}" placeholder="First Name"
+                <input id="firstname" type="text" th:field="*{firstName}"
+                       th:placeholder="#{register.firstname.placeholder}" placeholder="First Name"
                        class="form-control"/>
-                <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" th:errorclass="invalid-feedback">
+                <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
+                     th:errorclass="invalid-feedback">
                     Fist name error
                 </div>
             </div>
             <div>
                 <label for="lastname" class="form-label" th:text="#{register.lastname.label}">Last Name</label>
-                <input id="lastname" type="text" th:field="*{lastName}" th:placeholder="#{register.lastname.placeholder}" placeholder="Last Name" th:errorclass="is-invalid" class="form-control"/>
+                <input id="lastname" type="text" th:field="*{lastName}"
+                       th:placeholder="#{register.lastname.placeholder}" placeholder="Last Name"
+                       th:errorclass="is-invalid" class="form-control"/>
                 <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" th:errorclass="invalid-feedback">
                     Last name error
                 </div>
             </div>
             <div>
                 <label for="username" class="form-label" th:text="#{register.username.label}">Username</label>
-                <input id="username" type="text" th:field="*{username}" th:placeholder="#{register.username.placeholder}" placeholder="Username" th:errorclass="is-invalid" class="form-control"/>
+                <input id="username" type="text" th:field="*{username}"
+                       th:placeholder="#{register.username.placeholder}" placeholder="Username"
+                       th:errorclass="is-invalid" class="form-control"/>
                 <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" th:errorclass="invalid-feedback">
                     Username error
                 </div>
             </div>
             <div>
                 <label for="email" class="form-label" th:text="#{register.email.label}">E-mail</label>
-                <input id="email" type="text" th:field="*{email}" th:placeholder="#{register.email.placeholder}" placeholder="E-mail" th:errorclass="is-invalid" class="form-control"/>
+                <input id="email" type="text" th:field="*{email}" th:placeholder="#{register.email.placeholder}"
+                       placeholder="E-mail" th:errorclass="is-invalid" class="form-control"/>
                 <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" th:errorclass="invalid-feedback">
                     E-mail error
                 </div>
             </div>
             <div>
                 <label for="password" class="form-label" th:text="#{register.password.label}">Password</label>
-                <input id="password" type="password" th:field="*{password}" th:errorclass="is-invalid" th:placeholder="#{register.password.placeholder}" placeholder="Password"
+                <input id="password" type="password" th:field="*{password}" th:errorclass="is-invalid"
+                       th:placeholder="#{register.password.placeholder}" placeholder="Password"
                        class="form-control"/>
                 <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" th:errorclass="invalid-feedback">
                     Password error

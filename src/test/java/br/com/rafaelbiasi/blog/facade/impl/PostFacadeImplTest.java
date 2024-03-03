@@ -1,43 +1,58 @@
 package br.com.rafaelbiasi.blog.facade.impl;
 
+import br.com.rafaelbiasi.blog.data.AccountData;
 import br.com.rafaelbiasi.blog.data.PostData;
+import br.com.rafaelbiasi.blog.facade.AccountFacade;
+import br.com.rafaelbiasi.blog.facade.FileFacade;
 import br.com.rafaelbiasi.blog.facade.PostFacade;
 import br.com.rafaelbiasi.blog.model.Post;
 import br.com.rafaelbiasi.blog.service.impl.PostServiceImpl;
 import br.com.rafaelbiasi.blog.transformer.impl.Transformer;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class PostFacadeImplTest {
 
     private PostFacade postFacade;
-    private AutoCloseable closeable;
+    @Mock
+    private FileFacade fileFacade;
+    @Mock
+    private AccountFacade accountFacade;
     @Mock
     private PostServiceImpl postService;
     @Mock
     private Transformer<Post, PostData> postDataTransformer;
     @Mock
     private Transformer<PostData, Post> postTransformer;
+    @Mock
+    private MultipartFile file;
+    @Mock
+    private Principal principal;
+    private AutoCloseable closeable;
 
     @BeforeEach
     void setUp() {
         //GIVEN
         closeable = MockitoAnnotations.openMocks(this);
-        postFacade = new PostFacadeImpl(postService, postDataTransformer, postTransformer);
+        postFacade = new PostFacadeImpl(postService, fileFacade, postDataTransformer, postTransformer);
     }
 
     @AfterEach
@@ -53,9 +68,9 @@ class PostFacadeImplTest {
         when(postService.findAll()).thenReturn(posts);
         when(postDataTransformer.convertAll(posts)).thenReturn(postDatas);
         //WHEN
-        List<PostData> responsePostDatas = postFacade.getAll();
+        List<PostData> responsePostDatas = postFacade.findAll();
         //THEN
-        Assertions.assertEquals(postDatas, responsePostDatas);
+        assertEquals(postDatas, responsePostDatas);
         verify(postService).findAll();
         verify(postDataTransformer).convertAll(posts);
     }
@@ -73,9 +88,9 @@ class PostFacadeImplTest {
         when(postService.findAll(pageable)).thenReturn(postPage);
         when(postDataTransformer.convert(post)).thenReturn(postData);
         //WHEN
-        Page<PostData> responsePostDatas = postFacade.getAll(pageable);
+        Page<PostData> responsePostDatas = postFacade.findAll(pageable);
         //THEN
-        Assertions.assertEquals(postDataPage, responsePostDatas);
+        assertEquals(postDataPage, responsePostDatas);
         verify(postService).findAll(pageable);
         verify(postDataTransformer).convert(post);
     }
@@ -86,56 +101,137 @@ class PostFacadeImplTest {
         int id = 1;
         Post post = Post.builder().code("code").build();
         PostData postData = PostData.builder().code("code").build();
-        when(postService.findById(id)).thenReturn(Optional.of(post));
+        when(postService.findById(id)).thenReturn(of(post));
         when(postDataTransformer.convert(post)).thenReturn(postData);
         //WHEN
-        Optional<PostData> respondePostData = postFacade.getById(id);
+        Optional<PostData> respondePostData = postFacade.findById(id);
         //THEN
-        Assertions.assertTrue(respondePostData.isPresent());
-        Assertions.assertEquals(postData, respondePostData.get());
+        assertTrue(respondePostData.isPresent());
+        assertEquals(postData, respondePostData.get());
         verify(postService).findById(id);
         verify(postDataTransformer).convert(post);
     }
 
     @Test
-    void saveUpdate() {
+    void saveWithPrincipal() {
         //GIVEN
         PostData postData = PostData.builder().code("code").build();
         Post post = Post.builder().code("code").build();
-        when(postService.findByCode("code")).thenReturn(Optional.of(post));
+        AccountData account = AccountData.builder().build();
+        when(principal.getName()).thenReturn("user@domain.com");
+        when(postService.findByCode("code")).thenReturn(of(post));
         when(postTransformer.convertTo(postData, post)).thenReturn(post);
         when(postService.save(post)).thenReturn(post);
         //WHEN
-        postFacade.save(postData);
+        postFacade.save(postData, principal);
         //THEN
+        assertEquals(account, postData.getAuthor());
+        verify(principal).getName();
         verify(postService).findByCode("code");
         verify(postTransformer).convertTo(postData, post);
         verify(postService).save(post);
     }
 
     @Test
-    void saveNew() {
+    void saveUpdateWithFile() {
         //GIVEN
         PostData postData = PostData.builder().code("code").build();
         Post post = Post.builder().code("code").build();
-        when(postService.findByCode("code")).thenReturn(Optional.empty());
+        when(file.getOriginalFilename()).thenReturn("image.png");
+        when(postService.findByCode("code")).thenReturn(of(post));
+        when(postTransformer.convertTo(postData, post)).thenReturn(post);
+        when(postService.save(post)).thenReturn(post);
+        //WHEN
+        postFacade.save(postData, file);
+        //THEN
+        verify(file).getOriginalFilename();
+        verify(postService).findByCode("code");
+        verify(postTransformer).convertTo(postData, post);
+        verify(postService).save(post);
+        verify(fileFacade).save(file);
+    }
+
+    @Test
+    void saveNewWithFile() {
+        //GIVEN
+        PostData postData = PostData.builder().code("code").build();
+        Post post = Post.builder().code("code").build();
+        when(file.getOriginalFilename()).thenReturn("image.png");
+        when(postService.findByCode("code")).thenReturn(empty());
         when(postTransformer.convert(postData)).thenReturn(post);
         when(postService.save(post)).thenReturn(post);
         //WHEN
-        postFacade.save(postData);
+        postFacade.save(postData, file);
         //THEN
+        verify(file).getOriginalFilename();
         verify(postService).findByCode("code");
         verify(postTransformer).convert(postData);
         verify(postService).save(post);
     }
 
     @Test
+    void saveUpdateWithFileException() {
+        //GIVEN
+        PostData postData = PostData.builder().code("code").build();
+        Post post = Post.builder().code("code").build();
+        when(file.getOriginalFilename()).thenReturn("image.png");
+        when(postService.findByCode("code")).thenReturn(of(post));
+        when(postTransformer.convertTo(postData, post)).thenReturn(post);
+        when(postService.save(post)).thenReturn(post);
+        doThrow(new RuntimeException()).when(fileFacade).save(file);
+        //WHEN
+        Executable executable = () -> postFacade.save(postData, file);
+        //THEN
+        assertThrows(RuntimeException.class, executable);
+        verify(file).getOriginalFilename();
+        verify(postService).findByCode("code");
+        verify(postTransformer).convertTo(postData, post);
+        verify(postService).save(post);
+        verify(fileFacade).save(file);
+    }
+
+    @Test
+    void saveUpdateWithFileAndPrincipal() {
+        //GIVEN
+        PostData postData = PostData.builder().code("code").build();
+        Post post = Post.builder().code("code").build();
+        when(principal.getName()).thenReturn("user@domain.com");
+        AccountData account = AccountData.builder().build();
+        when(file.getOriginalFilename()).thenReturn("image.png");
+        when(postService.findByCode("code")).thenReturn(of(post));
+        when(postTransformer.convertTo(postData, post)).thenReturn(post);
+        when(postService.save(post)).thenReturn(post);
+        //WHEN
+        postFacade.save(postData, file, principal);
+        //THEN
+        verify(principal).getName();
+        verify(file).getOriginalFilename();
+        verify(postService).findByCode("code");
+        verify(postTransformer).convertTo(postData, post);
+        verify(postService).save(post);
+        verify(fileFacade).save(file);
+    }
+
+    @Test
     void delete() {
         //GIVEN
+        Post post = Post.builder().code("code").build();
+        when(postService.findByCode("code")).thenReturn(of(post));
         //WHEN
         postFacade.delete("code");
         //THEN
-        verify(postService).delete("code");
+        verify(postService).delete(post);
+    }
+
+    @Test
+    void deleteThrowExcetion() {
+        //GIVEN
+        Post post = Post.builder().code("code").build();
+        when(postService.findByCode("code")).thenReturn(empty());
+        //WHEN
+        Executable executable = () -> postFacade.delete("code");
+        //THEN
+        assertThrows(RuntimeException.class, executable);
     }
 
     @Test
@@ -143,21 +239,21 @@ class PostFacadeImplTest {
         //GIVEN
         Post post = Post.builder().code("code").build();
         PostData postData = PostData.builder().code("code").build();
-        when(postService.findByCode("code")).thenReturn(Optional.of(post));
+        when(postService.findByCode("code")).thenReturn(of(post));
         when(postDataTransformer.convert(post)).thenReturn(postData);
         //WHEN
-        Optional<PostData> responsePostData = postFacade.getByCode("code");
+        Optional<PostData> responsePostData = postFacade.findByCode("code");
         //THEN
-        Assertions.assertTrue(responsePostData.isPresent());
-        Assertions.assertEquals(postData, responsePostData.get());
+        assertTrue(responsePostData.isPresent());
+        assertEquals(postData, responsePostData.get());
         verify(postService).findByCode("code");
         verify(postDataTransformer).convert(post);
     }
 
     //@Test
-    void template() {
-        //GIVEN
-        //WHEN
-        //THEN
-    }
+    //void template() {
+    //    //GIVEN
+    //    //WHEN
+    //    //THEN
+    //}
 }

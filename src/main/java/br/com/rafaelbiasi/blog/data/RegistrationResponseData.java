@@ -5,8 +5,7 @@ import lombok.Builder;
 @Builder
 public record RegistrationResponseData(
         boolean usernameExists,
-        boolean emailExists
-) {
+        boolean emailExists) {
     public boolean success() {
         return !usernameExists && !emailExists;
     }

@@ -4,7 +4,6 @@ import br.com.rafaelbiasi.blog.data.AccountData;
 import br.com.rafaelbiasi.blog.data.RegistrationResponseData;
 import br.com.rafaelbiasi.blog.facade.AccountFacade;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -13,19 +12,20 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class RegisterControllerTest {
 
     private RegisterController registerController;
-    private AutoCloseable closeable;
     @Mock
     private AccountFacade accountFacade;
     @Mock
     private Model model;
     @Mock
     private BindingResult bindingResult;
+    private AutoCloseable closeable;
 
     @BeforeEach
     void setUp() {
@@ -45,7 +45,7 @@ class RegisterControllerTest {
         //WHEN
         String view = registerController.register(model);
         //THEN
-        Assertions.assertEquals("register", view);
+        assertEquals("register", view);
         Mockito.verify(model).addAttribute("account", new AccountData());
     }
 
@@ -62,7 +62,7 @@ class RegisterControllerTest {
         //WHEN
         String view = registerController.register(accountData, bindingResult, model);
         //THEN
-        Assertions.assertEquals("redirect:/", view);
+        assertEquals("redirect:/", view);
         verify(accountFacade).checkEmailAndUsernameExists(accountData);
         verify(accountFacade).attemptUserRegistration(accountData);
     }
@@ -80,7 +80,7 @@ class RegisterControllerTest {
         //WHEN
         String view = registerController.register(accountData, bindingResult, model);
         //THEN
-        Assertions.assertEquals("register", view);
+        assertEquals("register", view);
         verify(accountFacade).checkEmailAndUsernameExists(accountData);
         verify(bindingResult).hasErrors();
         verify(model).addAttribute("account", accountData);
@@ -99,7 +99,7 @@ class RegisterControllerTest {
         //WHEN
         String view = registerController.register(accountData, bindingResult, model);
         //THEN
-        Assertions.assertEquals("register", view);
+        assertEquals("register", view);
         verify(accountFacade).checkEmailAndUsernameExists(accountData);
         verify(bindingResult).hasErrors();
         verify(model).addAttribute("account", accountData);
@@ -118,7 +118,7 @@ class RegisterControllerTest {
         //WHEN
         String view = registerController.register(accountData, bindingResult, model);
         //THEN
-        Assertions.assertEquals("register", view);
+        assertEquals("register", view);
         verify(accountFacade).checkEmailAndUsernameExists(accountData);
         verify(bindingResult).hasErrors();
         verify(model).addAttribute("account", accountData);
@@ -137,15 +137,15 @@ class RegisterControllerTest {
         //WHEN
         String view = registerController.register(accountData, bindingResult, model);
         //THEN
-        Assertions.assertEquals("error403", view);
+        assertEquals("error403", view);
         verify(accountFacade).checkEmailAndUsernameExists(accountData);
         verify(accountFacade).attemptUserRegistration(accountData);
     }
 
     //@Test
-    void template() {
-        //GIVEN
-        //WHEN
-        //THEN
-    }
+    //void template() {
+    //    //GIVEN
+    //    //WHEN
+    //    //THEN
+    //}
 }

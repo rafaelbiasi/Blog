@@ -4,7 +4,6 @@ import br.com.rafaelbiasi.blog.model.Role;
 import br.com.rafaelbiasi.blog.repository.RoleRepository;
 import br.com.rafaelbiasi.blog.service.RoleService;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -12,15 +11,18 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
+import static java.util.Optional.of;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class RoleServiceImplTest {
 
     private RoleService roleService;
-    private AutoCloseable closeable;
     @Mock
     private RoleRepository roleRepository;
+    private AutoCloseable closeable;
 
     @BeforeEach
     void setUp() {
@@ -38,12 +40,12 @@ class RoleServiceImplTest {
     void findById() {
         //GIVEN
         Role role = Role.builder().id(1L).build();
-        when(roleRepository.findById(1L)).thenReturn(Optional.of(role));
+        when(roleRepository.findById(1L)).thenReturn(of(role));
         //WHEN
         Optional<Role> roleResponse = roleService.findById(1L);
         //THEN
-        Assertions.assertTrue(roleResponse.isPresent());
-        Assertions.assertEquals(role, roleResponse.get());
+        assertTrue(roleResponse.isPresent());
+        assertEquals(role, roleResponse.get());
         verify(roleRepository).findById(1L);
     }
 
@@ -55,14 +57,33 @@ class RoleServiceImplTest {
         //WHEN
         Role roleResponse = roleService.save(role);
         //THEN
-        Assertions.assertEquals(role, roleResponse);
+        assertEquals(role, roleResponse);
         verify(roleRepository).save(role);
     }
 
-    //@Test
-    void template() {
+    @Test
+    void delete() {
+        //GIVEN
+        Role role = Role.builder().id(1L).build();
+        //WHEN
+        roleService.delete(role);
+        //THEN
+        verify(roleRepository).delete(role);
+    }
+
+    @Test
+    void findByName() {
         //GIVEN
         //WHEN
+        roleService.findByName("USER_ROLE");
         //THEN
+        verify(roleRepository).findByName("USER_ROLE");
     }
+
+    //@Test
+    //void template() {
+    //    //GIVEN
+    //    //WHEN
+    //    //THEN
+    //}
 }

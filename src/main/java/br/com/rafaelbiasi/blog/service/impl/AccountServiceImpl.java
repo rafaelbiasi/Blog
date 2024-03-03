@@ -3,33 +3,27 @@ package br.com.rafaelbiasi.blog.service.impl;
 import br.com.rafaelbiasi.blog.model.Account;
 import br.com.rafaelbiasi.blog.model.RegistrationResponse;
 import br.com.rafaelbiasi.blog.repository.AccountRepository;
-import br.com.rafaelbiasi.blog.repository.RoleRepository;
 import br.com.rafaelbiasi.blog.service.AccountService;
-import br.com.rafaelbiasi.blog.specification.impl.EmailExistsSpecification;
-import br.com.rafaelbiasi.blog.specification.impl.HasRolesSpecification;
-import br.com.rafaelbiasi.blog.specification.impl.IsNewAccountSpecification;
-import br.com.rafaelbiasi.blog.specification.impl.UsernameExistsSpecification;
+import br.com.rafaelbiasi.blog.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.Objects;
 import java.util.Optional;
+
+import static java.util.Objects.requireNonNull;
+import static java.util.Optional.of;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
 
-    private final UsernameExistsSpecification usernameExistsSpec;
-    private final EmailExistsSpecification emailExistsSpec;
-    private final IsNewAccountSpecification isNewAccountSpec;
-    private final HasRolesSpecification hasRolesSpec;
     private final PasswordEncoder passwordEncoder;
     private final AccountRepository accountRepository;
-    private final RoleRepository roleRepository;
+    private final RoleService roleService;
 
     @Override
     public Optional<Account> findById(long id) {
@@ -38,41 +32,51 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account save(Account account) {
-        Objects.requireNonNull(account, "Account is null.");
-        if (isNewAccountSpec.andNot(hasRolesSpec).isSatisfiedBy(account)) {
-            roleRepository.findByName("ROLE_USER").map(Collections::singleton).ifPresent(account::setRoles);
-        }
+        requireNonNull(account, "Account is null.");
+        of(account)
+                .filter(Account::isNew)
+                .filter(Account::hasNoHoles)
+                .ifPresent(acc -> roleService
+                        .findByName("ROLE_GUEST")
+                        .map(Collections::singleton)
+                        .ifPresent(acc::setRoles)
+                );
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         return accountRepository.save(account);
     }
 
     @Override
     public Optional<Account> findOneByEmail(String email) {
-        Objects.requireNonNull(email, "Email is null.");
+        requireNonNull(email, "Email is null.");
         return accountRepository.findOneByEmailIgnoreCase(email);
     }
 
     @Override
     public Optional<Account> findOneByUsername(String username) {
-        Objects.requireNonNull(username, "Username is null.");
+        requireNonNull(username, "Username is null.");
         return accountRepository.findOneByUsernameIgnoreCase(username);
     }
 
     @Override
     public RegistrationResponse attemptUserRegistration(Account account) {
-        Objects.requireNonNull(account, "Account is null.");
-        RegistrationResponse registrationResponse = checkEmailAndUsernameExists(account);
-        if (registrationResponse.success()) {
-            save(account);
-        }
-        return registrationResponse;
+        requireNonNull(account, "Account is null.");
+        Optional<RegistrationResponse> registrationResponse = of(checkEmailAndUsernameExists(account));
+        registrationResponse
+                .filter(RegistrationResponse::success)
+                .ifPresent(response -> save(account));
+        return registrationResponse.get();
     }
 
     @Override
     public RegistrationResponse checkEmailAndUsernameExists(Account account) {
         return RegistrationResponse.builder()
-                .emailExists(emailExistsSpec.isSatisfiedBy(account))
-                .usernameExists(usernameExistsSpec.isSatisfiedBy(account))
+                .emailExists(accountRepository.findOneByEmailIgnoreCase(account.getEmail()).isPresent())
+                .usernameExists(accountRepository.findOneByUsernameIgnoreCase(account.getUsername()).isPresent())
                 .build();
+    }
+
+    @Override
+    public void delete(Account account) {
+        accountRepository.delete(account);
     }
 }

@@ -13,9 +13,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.util.Objects.requireNonNull;
 
 @Slf4j
 @Component("userDetailsService")
@@ -26,7 +27,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Objects.requireNonNull(username, "Username or E-mail is null.");
+        requireNonNull(username, "Username or E-mail is null.");
         Optional<Account> accountOptional = accountService.findOneByUsername(username);
         if (accountOptional.isEmpty()) {
             accountOptional = accountService.findOneByEmail(username);
@@ -37,7 +38,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                             .stream()
                             .map(role -> new SimpleGrantedAuthority(role.getName()))
                             .collect(Collectors.toList());
-                    return new User(account.getEmail(), account.getPassword(), grantedAuthorities);
+                    return new User(account.getUsername(), account.getPassword(), grantedAuthorities);
                 })
                 .orElseThrow(() -> {
                     log.warn("Account not found or password is not correct for username/email: {}", username);

@@ -7,7 +7,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 @Component
 @RequiredArgsConstructor
@@ -17,13 +17,13 @@ public class FileFacadeImpl implements FileFacade {
 
     @Override
     public Resource load(String imageUri) {
-        Objects.requireNonNull(imageUri, "ImageURI is null.");
+        requireNonNull(imageUri, "ImageURI is null.");
         return fileService.load(imageUri);
     }
 
     @Override
     public void save(MultipartFile file) {
-        Objects.requireNonNull(file, "MultipartFile is null.");
+        requireNonNull(file, "MultipartFile is null.");
         fileService.save(file);
     }
 }

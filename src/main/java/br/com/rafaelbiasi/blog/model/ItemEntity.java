@@ -1,5 +1,6 @@
 package br.com.rafaelbiasi.blog.model;
 
+import br.com.rafaelbiasi.blog.model.keygen.TSIDKeyGenerator;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -24,16 +25,14 @@ public abstract class ItemEntity {
     @EqualsAndHashCode.Include
     @GeneratedValue(generator = "tsid_gen")
     @GenericGenerator(name = "tsid_gen", type = TSIDKeyGenerator.class)
-    Long id;
-
+    private Long id;
     @Column(nullable = false)
-    LocalDateTime creation;
-
+    private LocalDateTime creation;
     @Column(nullable = false)
-    LocalDateTime modified;
+    private LocalDateTime modified;
 
     @PrePersist
-    protected void onCreate() {
+    void onCreate() {
         creation = LocalDateTime.now();
         modified = creation;
     }

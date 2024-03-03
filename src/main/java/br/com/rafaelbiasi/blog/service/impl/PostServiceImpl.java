@@ -1,19 +1,23 @@
 package br.com.rafaelbiasi.blog.service.impl;
 
+import br.com.rafaelbiasi.blog.model.Account;
 import br.com.rafaelbiasi.blog.model.Post;
 import br.com.rafaelbiasi.blog.repository.PostRepository;
+import br.com.rafaelbiasi.blog.service.AccountService;
 import br.com.rafaelbiasi.blog.service.PostService;
-import br.com.rafaelbiasi.blog.specification.impl.IsNewPostSpecification;
 import com.github.slugify.Slugify;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+
+import static java.util.Objects.requireNonNull;
+import static java.util.Optional.ofNullable;
 
 @Slf4j
 @Service
@@ -21,7 +25,7 @@ import java.util.Optional;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
-    private final IsNewPostSpecification isNewPostSpecification;
+    private final AccountService accountService;
     private final Slugify slugify = Slugify.builder().build();
 
     @Override
@@ -36,29 +40,32 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<Post> findAll(Pageable pageable) {
-        Objects.requireNonNull(pageable, "Pageable is null.");
+        requireNonNull(pageable, "Pageable is null.");
         return postRepository.findAll(pageable);
     }
 
     @Override
     public Post save(Post post) {
-        Objects.requireNonNull(post, "Post is null.");
-        if (isNewPostSpecification.isSatisfiedBy(post)) {
+        requireNonNull(post, "Post is null.");
+        Account account = accountService.findOneByUsername(post.getAuthor().getUsername())
+                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
+        post.setAuthor(account);
+        Optional<String> code = ofNullable(post.getCode());
+        if (code.isEmpty()) {
             post.setCode(slugify.slugify(post.getTitle()));
         }
         return postRepository.save(post);
     }
 
     @Override
-    public void delete(String code) {
-        Objects.requireNonNull(code, "Post is null.");
-        postRepository.delete(postRepository.findByCode(code).orElseThrow(() -> new IllegalArgumentException("Post not found")));
-    }
-
-    @Override
     public Optional<Post> findByCode(String code) {
-        Objects.requireNonNull(code, "Code is null.");
+        requireNonNull(code, "Code is null.");
         return postRepository.findByCode(code);
     }
 
+    @Override
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #post.author.username == authentication.principal.username")
+    public void delete(Post post) {
+        postRepository.delete(post);
+    }
 }

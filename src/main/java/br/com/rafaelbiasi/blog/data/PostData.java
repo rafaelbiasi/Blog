@@ -1,9 +1,12 @@
 package br.com.rafaelbiasi.blog.data;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -15,13 +18,15 @@ import java.time.LocalDateTime;
 public class PostData {
 
     @EqualsAndHashCode.Include
-    String code;
+    private String code;
     @NotBlank(message = "Title is mandatory")
-    String title;
+    private String title;
     @NotBlank(message = "Body is mandatory")
-    String body;
-    String imageFilePath;
-    AccountData account;
-    LocalDateTime creation;
-    LocalDateTime modified;
+    private String body;
+    private String imageFilePath;
+    @NotNull(message = "Account is mandatory")
+    private AccountData author;
+    private Set<CommentData> comments = new HashSet<>();
+    private LocalDateTime creation;
+    private LocalDateTime modified;
 }

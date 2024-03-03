@@ -33,7 +33,7 @@ public class WebSecurityConfig {
             "/page/**",
             "/rss/**",
             "/register/**",
-            "/posts/**",
+            "/post/**",
             "/auth",
             "/auth/**"
     };

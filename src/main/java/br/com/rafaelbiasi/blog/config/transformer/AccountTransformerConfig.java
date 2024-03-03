@@ -7,25 +7,20 @@ import br.com.rafaelbiasi.blog.facade.mapper.account.AccountDataMapper;
 import br.com.rafaelbiasi.blog.facade.mapper.account.AccountMapper;
 import br.com.rafaelbiasi.blog.model.Account;
 import br.com.rafaelbiasi.blog.transformer.impl.Transformer;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
 @Configuration
+@RequiredArgsConstructor
 public class AccountTransformerConfig {
 
     private final AccountDataMapper accountDataMapper;
     private final AccountMapper accountMapper;
     private final AccountDataCodeMapper accountDataCodeMapper;
     private final AccountCodeMapper accountCodeMapper;
-
-    public AccountTransformerConfig(AccountDataMapper accountDataMapper, AccountMapper accountMapper, AccountDataCodeMapper accountDataCodeMapper, AccountCodeMapper accountCodeMapper) {
-        this.accountDataMapper = accountDataMapper;
-        this.accountMapper = accountMapper;
-        this.accountDataCodeMapper = accountDataCodeMapper;
-        this.accountCodeMapper = accountCodeMapper;
-    }
 
     @Bean("accountDataTransformer")
     public Transformer<Account, AccountData> accountDataTransformer() {

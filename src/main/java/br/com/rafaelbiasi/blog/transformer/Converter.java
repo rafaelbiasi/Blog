@@ -3,10 +3,9 @@ package br.com.rafaelbiasi.blog.transformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
+import static java.util.Optional.ofNullable;
 
 
 public interface Converter<S, T> {
@@ -20,7 +19,8 @@ public interface Converter<S, T> {
     default List<T> convertAll(List<S> sources) {
         log.debug("Converting list of sources. Total elements: {}", sources == null ? 0 : sources.size());
 
-        if (sources == null) {
+        Optional<List<S>> sourcesOpt = ofNullable(sources);
+        if (sourcesOpt.isEmpty()) {
             return new ArrayList<>();
         }
 
@@ -37,7 +37,8 @@ public interface Converter<S, T> {
 
     default Set<T> convertAll(Set<S> sources) {
         log.debug("Converting set of sources. Total elements: {}", sources == null ? 0 : sources.size());
-        if (sources == null) {
+        Optional<Set<S>> sourcesOpt = ofNullable(sources);
+        if (sourcesOpt.isEmpty()) {
             return new HashSet<>();
         }
 
@@ -53,7 +54,8 @@ public interface Converter<S, T> {
     }
 
     default List<T> convertAllIgnoreExceptions(List<S> sources) {
-        if (sources == null) {
+        Optional<List<S>> sourcesOpt = ofNullable(sources);
+        if (sourcesOpt.isEmpty()) {
             return new ArrayList<>();
         }
 
@@ -70,7 +72,8 @@ public interface Converter<S, T> {
     }
 
     default Set<T> convertAllIgnoreExceptions(Set<S> sources) {
-        if (sources == null) {
+        Optional<Set<S>> sourcesOpt = ofNullable(sources);
+        if (sourcesOpt.isEmpty()) {
             return new HashSet<>();
         }
 

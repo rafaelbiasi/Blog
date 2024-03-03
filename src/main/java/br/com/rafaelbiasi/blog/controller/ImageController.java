@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
+import static java.util.Optional.ofNullable;
+import static java.util.function.Predicate.not;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -21,13 +26,6 @@ public class ImageController {
     private final FileFacade fileService;
     private final ServletContext servletContext;
 
-    /**
-     * Fetches an image by its URI and serves it to the client.
-     * The method determines the content type of the image and sets appropriate HTTP headers.
-     *
-     * @param imageUri the URI of the image to fetch, mapped from the URL path
-     * @return a {@link ResponseEntity} containing the image as a {@link Resource} and HTTP headers
-     */
     @GetMapping("/images/{id}")
     public ResponseEntity<Resource> image(@PathVariable("id") String imageUri) {
         String logId = LogId.logId();
@@ -36,8 +34,9 @@ public class ImageController {
                 "Image URI", imageUri
         );
         try {
-            if (imageUri != null && !imageUri.isEmpty()) {
-                Resource image = fileService.load(imageUri);
+            Optional<String> imageUriOpt = ofNullable(imageUri).filter(not(String::isBlank));
+            if (imageUriOpt.isPresent()) {
+                Resource image = fileService.load(imageUriOpt.get());
                 MediaType contentType = getMediaType(logId, image);
                 log.info("#{}={}. Image fetched. [{}={}, {}={}, {}={} {}]",
                         "LogID", logId,

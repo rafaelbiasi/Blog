@@ -20,5 +20,5 @@ import lombok.experimental.SuperBuilder;
 public class Role extends ItemEntity {
 
     @Column(length = 16, nullable = false)
-    String name;
+    private String name;
 }

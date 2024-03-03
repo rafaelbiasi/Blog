@@ -4,11 +4,10 @@ import br.com.rafaelbiasi.blog.data.AccountData;
 import br.com.rafaelbiasi.blog.data.RegistrationResponseData;
 import br.com.rafaelbiasi.blog.facade.AccountFacade;
 import br.com.rafaelbiasi.blog.model.Account;
-import br.com.rafaelbiasi.blog.service.AccountService;
 import br.com.rafaelbiasi.blog.model.RegistrationResponse;
+import br.com.rafaelbiasi.blog.service.AccountService;
 import br.com.rafaelbiasi.blog.transformer.impl.Transformer;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -16,20 +15,23 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class AccountFacadeImplTest {
 
     private AccountFacade accountFacade;
-
-    private AutoCloseable closeable;
     @Mock
     private AccountService accountService;
     @Mock
     private Transformer<Account, AccountData> accountDataTransformer;
     @Mock
     private Transformer<AccountData, Account> accountTransformer;
+    private AutoCloseable closeable;
 
     @BeforeEach
     void setUp() {
@@ -48,13 +50,13 @@ class AccountFacadeImplTest {
         //GIVEN
         Account account = new Account();
         AccountData accountData = new AccountData();
-        when(accountService.findOneByEmail("emai@email.com")).thenReturn(Optional.of(account));
+        when(accountService.findOneByEmail("emai@email.com")).thenReturn(of(account));
         when(accountDataTransformer.convert(account)).thenReturn(accountData);
         //WHEN
-        Optional<AccountData> oneByEmail = accountFacade.findOneByEmail("emai@email.com");
+        Optional<AccountData> accountResponse = accountFacade.findOneByEmail("emai@email.com");
         //THEN
-        Assertions.assertTrue(oneByEmail.isPresent());
-        Assertions.assertEquals(accountData, oneByEmail.get());
+        assertTrue(accountResponse.isPresent());
+        assertEquals(accountData, accountResponse.get());
         verify(accountService).findOneByEmail("emai@email.com");
         verify(accountDataTransformer).convert(account);
     }
@@ -62,13 +64,41 @@ class AccountFacadeImplTest {
     @Test
     void findOneByEmailEmpty() {
         //GIVEN
-        when(accountService.findOneByEmail("emai@email.com")).thenReturn(Optional.empty());
+        when(accountService.findOneByEmail("emai@email.com")).thenReturn(empty());
         //WHEN
-        Optional<AccountData> oneByEmail = accountFacade.findOneByEmail("emai@email.com");
+        Optional<AccountData> accountResponse = accountFacade.findOneByEmail("emai@email.com");
         //THEN
-        Assertions.assertTrue(oneByEmail.isEmpty());
+        assertTrue(accountResponse.isEmpty());
         verify(accountService).findOneByEmail("emai@email.com");
     }
+
+    @Test
+    void findOneByUsername() {
+        //GIVEN
+        Account account = new Account();
+        AccountData accountData = new AccountData();
+        when(accountService.findOneByUsername("username")).thenReturn(of(account));
+        when(accountDataTransformer.convert(account)).thenReturn(accountData);
+        //WHEN
+        Optional<AccountData> accountResponse = accountFacade.findOneByUsername("username");
+        //THEN
+        assertTrue(accountResponse.isPresent());
+        assertEquals(accountData, accountResponse.get());
+        verify(accountService).findOneByUsername("username");
+        verify(accountDataTransformer).convert(account);
+    }
+
+    @Test
+    void findOneByUsernameEmpty() {
+        //GIVEN
+        when(accountService.findOneByUsername("username")).thenReturn(empty());
+        //WHEN
+        Optional<AccountData> accountResponse = accountFacade.findOneByUsername("username");
+        //THEN
+        assertTrue(accountResponse.isEmpty());
+        verify(accountService).findOneByUsername("username");
+    }
+
 
     @Test()
     void save() {
@@ -96,7 +126,7 @@ class AccountFacadeImplTest {
         //WHEN
         RegistrationResponseData registrationResponse = accountFacade.attemptUserRegistration(accountData);
         //THEN
-        Assertions.assertEquals(resultData, registrationResponse);
+        assertEquals(resultData, registrationResponse);
         verify(accountTransformer).convert(accountData);
         verify(accountService).attemptUserRegistration(account);
     }
@@ -113,15 +143,15 @@ class AccountFacadeImplTest {
         //WHEN
         RegistrationResponseData registrationResponse = accountFacade.checkEmailAndUsernameExists(accountData);
         //THEN
-        Assertions.assertEquals(resultData, registrationResponse);
+        assertEquals(resultData, registrationResponse);
         verify(accountTransformer).convert(accountData);
         verify(accountService).checkEmailAndUsernameExists(account);
     }
 
     //@Test
-    void template() {
-        //GIVEN
-        //WHEN
-        //THEN
-    }
+    //void template() {
+    //    //GIVEN
+    //    //WHEN
+    //    //THEN
+    //}
 }

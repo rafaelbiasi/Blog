@@ -1,5 +1,6 @@
 package br.com.rafaelbiasi.blog.data;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -14,8 +15,9 @@ import java.time.LocalDateTime;
 public class RoleData {
 
     @EqualsAndHashCode.Include
-    long code;
-    String name;
-    LocalDateTime creation;
-    LocalDateTime modified;
+    private long code;
+    @NotBlank(message = "Role name is mandatory")
+    private String name;
+    private LocalDateTime creation;
+    private LocalDateTime modified;
 }

@@ -7,7 +7,6 @@ import com.rometools.rome.feed.rss.Channel;
 import com.rometools.rome.feed.rss.Item;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -26,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -61,7 +62,7 @@ class RssFeedControllerTest {
         Pageable pageable = PageRequest.of(0, 20);
         Page<PostData> page = new PageImpl<>(posts, pageable, size);
         URI url = new URI("https://127.0.0.1/rss");
-        when(postFacade.getAll(pageable)).thenReturn(page);
+        when(postFacade.findAll(pageable)).thenReturn(page);
         when(request.getRequestURI()).thenReturn(url.toString());
         when(request.getServerName()).thenReturn(url.getHost());
         when(request.getServerPort()).thenReturn(url.getPort());
@@ -69,25 +70,25 @@ class RssFeedControllerTest {
         //WHEN
         Channel channel = rssFeedController.rssFeed(request);
         //THEN
-        Assertions.assertEquals("Spring Boot Blog Application", channel.getTitle());
-        Assertions.assertEquals("Spring Boot Blog Application", channel.getDescription());
-        Assertions.assertEquals("https://127.0.0.1", channel.getLink());
-        Assertions.assertEquals("https://127.0.0.1", channel.getUri());
-        Assertions.assertEquals("Rome Tools", channel.getGenerator());
-        Assertions.assertEquals(1, channel.getPubDate().compareTo(anotherDate));
+        assertEquals("Spring Boot Blog Application", channel.getTitle());
+        assertEquals("Spring Boot Blog Application", channel.getDescription());
+        assertEquals("https://127.0.0.1", channel.getLink());
+        assertEquals("https://127.0.0.1", channel.getUri());
+        assertEquals("Rome Tools", channel.getGenerator());
+        assertEquals(1, channel.getPubDate().compareTo(anotherDate));
         Item item1 = channel.getItems().get(0);
-        Assertions.assertEquals("first0 last0", item1.getAuthor());
-        Assertions.assertEquals("https://127.0.0.1/posts/code0", item1.getLink());
-        Assertions.assertEquals("title0", item1.getTitle());
-        Assertions.assertEquals("body0", item1.getDescription().getValue());
-        Assertions.assertEquals(Date.from(date.atZone(ZoneId.systemDefault()).toInstant()), item1.getPubDate());
+        assertEquals("first0 last0", item1.getAuthor());
+        assertEquals("https://127.0.0.1/post/code0", item1.getLink());
+        assertEquals("title0", item1.getTitle());
+        assertEquals("body0", item1.getDescription().getValue());
+        assertEquals(Date.from(date.atZone(ZoneId.systemDefault()).toInstant()), item1.getPubDate());
         Item item2 = channel.getItems().get(1);
-        Assertions.assertEquals("first1 last1", item2.getAuthor());
-        Assertions.assertEquals("https://127.0.0.1/posts/code1", item2.getLink());
-        Assertions.assertEquals("title1", item2.getTitle());
-        Assertions.assertEquals("body1", item2.getDescription().getValue());
-        Assertions.assertEquals(Date.from(date.atZone(ZoneId.systemDefault()).toInstant()), item2.getPubDate());
-        verify(postFacade).getAll(any());
+        assertEquals("first1 last1", item2.getAuthor());
+        assertEquals("https://127.0.0.1/post/code1", item2.getLink());
+        assertEquals("title1", item2.getTitle());
+        assertEquals("body1", item2.getDescription().getValue());
+        assertEquals(Date.from(date.atZone(ZoneId.systemDefault()).toInstant()), item2.getPubDate());
+        verify(postFacade).findAll(any());
         verify(request).getRequestURI();
         verify(request).getServerName();
         verify(request).getServerPort();
@@ -97,12 +98,12 @@ class RssFeedControllerTest {
     @Test
     void rssFeedException() {
         //GIVEN
-        when(postFacade.getAll(any())).thenThrow(new RuntimeException());
+        when(postFacade.findAll(any())).thenThrow(new RuntimeException());
         //WHEN
         Executable executable = () -> rssFeedController.rssFeed(request);
         //GIVEN
-        Assertions.assertThrows(RuntimeException.class, executable);
-        verify(postFacade).getAll(any());
+        assertThrows(RuntimeException.class, executable);
+        verify(postFacade).findAll(any());
     }
 
     private List<PostData> createPosts(int size, LocalDateTime date) {
@@ -113,7 +114,7 @@ class RssFeedControllerTest {
                     .title("title" + i)
                     .body("body" + i)
                     .modified(date)
-                    .account(AccountData.builder()
+                    .author(AccountData.builder()
                             .firstName("first" + i)
                             .lastName("last" + i)
                             .build())
@@ -123,9 +124,9 @@ class RssFeedControllerTest {
     }
 
     //@Test
-    void template() {
-        //GIVEN
-        //WHEN
-        //THEN
-    }
+    //void template() {
+    //    //GIVEN
+    //    //WHEN
+    //    //THEN
+    //}
 }

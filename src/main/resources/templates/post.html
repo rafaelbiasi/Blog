@@ -13,7 +13,7 @@
                      class="img-fluid" alt="Post image" loading="lazy"/>
                 <h1 th:text="${post.title}">Title</h1>
                 <p class="meta">
-                    <span th:text="#{post.metadata.author(${post.account.name})}">Written by Author</span>
+                    <span th:text="#{post.metadata.author(${post.author.name})}">Written by Author</span>
                     <span th:text="#{post.metadata.separator}"> | </span>
                     <span th:text="#{post.metadata.published(${#temporals.format(post.creation, 'dd MMM yyyy HH:mm')})}">Published at 01 Jan 2024 00:00</span>
                     <span th:text="#{post.metadata.separator}"> | </span>
@@ -23,9 +23,49 @@
             <section th:text="${post.body}">Body text</section>
         </article>
         <div sec:authorize="isAuthenticated()">
-            <a th:href="@{'/posts/' + ${post.code} + '/edit'}" class="btn btn-primary" th:text="#{post.edit}">Edit</a>
-            <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{'/posts/' + ${post.code} + '/delete'}"
+            <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_USER'')')}"
+               th:href="@{'/post/' + ${post.code} + '/edit'}"
+               class="btn btn-primary" th:text="#{post.edit}">Edit</a>
+            <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_USER'')')}"
+               th:href="@{'/post/' + ${post.code} + '/delete'}"
                class="btn btn-danger" th:text="#{post.delete}">Delete</a>
+        </div>
+        <div class="comments mt-5">
+            <h3>Comentários</h3>
+            <div th:each="comment : ${post.comments}" class="card mb-3">
+                <div class="card-body">
+                    <p class="card-text" th:text="${comment.text}">Texto do comentário</p>
+                    <footer class="blockquote-footer">
+                        <cite title="Source Title" th:text="${comment.author.username}">Nome do Autor</cite> em
+                        <small th:text="${#temporals.format(comment.creation, 'dd MMM yyyy HH:mm')}">Data de
+                            Criação</small>
+                    </footer>
+                    <form th:action="@{'/comment/delete/' + ${comment.code} + '/post/' + ${post.code}}" method="post">
+                        <button th:if="${comment.author.username eq #authentication?.principal?.username
+                        or #authorization.expression('hasRole(''ROLE_ADMIN'')')
+                        or #authorization.expression('hasRole(''ROLE_USER'')')}"
+                                class="btn btn-danger btn-sm delete-comment-btn">
+                            Apagar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div sec:authorize="isAuthenticated()" class="mt-5">
+            <h3>Adicionar um Comentário</h3>
+            <form th:action="@{'/comment/add/post/' + ${post.code}}" th:object="${comment}" method="post">
+                <div class="form-group">
+                    <label for="commentText">Comentário</label>
+                    <textarea class="form-control" id="commentText" th:field="*{text}" rows="3"
+                              th:placeholder="#{comment.text.placeholder}"
+                              placeholder="Write your comment here..."></textarea>
+                </div>
+                <div th:if="${comment != null}" th:each="error : ${#fields.errors('text')}" class="alert alert-danger"
+                     role="alert">
+                    <span th:text="${error}">Error message for text field</span>
+                </div>
+                <button type="submit" class="btn btn-primary">Enviar Comentário</button>
+            </form>
         </div>
     </div>
 </main>

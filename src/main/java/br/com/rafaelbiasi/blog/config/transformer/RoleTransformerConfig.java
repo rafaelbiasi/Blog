@@ -7,25 +7,20 @@ import br.com.rafaelbiasi.blog.facade.mapper.role.RoleDataMapper;
 import br.com.rafaelbiasi.blog.facade.mapper.role.RoleMapper;
 import br.com.rafaelbiasi.blog.model.Role;
 import br.com.rafaelbiasi.blog.transformer.impl.Transformer;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
 @Configuration
+@RequiredArgsConstructor
 public class RoleTransformerConfig {
 
     private final RoleDataMapper roleDataMapper;
     private final RoleMapper roleMapper;
     private final RoleDataCodeMapper roleDataCodeMapper;
     private final RoleCodeMapper roleCodeMapper;
-
-    public RoleTransformerConfig(RoleDataMapper roleDataMapper, RoleMapper roleMapper, RoleDataCodeMapper roleDataCodeMapper, RoleCodeMapper roleCodeMapper) {
-        this.roleDataMapper = roleDataMapper;
-        this.roleMapper = roleMapper;
-        this.roleDataCodeMapper = roleDataCodeMapper;
-        this.roleCodeMapper = roleCodeMapper;
-    }
 
     @Bean("roleDataTransformer")
     public Transformer<Role, RoleData> roleDataTransformer() {

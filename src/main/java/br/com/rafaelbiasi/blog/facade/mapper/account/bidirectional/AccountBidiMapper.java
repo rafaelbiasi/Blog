@@ -27,8 +27,7 @@ public class AccountBidiMapper implements BidirectionalMapper<Account, AccountDa
             @Lazy @Qualifier("roleTransformer") Transformer<RoleData, Role> roleTransformer,
             @Lazy @Qualifier("postTransformer") Transformer<PostData, Post> postTransformer,
             @Lazy @Qualifier("roleDataTransformer") Transformer<Role, RoleData> roleDataTransformer,
-            @Lazy @Qualifier("postDataCodeTransformer") Transformer<Post, PostData> postDataCodeTransformer
-    ) {
+            @Lazy @Qualifier("postDataCodeTransformer") Transformer<Post, PostData> postDataCodeTransformer) {
         this.roleTransformer = roleTransformer;
         this.postTransformer = postTransformer;
         this.roleDataTransformer = roleDataTransformer;
@@ -54,8 +53,6 @@ public class AccountBidiMapper implements BidirectionalMapper<Account, AccountDa
         mapGet(source::getFirstName, target::setFirstName);
         mapGet(source::getLastName, target::setLastName);
         mapGet(source::getPassword, target::setPassword);
-        mapGet(source::getCreation, target::setCreation);
-        mapGet(source::getModified, target::setModified);
         mapGet(source::getRoles, roleTransformer::convertAll, target::setRoles);
         mapGet(source::getPosts, postTransformer::convertAll, target::setPosts);
     }
