@@ -7,6 +7,7 @@ import br.com.rafaelbiasi.blog.service.AccountService;
 import br.com.rafaelbiasi.blog.service.FileService;
 import br.com.rafaelbiasi.blog.service.PostService;
 import br.com.rafaelbiasi.blog.service.RoleService;
+import br.com.rafaelbiasi.blog.util.LogId;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -34,6 +35,7 @@ public class InitialData implements CommandLineRunner {
     @Override
     public void run(String... args) {
         try {
+            LogId.mdcLogId();
             if (postService.findAll().isEmpty()) {
                 log.info("Starting application data initialization");
                 fileService.init();
@@ -45,6 +47,8 @@ public class InitialData implements CommandLineRunner {
         } catch (Exception e) {
             log.error("Error during application data initialization", e);
             throw e;
+        } finally {
+            LogId.removeMdcLogId();
         }
     }
 

@@ -3,7 +3,6 @@ package br.com.rafaelbiasi.blog.controller;
 import br.com.rafaelbiasi.blog.data.CommentData;
 import br.com.rafaelbiasi.blog.data.PostData;
 import br.com.rafaelbiasi.blog.facade.PostFacade;
-import br.com.rafaelbiasi.blog.util.LogId;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,22 +31,17 @@ public class PostController {
 
     @GetMapping("/{code}")
     public String post(@PathVariable String code, Model model, HttpServletRequest request) {
-        String logId = LogId.logId();
-        log.info("#{}={}. Entering the post page. Parameters [{}={}]",
-                "LogID", logId,
+        log.info("Entering the post page. Parameters [{}={}]",
                 "Code", code
         );
-        log.info("#{}={}. Fetching post. Parameters [{}={}]",
-                "LogID", logId,
+        log.info("Fetching post. Parameters [{}={}]",
                 "Code", code
         );
         Optional<PostData> post = postFacade.findByCode(code);
         if (post.isPresent()) {
             model.addAttribute("post", post.get());
             Optional<Map<String, ?>> flashAttributes = ofNullable(RequestContextUtils.getInputFlashMap(request));
-            if (flashAttributes.isPresent()) {
-                model.addAllAttributes(flashAttributes.get());
-            }
+            flashAttributes.ifPresent(model::addAllAttributes);
             if (!model.containsAttribute("comment")) {
                 model.addAttribute("comment", new CommentData());
             }
@@ -60,13 +54,10 @@ public class PostController {
     @GetMapping("/{code}/edit")
     @PreAuthorize("isAuthenticated()")
     public String update(@PathVariable String code, Model model) {
-        String logId = LogId.logId();
-        log.info("#{}={}. Entering the post edit page. Parameters [{}={}]",
-                "LogID", logId,
+        log.info("Entering the post edit page. Parameters [{}={}]",
                 "Code", code
         );
-        log.info("#{}={}. Fetching post. Parameters [{}={}]",
-                "LogID", logId,
+        log.info("Fetching post. Parameters [{}={}]",
                 "Code", code
         );
         Optional<PostData> post = postFacade.findByCode(code);
@@ -86,9 +77,7 @@ public class PostController {
             Model model,
             @PathVariable String code,
             @RequestParam("file") MultipartFile file) {
-        String logId = LogId.logId();
-        log.info("#{}={}. Updating the post. Parameters [{}={}, {}={}]",
-                "LogID", logId,
+        log.info("Updating the post. Parameters [{}={}, {}={}]",
                 "Code", code,
                 "File", file
         );
@@ -96,25 +85,17 @@ public class PostController {
             model.addAttribute("post", post);
             return "post_edit";
         }
-        try {
-            ofNullable(file).ifPresentOrElse(
-                    multipartFile -> postFacade.save(post, multipartFile),
-                    () -> postFacade.save(post)
-            );
-            return "redirect:/post/" + code;
-        } catch (Exception e) {
-            log.error("Error updating post. [{}={}]", "Code", code, e);
-            return "error500";
-        }
+        ofNullable(file).ifPresentOrElse(
+                multipartFile -> postFacade.save(post, multipartFile),
+                () -> postFacade.save(post)
+        );
+        return "redirect:/post/" + code;
     }
 
     @GetMapping("/new")
     @PreAuthorize("isAuthenticated()")
     public String create(Model model) {
-        String logId = LogId.logId();
-        log.info("#{}={}. Entering the new post page.",
-                "LogID", logId
-        );
+        log.info("Entering the new post page.");
         model.addAttribute("post", new PostData());
         return "post_new";
     }
@@ -127,9 +108,7 @@ public class PostController {
             Model model,
             @RequestParam("file") MultipartFile file,
             Principal principal) {
-        String logId = LogId.logId();
-        log.info("#{}={}. Saving the new post. Parameters [{}={}, {}={}, {}={}]",
-                "LogID", logId,
+        log.info("Saving the new post. Parameters [{}={}, {}={}, {}={}]",
                 "Post", post,
                 "File", file,
                 "Principal", principal
@@ -138,28 +117,20 @@ public class PostController {
             model.addAttribute("post", post);
             return "post_new";
         }
-        try {
-            log.info("#{}={}. Fetching principal. Parameters [{}={}]",
-                    "LogID", logId,
-                    "Principal", principal
-            );
-            ofNullable(file).ifPresentOrElse(
-                    multipartFile -> postFacade.save(post, multipartFile, principal),
-                    () -> postFacade.save(post, principal)
-            );
-            return "redirect:/";
-        } catch (Exception e) {
-            log.error("Error creating post. [{}={}]", "Post", post, e);
-            return "error500";
-        }
+        log.info("Fetching principal. Parameters [{}={}]",
+                "Principal", principal
+        );
+        ofNullable(file).ifPresentOrElse(
+                multipartFile -> postFacade.save(post, multipartFile, principal),
+                () -> postFacade.save(post, principal)
+        );
+        return "redirect:/";
     }
 
     @GetMapping("/{code}/delete")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String delete(@PathVariable String code) {
-        String logId = LogId.logId();
-        log.info("#{}={}. Deleting the post. Parameters [{}={}]",
-                "LogID", logId,
+        log.info("Deleting the post. Parameters [{}={}]",
                 "Code", code
         );
         postFacade.delete(code);

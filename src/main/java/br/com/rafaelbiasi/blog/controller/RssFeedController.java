@@ -2,7 +2,6 @@ package br.com.rafaelbiasi.blog.controller;
 
 import br.com.rafaelbiasi.blog.data.PostData;
 import br.com.rafaelbiasi.blog.facade.PostFacade;
-import br.com.rafaelbiasi.blog.util.LogId;
 import com.rometools.rome.feed.rss.Channel;
 import com.rometools.rome.feed.rss.Description;
 import com.rometools.rome.feed.rss.Item;
@@ -29,31 +28,25 @@ public class RssFeedController {
 
     @GetMapping(path = "/rss")
     public Channel rssFeed(HttpServletRequest request) {
-        try {
-            String logId = LogId.logId();
-            log.info("#{}={}. Accessing RSS feed", "LogID", logId);
-            String baseUrl = ServletUriComponentsBuilder.fromRequestUri(request)
-                    .replacePath(null)
-                    .build()
-                    .toUriString();
+        log.info("Accessing RSS feed");
+        String baseUrl = ServletUriComponentsBuilder.fromRequestUri(request)
+                .replacePath(null)
+                .build()
+                .toUriString();
 
-            Channel channel = createChannel(logId, baseUrl);
-            Pageable pageable = PageRequest.of(0, 20);
-            List<Item> items = postFacade.findAll(pageable).stream()
-                    .map(post -> createItem(logId, post, baseUrl))
-                    .collect(Collectors.toList());
+        Channel channel = createChannel(baseUrl);
+        Pageable pageable = PageRequest.of(0, 20);
+        List<Item> items = postFacade.findAll(pageable).stream()
+                .map(post -> createItem(post, baseUrl))
+                .collect(Collectors.toList());
 
-            log.info("#{}={}. Number of RSS items created: {}", "LogID", logId, items.size());
-            channel.setItems(items);
+        log.info("Number of RSS items created: {}", items.size());
+        channel.setItems(items);
 
-            return channel;
-        } catch (Exception e) {
-            log.error("Error generating RSS feed", e);
-            throw e;
-        }
+        return channel;
     }
 
-    private Channel createChannel(String logId, String baseUrl) {
+    private Channel createChannel(String baseUrl) {
         Channel channel = new Channel("rss_2.0");
         channel.setTitle("Spring Boot Blog Application");
         channel.setDescription("Spring Boot Blog Application");
@@ -61,12 +54,12 @@ public class RssFeedController {
         channel.setUri(baseUrl);
         channel.setGenerator("Rome Tools");
         channel.setPubDate(new Date());
-        log.debug("#{}={}. RSS Channel created with title: {}", "LogID", logId, channel.getTitle());
+        log.debug("RSS Channel created with title: {}", channel.getTitle());
         return channel;
     }
 
-    private Item createItem(String logId, PostData post, String baseUrl) {
-        log.debug("#{}={}. Creating RSS item for post: {}", "LogID", logId, post.getTitle());
+    private Item createItem(PostData post, String baseUrl) {
+        log.debug("Creating RSS item for post: {}", post.getTitle());
         Item item = new Item();
         item.setAuthor(post.getAuthor().getName());
         item.setLink(baseUrl + "/post/" + post.getCode());
@@ -75,7 +68,7 @@ public class RssFeedController {
         Description description = new Description();
         description.setValue(post.getBody());
         item.setDescription(description);
-        log.debug("#{}={}. RSS item created for post: {}", "LogID", logId, post.getTitle());
+        log.debug("RSS item created for post: {}", post.getTitle());
         return item;
     }
 }
