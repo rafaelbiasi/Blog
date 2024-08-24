@@ -1,12 +1,10 @@
-package br.com.rafaelbiasi.blog.facade.impl;
+package br.com.rafaelbiasi.blog.facade;
 
 import br.com.rafaelbiasi.blog.data.AccountData;
 import br.com.rafaelbiasi.blog.data.PostData;
-import br.com.rafaelbiasi.blog.facade.FileFacade;
-import br.com.rafaelbiasi.blog.facade.PostFacade;
 import br.com.rafaelbiasi.blog.model.Post;
 import br.com.rafaelbiasi.blog.service.PostService;
-import br.com.rafaelbiasi.blog.transformer.impl.Transformer;
+import br.com.rafaelbiasi.blog.transformer.Transformer;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;

@@ -2,6 +2,7 @@ package br.com.rafaelbiasi.blog.service.impl;
 
 import br.com.rafaelbiasi.blog.repository.FileRepository;
 import br.com.rafaelbiasi.blog.service.FileService;
+import br.com.rafaelbiasi.blog.service.FileServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

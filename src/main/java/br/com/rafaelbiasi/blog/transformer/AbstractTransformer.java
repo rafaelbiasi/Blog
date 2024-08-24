@@ -1,7 +1,5 @@
-package br.com.rafaelbiasi.blog.transformer.impl;
+package br.com.rafaelbiasi.blog.transformer;
 
-import br.com.rafaelbiasi.blog.transformer.Converter;
-import br.com.rafaelbiasi.blog.transformer.Mapper;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -66,7 +64,7 @@ public abstract class AbstractTransformer<S, T> implements Converter<S, T>, Mapp
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         //Empty
     }
 }

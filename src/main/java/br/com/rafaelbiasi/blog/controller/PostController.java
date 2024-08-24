@@ -2,6 +2,7 @@ package br.com.rafaelbiasi.blog.controller;
 
 import br.com.rafaelbiasi.blog.data.CommentData;
 import br.com.rafaelbiasi.blog.data.PostData;
+import br.com.rafaelbiasi.blog.exception.ResourceNotFoundException;
 import br.com.rafaelbiasi.blog.facade.PostFacade;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -34,9 +35,6 @@ public class PostController {
         log.info("Entering the post page. Parameters [{}={}]",
                 "Code", code
         );
-        log.info("Fetching post. Parameters [{}={}]",
-                "Code", code
-        );
         Optional<PostData> post = postFacade.findByCode(code);
         if (post.isPresent()) {
             model.addAttribute("post", post.get());
@@ -47,7 +45,7 @@ public class PostController {
             }
             return "post";
         } else {
-            return "error404";
+            throw new ResourceNotFoundException("Post not found for [code=" + code + "]");
         }
     }
 
@@ -57,15 +55,12 @@ public class PostController {
         log.info("Entering the post edit page. Parameters [{}={}]",
                 "Code", code
         );
-        log.info("Fetching post. Parameters [{}={}]",
-                "Code", code
-        );
         Optional<PostData> post = postFacade.findByCode(code);
         if (post.isPresent()) {
             model.addAttribute("post", post.get());
             return "post_edit";
         } else {
-            return "error404";
+            throw new ResourceNotFoundException("Post not found for code: " + code);
         }
     }
 

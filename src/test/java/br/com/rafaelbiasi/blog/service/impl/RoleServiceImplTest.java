@@ -3,6 +3,7 @@ package br.com.rafaelbiasi.blog.service.impl;
 import br.com.rafaelbiasi.blog.model.Role;
 import br.com.rafaelbiasi.blog.repository.RoleRepository;
 import br.com.rafaelbiasi.blog.service.RoleService;
+import br.com.rafaelbiasi.blog.service.RoleServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

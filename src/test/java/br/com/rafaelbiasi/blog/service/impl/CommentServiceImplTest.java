@@ -6,6 +6,7 @@ import br.com.rafaelbiasi.blog.model.Post;
 import br.com.rafaelbiasi.blog.repository.CommentRepository;
 import br.com.rafaelbiasi.blog.service.AccountService;
 import br.com.rafaelbiasi.blog.service.CommentService;
+import br.com.rafaelbiasi.blog.service.CommentServiceImpl;
 import br.com.rafaelbiasi.blog.service.PostService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

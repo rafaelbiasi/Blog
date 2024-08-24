@@ -6,7 +6,7 @@ import br.com.rafaelbiasi.blog.facade.mapper.post.PostDataCodeMapper;
 import br.com.rafaelbiasi.blog.facade.mapper.post.PostDataMapper;
 import br.com.rafaelbiasi.blog.facade.mapper.post.PostMapper;
 import br.com.rafaelbiasi.blog.model.Post;
-import br.com.rafaelbiasi.blog.transformer.impl.Transformer;
+import br.com.rafaelbiasi.blog.transformer.Transformer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

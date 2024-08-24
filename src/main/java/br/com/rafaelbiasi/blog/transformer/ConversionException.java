@@ -1,4 +1,4 @@
-package br.com.rafaelbiasi.blog.transformer.impl;
+package br.com.rafaelbiasi.blog.transformer;
 
 public class ConversionException extends RuntimeException {
 

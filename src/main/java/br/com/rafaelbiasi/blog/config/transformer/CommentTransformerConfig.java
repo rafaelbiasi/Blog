@@ -6,7 +6,7 @@ import br.com.rafaelbiasi.blog.facade.mapper.comment.CommentDataCodeMapper;
 import br.com.rafaelbiasi.blog.facade.mapper.comment.CommentDataMapper;
 import br.com.rafaelbiasi.blog.facade.mapper.comment.CommentMapper;
 import br.com.rafaelbiasi.blog.model.Comment;
-import br.com.rafaelbiasi.blog.transformer.impl.Transformer;
+import br.com.rafaelbiasi.blog.transformer.Transformer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

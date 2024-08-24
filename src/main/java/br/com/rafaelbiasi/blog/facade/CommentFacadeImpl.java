@@ -1,12 +1,11 @@
-package br.com.rafaelbiasi.blog.facade.impl;
+package br.com.rafaelbiasi.blog.facade;
 
 import br.com.rafaelbiasi.blog.data.AccountData;
 import br.com.rafaelbiasi.blog.data.CommentData;
 import br.com.rafaelbiasi.blog.data.PostData;
-import br.com.rafaelbiasi.blog.facade.CommentFacade;
 import br.com.rafaelbiasi.blog.model.Comment;
 import br.com.rafaelbiasi.blog.service.CommentService;
-import br.com.rafaelbiasi.blog.transformer.impl.Transformer;
+import br.com.rafaelbiasi.blog.transformer.Transformer;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;

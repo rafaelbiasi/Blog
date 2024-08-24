@@ -6,7 +6,7 @@ import br.com.rafaelbiasi.blog.facade.mapper.role.RoleDataCodeMapper;
 import br.com.rafaelbiasi.blog.facade.mapper.role.RoleDataMapper;
 import br.com.rafaelbiasi.blog.facade.mapper.role.RoleMapper;
 import br.com.rafaelbiasi.blog.model.Role;
-import br.com.rafaelbiasi.blog.transformer.impl.Transformer;
+import br.com.rafaelbiasi.blog.transformer.Transformer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

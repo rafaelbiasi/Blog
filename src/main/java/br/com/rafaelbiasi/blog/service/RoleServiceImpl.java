@@ -1,8 +1,7 @@
-package br.com.rafaelbiasi.blog.service.impl;
+package br.com.rafaelbiasi.blog.service;
 
 import br.com.rafaelbiasi.blog.model.Role;
 import br.com.rafaelbiasi.blog.repository.RoleRepository;
-import br.com.rafaelbiasi.blog.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

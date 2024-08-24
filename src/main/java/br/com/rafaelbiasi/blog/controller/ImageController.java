@@ -1,5 +1,6 @@
 package br.com.rafaelbiasi.blog.controller;
 
+import br.com.rafaelbiasi.blog.exception.ResourceNotFoundException;
 import br.com.rafaelbiasi.blog.facade.FileFacade;
 import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
@@ -45,9 +46,7 @@ public class ImageController {
                     .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + image.getFilename() + "\"")
                     .body(image);
         } else {
-            log.error("Error loading image with null or empty URI. [{}={}]",
-                    "Image URI", imageUri);
-            return ResponseEntity.notFound().build();
+            throw new ResourceNotFoundException("Error loading image with null or empty URI. [Image URI=" + imageUri + "] ");
         }
     }
 

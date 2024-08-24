@@ -4,7 +4,7 @@ import br.com.rafaelbiasi.blog.data.PostData;
 import br.com.rafaelbiasi.blog.facade.mapper.post.bidirectional.PostCodeBidiMapper;
 import br.com.rafaelbiasi.blog.model.Post;
 import br.com.rafaelbiasi.blog.transformer.Mapper;
-import br.com.rafaelbiasi.blog.transformer.impl.ConversionException;
+import br.com.rafaelbiasi.blog.transformer.ConversionException;
 import org.springframework.stereotype.Component;
 
 @Component

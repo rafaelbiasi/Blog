@@ -6,7 +6,7 @@ import br.com.rafaelbiasi.blog.facade.mapper.account.AccountDataCodeMapper;
 import br.com.rafaelbiasi.blog.facade.mapper.account.AccountDataMapper;
 import br.com.rafaelbiasi.blog.facade.mapper.account.AccountMapper;
 import br.com.rafaelbiasi.blog.model.Account;
-import br.com.rafaelbiasi.blog.transformer.impl.Transformer;
+import br.com.rafaelbiasi.blog.transformer.Transformer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

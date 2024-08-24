@@ -4,7 +4,7 @@ import br.com.rafaelbiasi.blog.data.CommentData;
 import br.com.rafaelbiasi.blog.facade.mapper.comment.bidirectional.CommentCodeBidiMapper;
 import br.com.rafaelbiasi.blog.model.Comment;
 import br.com.rafaelbiasi.blog.transformer.Mapper;
-import br.com.rafaelbiasi.blog.transformer.impl.ConversionException;
+import br.com.rafaelbiasi.blog.transformer.ConversionException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -2,9 +2,10 @@ package br.com.rafaelbiasi.blog.facade.impl;
 
 import br.com.rafaelbiasi.blog.data.CommentData;
 import br.com.rafaelbiasi.blog.facade.CommentFacade;
+import br.com.rafaelbiasi.blog.facade.CommentFacadeImpl;
 import br.com.rafaelbiasi.blog.model.Comment;
 import br.com.rafaelbiasi.blog.service.CommentService;
-import br.com.rafaelbiasi.blog.transformer.impl.Transformer;
+import br.com.rafaelbiasi.blog.transformer.Transformer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

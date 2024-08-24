@@ -1,10 +1,8 @@
-package br.com.rafaelbiasi.blog.service.impl;
+package br.com.rafaelbiasi.blog.service;
 
 import br.com.rafaelbiasi.blog.model.Account;
 import br.com.rafaelbiasi.blog.model.Post;
 import br.com.rafaelbiasi.blog.repository.PostRepository;
-import br.com.rafaelbiasi.blog.service.AccountService;
-import br.com.rafaelbiasi.blog.service.PostService;
 import com.github.slugify.Slugify;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

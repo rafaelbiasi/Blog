@@ -1,7 +1,6 @@
-package br.com.rafaelbiasi.blog.service.impl;
+package br.com.rafaelbiasi.blog.service;
 
 import br.com.rafaelbiasi.blog.repository.FileRepository;
-import br.com.rafaelbiasi.blog.service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;

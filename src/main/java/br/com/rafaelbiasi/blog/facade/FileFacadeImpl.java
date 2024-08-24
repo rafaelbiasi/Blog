@@ -1,6 +1,5 @@
-package br.com.rafaelbiasi.blog.facade.impl;
+package br.com.rafaelbiasi.blog.facade;
 
-import br.com.rafaelbiasi.blog.facade.FileFacade;
 import br.com.rafaelbiasi.blog.service.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;

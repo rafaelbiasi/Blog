@@ -1,10 +1,7 @@
-package br.com.rafaelbiasi.blog.service.impl;
+package br.com.rafaelbiasi.blog.service;
 
 import br.com.rafaelbiasi.blog.model.Comment;
 import br.com.rafaelbiasi.blog.repository.CommentRepository;
-import br.com.rafaelbiasi.blog.service.AccountService;
-import br.com.rafaelbiasi.blog.service.CommentService;
-import br.com.rafaelbiasi.blog.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;

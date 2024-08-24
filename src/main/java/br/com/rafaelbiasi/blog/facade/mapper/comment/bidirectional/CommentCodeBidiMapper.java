@@ -3,7 +3,7 @@ package br.com.rafaelbiasi.blog.facade.mapper.comment.bidirectional;
 import br.com.rafaelbiasi.blog.data.CommentData;
 import br.com.rafaelbiasi.blog.model.Comment;
 import br.com.rafaelbiasi.blog.transformer.BidirectionalMapper;
-import br.com.rafaelbiasi.blog.transformer.impl.ConversionException;
+import br.com.rafaelbiasi.blog.transformer.ConversionException;
 import org.springframework.stereotype.Component;
 
 @Component

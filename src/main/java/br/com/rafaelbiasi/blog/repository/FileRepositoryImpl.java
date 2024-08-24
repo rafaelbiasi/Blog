@@ -1,6 +1,5 @@
-package br.com.rafaelbiasi.blog.repository.impl;
+package br.com.rafaelbiasi.blog.repository;
 
-import br.com.rafaelbiasi.blog.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;

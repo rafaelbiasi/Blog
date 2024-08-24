@@ -5,6 +5,7 @@ import br.com.rafaelbiasi.blog.model.RegistrationResponse;
 import br.com.rafaelbiasi.blog.model.Role;
 import br.com.rafaelbiasi.blog.repository.AccountRepository;
 import br.com.rafaelbiasi.blog.service.AccountService;
+import br.com.rafaelbiasi.blog.service.AccountServiceImpl;
 import br.com.rafaelbiasi.blog.service.RoleService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
