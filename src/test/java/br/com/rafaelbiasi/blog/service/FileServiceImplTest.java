@@ -1,8 +1,6 @@
-package br.com.rafaelbiasi.blog.service.impl;
+package br.com.rafaelbiasi.blog.service;
 
 import br.com.rafaelbiasi.blog.repository.FileRepository;
-import br.com.rafaelbiasi.blog.service.FileService;
-import br.com.rafaelbiasi.blog.service.FileServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,9 +14,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.nio.file.Path;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class FileServiceImplTest {
@@ -77,9 +75,10 @@ class FileServiceImplTest {
         when(fileRepository.getUrlResource(uri)).thenReturn(resource);
         when(resource.exists()).thenReturn(true);
         //WHEN
-        Resource resourceResponse = fileService.load("filename.png");
+        Optional<Resource> resourceResponse = fileService.load("filename.png");
         //THEN
-        assertEquals(resource, resourceResponse);
+        assertTrue(resourceResponse.isPresent());
+        assertEquals(resource, resourceResponse.get());
         verify(fileRepository).resolve("filename.png");
         verify(path).toUri();
         verify(fileRepository).getUrlResource(uri);
@@ -95,9 +94,10 @@ class FileServiceImplTest {
         when(resource.exists()).thenReturn(false);
         when(resource.isReadable()).thenReturn(true);
         //WHEN
-        Resource resourceResponse = fileService.load("filename.png");
+        Optional<Resource> resourceResponse = fileService.load("filename.png");
         //THEN
-        assertEquals(resource, resourceResponse);
+        assertTrue(resourceResponse.isPresent());
+        assertEquals(resource, resourceResponse.get());
         verify(fileRepository).resolve("filename.png");
         verify(path).toUri();
         verify(fileRepository).getUrlResource(uri);
@@ -114,10 +114,9 @@ class FileServiceImplTest {
         when(resource.exists()).thenReturn(false);
         when(resource.isReadable()).thenReturn(false);
         //WHEN
-        Executable executable = () -> fileService.load("filename.png");
+        Optional<Resource> loaded = fileService.load("filename.png");
         //THEN
-        RuntimeException runtimeException = assertThrows(RuntimeException.class, executable);
-        assertEquals("Could not read the file!", runtimeException.getMessage());
+        assertTrue(loaded.isEmpty());
         verify(fileRepository).resolve("filename.png");
         verify(path).toUri();
         verify(fileRepository).getUrlResource(uri);
@@ -134,8 +133,7 @@ class FileServiceImplTest {
         //WHEN
         Executable executable = () -> fileService.load("filename.png");
         //THEN
-        RuntimeException runtimeException = assertThrows(RuntimeException.class, executable);
-        assertEquals("Error: message", runtimeException.getMessage());
+        assertThrows(MalformedURLException.class, executable);
         verify(fileRepository).resolve("filename.png");
         verify(path).toUri();
         verify(fileRepository).getUrlResource(uri);

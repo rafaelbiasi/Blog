@@ -1,8 +1,6 @@
-package br.com.rafaelbiasi.blog.facade.impl;
+package br.com.rafaelbiasi.blog.facade;
 
 import br.com.rafaelbiasi.blog.data.CommentData;
-import br.com.rafaelbiasi.blog.facade.CommentFacade;
-import br.com.rafaelbiasi.blog.facade.CommentFacadeImpl;
 import br.com.rafaelbiasi.blog.model.Comment;
 import br.com.rafaelbiasi.blog.service.CommentService;
 import br.com.rafaelbiasi.blog.transformer.Transformer;

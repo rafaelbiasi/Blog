@@ -35,7 +35,7 @@ public class AccountServiceImpl implements AccountService {
                 .filter(Account::isNew)
                 .filter(Account::hasNoHoles)
                 .ifPresent(acc -> roleService
-                        .findByName("ROLE_GUEST")
+                        .findByName("ROLE_USER")
                         .map(Collections::singleton)
                         .ifPresent(acc::setRoles)
                 );

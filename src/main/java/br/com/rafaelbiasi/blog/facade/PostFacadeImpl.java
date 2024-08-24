@@ -13,11 +13,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
 import static java.util.function.Predicate.not;
 
@@ -67,20 +69,15 @@ public class PostFacadeImpl implements PostFacade {
     }
 
     @Override
-    public void save(PostData postData, MultipartFile file) {
+    public void save(PostData postData, MultipartFile file) throws IOException {
         requireNonNull(postData, "Post is null.");
         requireNonNull(file, "File is null.");
-        Optional<String> originalFilename = ofNullable(file.getOriginalFilename()).filter(not(String::isBlank));
+        Optional<String> originalFilename = of(file)
+                .map(MultipartFile::getOriginalFilename)
+                .filter(not(String::isBlank));
         originalFilename.ifPresent(postData::setImageFilePath);
         save(postData);
-        if (originalFilename.isPresent()) {
-            try {
-                fileFacade.save(file);
-            } catch (Exception e) {
-                log.error("Error processing file: {}", originalFilename, e);
-                throw e;
-            }
-        }
+        originalFilename.ifPresent(s -> fileFacade.save(file));
     }
 
     @Override
@@ -92,7 +89,7 @@ public class PostFacadeImpl implements PostFacade {
     }
 
     @Override
-    public void save(PostData postData, MultipartFile file, Principal user) {
+    public void save(PostData postData, MultipartFile file, Principal user) throws IOException {
         requireNonNull(postData, "Post is null.");
         requireNonNull(file, "File is null.");
         requireNonNull(user, "User is null.");

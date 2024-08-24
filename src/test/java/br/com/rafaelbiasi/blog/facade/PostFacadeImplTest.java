@@ -1,11 +1,7 @@
-package br.com.rafaelbiasi.blog.facade.impl;
+package br.com.rafaelbiasi.blog.facade;
 
 import br.com.rafaelbiasi.blog.data.AccountData;
 import br.com.rafaelbiasi.blog.data.PostData;
-import br.com.rafaelbiasi.blog.facade.AccountFacade;
-import br.com.rafaelbiasi.blog.facade.FileFacade;
-import br.com.rafaelbiasi.blog.facade.PostFacade;
-import br.com.rafaelbiasi.blog.facade.PostFacadeImpl;
 import br.com.rafaelbiasi.blog.model.Post;
 import br.com.rafaelbiasi.blog.service.PostServiceImpl;
 import br.com.rafaelbiasi.blog.transformer.Transformer;
@@ -20,6 +16,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
@@ -35,8 +32,6 @@ class PostFacadeImplTest {
     private PostFacade postFacade;
     @Mock
     private FileFacade fileFacade;
-    @Mock
-    private AccountFacade accountFacade;
     @Mock
     private PostServiceImpl postService;
     @Mock
@@ -134,7 +129,7 @@ class PostFacadeImplTest {
     }
 
     @Test
-    void saveUpdateWithFile() {
+    void saveUpdateWithFile() throws IOException {
         //GIVEN
         PostData postData = PostData.builder().code("code").build();
         Post post = Post.builder().code("code").build();
@@ -153,7 +148,7 @@ class PostFacadeImplTest {
     }
 
     @Test
-    void saveNewWithFile() {
+    void saveNewWithFile() throws IOException {
         //GIVEN
         PostData postData = PostData.builder().code("code").build();
         Post post = Post.builder().code("code").build();
@@ -192,12 +187,11 @@ class PostFacadeImplTest {
     }
 
     @Test
-    void saveUpdateWithFileAndPrincipal() {
+    void saveUpdateWithFileAndPrincipal() throws IOException {
         //GIVEN
         PostData postData = PostData.builder().code("code").build();
         Post post = Post.builder().code("code").build();
         when(principal.getName()).thenReturn("user@domain.com");
-        AccountData account = AccountData.builder().build();
         when(file.getOriginalFilename()).thenReturn("image.png");
         when(postService.findByCode("code")).thenReturn(of(post));
         when(postTransformer.convertTo(postData, post)).thenReturn(post);
@@ -227,7 +221,6 @@ class PostFacadeImplTest {
     @Test
     void deleteThrowExcetion() {
         //GIVEN
-        Post post = Post.builder().code("code").build();
         when(postService.findByCode("code")).thenReturn(empty());
         //WHEN
         Executable executable = () -> postFacade.delete("code");

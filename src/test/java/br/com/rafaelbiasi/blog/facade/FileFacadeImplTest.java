@@ -1,7 +1,5 @@
-package br.com.rafaelbiasi.blog.facade.impl;
+package br.com.rafaelbiasi.blog.facade;
 
-import br.com.rafaelbiasi.blog.facade.FileFacade;
-import br.com.rafaelbiasi.blog.facade.FileFacadeImpl;
 import br.com.rafaelbiasi.blog.service.FileService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +9,11 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -42,16 +44,17 @@ class FileFacadeImplTest {
     void load() {
         //GIVEN
         String imageURI = "imageURI";
-        when(fileService.load(imageURI)).thenReturn(resource);
+        when(fileService.load(imageURI)).thenReturn(Optional.of(resource));
         //WHEN
-        Resource load = fileFacade.load(imageURI);
+        Optional<Resource> load = fileFacade.load(imageURI);
         //THEN
-        assertEquals(resource, load);
+        assertTrue(load.isPresent());
+        assertEquals(resource, load.get());
         verify(fileService).load(imageURI);
     }
 
     @Test()
-    void save() {
+    void save() throws IOException {
         //GIVEN
         //WHEN
         fileFacade.save(file);

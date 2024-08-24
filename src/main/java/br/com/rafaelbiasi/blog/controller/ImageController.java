@@ -27,30 +27,35 @@ public class ImageController {
     private final FileFacade fileService;
     private final ServletContext servletContext;
 
+    private static String inlineFilename(Resource image) {
+        return "inline; filename=\"" + image.getFilename() + "\"";
+    }
+
     @GetMapping("/images/{id}")
     public ResponseEntity<Resource> image(@PathVariable("id") String imageUri) throws IOException {
         log.info("Fetching image. Parameters [{}={}]",
                 "Image URI", imageUri
         );
-        Optional<String> imageUriOpt = ofNullable(imageUri).filter(not(String::isBlank));
+        Optional<Resource> imageUriOpt = ofNullable(imageUri)
+                .filter(not(String::isBlank))
+                .flatMap(fileService::load);
         if (imageUriOpt.isPresent()) {
-            Resource image = fileService.load(imageUriOpt.get());
-            MediaType contentType = getMediaType(image);
+            Resource resource = imageUriOpt.get();
+            MediaType contentType = mediaType(resource);
             log.info("Image fetched. [{}={}, {}={}, {}={} {}]",
-                    "File name", image.getFilename(),
+                    "File name", resource.getFilename(),
                     "Content type", contentType,
-                    "Content length", image.contentLength(), "bytes"
+                    "Content length", resource.contentLength(), "bytes"
             );
             return ResponseEntity.ok()
                     .contentType(contentType)
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + image.getFilename() + "\"")
-                    .body(image);
-        } else {
-            throw new ResourceNotFoundException("Error loading image with null or empty URI. [Image URI=" + imageUri + "] ");
+                    .header(HttpHeaders.CONTENT_DISPOSITION, inlineFilename(resource))
+                    .body(resource);
         }
+        throw new ResourceNotFoundException("Error loading image with null or empty URI. [Image URI=" + imageUri + "] ");
     }
 
-    private MediaType getMediaType(Resource image) {
+    private MediaType mediaType(Resource image) {
         String mimeType = servletContext.getMimeType(image.getFilename());
         log.debug("Getting image mime type. [{}={}, {}={}]",
                 "File name", image.getFilename(),

@@ -6,6 +6,7 @@ import br.com.rafaelbiasi.blog.facade.AccountFacade;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -135,9 +137,9 @@ class RegisterControllerTest {
         when(accountFacade.checkEmailAndUsernameExists(accountData)).thenReturn(registrationResponse);
         when(accountFacade.attemptUserRegistration(accountData)).thenThrow(RuntimeException.class);
         //WHEN
-        String view = registerController.register(accountData, bindingResult, model);
+        Executable executable = () -> registerController.register(accountData, bindingResult, model);
         //THEN
-        assertEquals("error403", view);
+        assertThrows(RuntimeException.class, executable);
         verify(accountFacade).checkEmailAndUsernameExists(accountData);
         verify(accountFacade).attemptUserRegistration(accountData);
     }

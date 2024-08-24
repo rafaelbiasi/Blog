@@ -3,11 +3,11 @@ package br.com.rafaelbiasi.blog.transformer;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.InitializingBean;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
@@ -24,18 +24,11 @@ public abstract class AbstractTransformer<S, T> implements Converter<S, T>, Mapp
     @Override
     public abstract void map(final S source, final T target);
 
+    @SneakyThrows
     protected T createFromClass() {
-        try {
-            T instance = targetClass.getDeclaredConstructor().newInstance();
-            log.debug("Created new instance of target class: {}", targetClass.getSimpleName());
-            return instance;
-        } catch (InstantiationException
-                 | IllegalAccessException
-                 | NoSuchMethodException
-                 | InvocationTargetException e) {
-            log.error("Error creating instance of target class: {}", targetClass.getSimpleName(), e);
-            throw new RuntimeException(e);
-        }
+        T instance = targetClass.getDeclaredConstructor().newInstance();
+        log.debug("Created new instance of target class: {}", targetClass.getSimpleName());
+        return instance;
     }
 
     public T convertTo(S source, T target) {

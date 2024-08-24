@@ -3,9 +3,11 @@ package br.com.rafaelbiasi.blog.facade;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Optional;
+
 public interface FileFacade {
 
-    Resource load(String imageUri);
+    Optional<Resource> load(String imageUri);
 
     void save(MultipartFile file);
 }

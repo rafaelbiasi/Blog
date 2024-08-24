@@ -1,9 +1,7 @@
-package br.com.rafaelbiasi.blog.facade.impl;
+package br.com.rafaelbiasi.blog.facade;
 
 import br.com.rafaelbiasi.blog.data.AccountData;
 import br.com.rafaelbiasi.blog.data.RegistrationResponseData;
-import br.com.rafaelbiasi.blog.facade.AccountFacade;
-import br.com.rafaelbiasi.blog.facade.AccountFacadeImpl;
 import br.com.rafaelbiasi.blog.model.Account;
 import br.com.rafaelbiasi.blog.model.RegistrationResponse;
 import br.com.rafaelbiasi.blog.service.AccountService;

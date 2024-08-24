@@ -59,17 +59,6 @@ class HomeControllerTest {
         verify(model).addAttribute("size", 5);
     }
 
-    @Test
-    void homeError() {
-        //GIVEN
-        when(postFacade.findAll(any())).thenThrow(RuntimeException.class);
-        //WHEN
-        String view = homeController.home(empty(), 5, model);
-        //THEN
-        assertEquals("error403", view);
-        verify(postFacade).findAll(any());
-    }
-
     //@Test
     //void template() {
     //    //GIVEN

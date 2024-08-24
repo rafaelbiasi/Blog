@@ -1,17 +1,22 @@
 package br.com.rafaelbiasi.blog.controller;
 
+import br.com.rafaelbiasi.blog.exception.ResourceNotFoundException;
 import br.com.rafaelbiasi.blog.facade.FileFacade;
 import jakarta.servlet.ServletContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
+import java.io.IOException;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -39,10 +44,10 @@ class ImageControllerTest {
     }
 
     @Test
-    void image() {
+    void image() throws IOException {
         //GIVEN
         String imageURI = "image.jpg";
-        when(fileFacade.load(imageURI)).thenReturn(resource);
+        when(fileFacade.load(imageURI)).thenReturn(Optional.of(resource));
         //WHEN
         ResponseEntity<Resource> image = imageController.image(imageURI);
         //THEN
@@ -55,9 +60,9 @@ class ImageControllerTest {
         //GIVEN
         String imageURI = "";
         //WHEN
-        ResponseEntity<Resource> image = imageController.image(imageURI);
+        Executable executable = () -> imageController.image(imageURI);
         //THEN
-        assertEquals(HttpStatusCode.valueOf(404), image.getStatusCode());
+        assertThrows(ResourceNotFoundException.class, executable);
     }
 
     @Test
@@ -65,9 +70,9 @@ class ImageControllerTest {
         //GIVEN
         String imageURI = null;
         //WHEN
-        ResponseEntity<Resource> image = imageController.image(imageURI);
+        Executable executable = () -> imageController.image(imageURI);
         //THEN
-        assertEquals(HttpStatusCode.valueOf(404), image.getStatusCode());
+        assertThrows(ResourceNotFoundException.class, executable);
     }
 
     @Test
@@ -76,9 +81,9 @@ class ImageControllerTest {
         String imageURI = "image.jpg";
         when(fileFacade.load(imageURI)).thenThrow(RuntimeException.class);
         //WHEN
-        ResponseEntity<Resource> image = imageController.image(imageURI);
+        Executable executable = () -> imageController.image(imageURI);
         //THEN
-        assertEquals(HttpStatusCode.valueOf(500), image.getStatusCode());
+        assertThrows(RuntimeException.class, executable);
         verify(fileFacade).load(imageURI);
     }
 

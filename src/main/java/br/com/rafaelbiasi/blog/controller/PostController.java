@@ -7,6 +7,7 @@ import br.com.rafaelbiasi.blog.facade.PostFacade;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -17,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import java.security.Principal;
-import java.util.Map;
 import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
@@ -30,6 +30,16 @@ public class PostController {
 
     private final PostFacade postFacade;
 
+    private static void addFlashAttributeWhenError(Model model, HttpServletRequest request) {
+        ofNullable(RequestContextUtils.getInputFlashMap(request)).ifPresent(model::addAllAttributes);
+    }
+
+    private static void addCommentAttribute(Model model) {
+        if (!model.containsAttribute("comment")) {
+            model.addAttribute("comment", new CommentData());
+        }
+    }
+
     @GetMapping("/{code}")
     public String post(@PathVariable String code, Model model, HttpServletRequest request) {
         log.info("Entering the post page. Parameters [{}={}]",
@@ -38,11 +48,8 @@ public class PostController {
         Optional<PostData> post = postFacade.findByCode(code);
         if (post.isPresent()) {
             model.addAttribute("post", post.get());
-            Optional<Map<String, ?>> flashAttributes = ofNullable(RequestContextUtils.getInputFlashMap(request));
-            flashAttributes.ifPresent(model::addAllAttributes);
-            if (!model.containsAttribute("comment")) {
-                model.addAttribute("comment", new CommentData());
-            }
+            addFlashAttributeWhenError(model, request);
+            addCommentAttribute(model);
             return "post";
         } else {
             throw new ResourceNotFoundException("Post not found for [code=" + code + "]");
@@ -81,13 +88,13 @@ public class PostController {
             return "post_edit";
         }
         ofNullable(file).ifPresentOrElse(
-                multipartFile -> postFacade.save(post, multipartFile),
+                multipartFile -> save(post, multipartFile),
                 () -> postFacade.save(post)
         );
         return "redirect:/post/" + code;
     }
 
-    @GetMapping("/new")
+    @GetMapping("/create")
     @PreAuthorize("isAuthenticated()")
     public String create(Model model) {
         log.info("Entering the new post page.");
@@ -116,7 +123,7 @@ public class PostController {
                 "Principal", principal
         );
         ofNullable(file).ifPresentOrElse(
-                multipartFile -> postFacade.save(post, multipartFile, principal),
+                multipartFile -> save(post, principal, multipartFile),
                 () -> postFacade.save(post, principal)
         );
         return "redirect:/";
@@ -130,6 +137,16 @@ public class PostController {
         );
         postFacade.delete(code);
         return "redirect:/";
+    }
+
+    @SneakyThrows
+    private void save(PostData post, MultipartFile multipartFile) {
+        postFacade.save(post, multipartFile);
+    }
+
+    @SneakyThrows
+    private void save(PostData post, Principal principal, MultipartFile multipartFile) {
+        postFacade.save(post, multipartFile, principal);
     }
 
 }

@@ -1,22 +1,26 @@
 package br.com.rafaelbiasi.blog.controller;
 
 import br.com.rafaelbiasi.blog.data.PostData;
+import br.com.rafaelbiasi.blog.exception.ResourceNotFoundException;
 import br.com.rafaelbiasi.blog.facade.PostFacade;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
 
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 class PostControllerTest {
@@ -64,9 +68,9 @@ class PostControllerTest {
         //GIVEN
         when(postFacade.findByCode("title-code")).thenReturn(empty());
         //WHEN
-        String view = postController.post("title-code", model, request);
+        Executable executable = () -> postController.post("title-code", model, request);
         //THEN
-        assertEquals("error404", view);
+        assertThrows(ResourceNotFoundException.class, executable);
         verify(postFacade).findByCode("title-code");
     }
 
@@ -86,9 +90,9 @@ class PostControllerTest {
         //GIVEN
         when(postFacade.findByCode("title-code")).thenReturn(empty());
         //WHEN
-        String view = postController.update("title-code", model);
+        Executable executable = () -> postController.update("title-code", model);
         //THEN
-        assertEquals("error404", view);
+        assertThrows(ResourceNotFoundException.class, executable);
         verify(postFacade).findByCode("title-code");
     }
 
@@ -106,7 +110,7 @@ class PostControllerTest {
     }
 
     @Test
-    void updateSave() {
+    void updateSave() throws IOException {
         //GIVEN
         PostData post = PostData.builder().code("title-code").build();
         when(bindingResult.hasErrors()).thenReturn(false);
@@ -119,29 +123,29 @@ class PostControllerTest {
     }
 
     @Test
-    void updateSaveFileSaveException() {
+    void updateSaveFileSaveException() throws IOException {
         //GIVEN
         PostData post = PostData.builder().code("title-code").build();
         when(bindingResult.hasErrors()).thenReturn(false);
         doThrow(new RuntimeException()).when(postFacade).save(post, file);
         //WHEN
-        String view = postController.update(post, bindingResult, model, "title-code", file);
+        Executable executable = () -> postController.update(post, bindingResult, model, "title-code", file);
         //THEN
-        assertEquals("error500", view);
+        assertThrows(RuntimeException.class, executable);
         verify(bindingResult).hasErrors();
         verify(postFacade).save(post, file);
     }
 
     @Test
-    void updateSaveExceptionErro500() {
+    void updateSaveExceptionErro500() throws IOException {
         //GIVEN
         PostData post = PostData.builder().code("title-code").build();
         when(bindingResult.hasErrors()).thenReturn(false);
         doThrow(RuntimeException.class).when(postFacade).save(post, file);
         //WHEN
-        String view = postController.update(post, bindingResult, model, "title-code", file);
+        Executable executable = () -> postController.update(post, bindingResult, model, "title-code", file);
         //THEN
-        assertEquals("error500", view);
+        assertThrows(RuntimeException.class, executable);
         verify(bindingResult).hasErrors();
         verify(postFacade).save(post, file);
     }
@@ -181,7 +185,7 @@ class PostControllerTest {
     }
 
     @Test
-    void createSaveWithFile() {
+    void createSaveWithFile() throws IOException {
         //GIVEN
         PostData post = PostData.builder().code("title-code").build();
         when(bindingResult.hasErrors()).thenReturn(false);
@@ -194,15 +198,15 @@ class PostControllerTest {
     }
 
     @Test
-    void createSaveExceptionError500() {
+    void createSaveExceptionError500() throws IOException {
         //GIVEN
         PostData post = PostData.builder().code("title-code").build();
         when(bindingResult.hasErrors()).thenReturn(false);
         doThrow(RuntimeException.class).when(postFacade).save(post, file, principal);
         //WHEN
-        String view = postController.create(post, bindingResult, model, file, principal);
+        Executable executable = () -> postController.create(post, bindingResult, model, file, principal);
         //THEN
-        assertEquals("error500", view);
+        assertThrows(RuntimeException.class, executable);
         verify(bindingResult).hasErrors();
         verify(postFacade).save(post, file, principal);
     }

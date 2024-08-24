@@ -76,7 +76,7 @@ class RssFeedControllerTest {
         assertEquals("https://127.0.0.1", channel.getUri());
         assertEquals("Rome Tools", channel.getGenerator());
         assertEquals(1, channel.getPubDate().compareTo(anotherDate));
-        Item item1 = channel.getItems().get(0);
+        Item item1 = channel.getItems().getFirst();
         assertEquals("first0 last0", item1.getAuthor());
         assertEquals("https://127.0.0.1/post/code0", item1.getLink());
         assertEquals("title0", item1.getTitle());

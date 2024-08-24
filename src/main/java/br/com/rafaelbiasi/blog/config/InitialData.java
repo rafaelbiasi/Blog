@@ -44,9 +44,6 @@ public class InitialData implements CommandLineRunner {
                 AccountsResult accounts = createAccounts(roles);
                 createPosts(accounts);
             }
-        } catch (Exception e) {
-            log.error("Error during application data initialization", e);
-            throw e;
         } finally {
             LogId.removeMdcLogId();
         }

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -21,10 +22,9 @@ public interface PostFacade {
 
     void save(PostData postData, Principal user);
 
+    void save(PostData post, MultipartFile file) throws IOException;
 
-    void save(PostData post, MultipartFile file);
-
-    void save(PostData postData, MultipartFile file, Principal user);
+    void save(PostData postData, MultipartFile file, Principal user) throws IOException;
 
     void delete(String code);
 
