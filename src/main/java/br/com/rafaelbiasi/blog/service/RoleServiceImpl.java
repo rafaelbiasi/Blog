@@ -29,7 +29,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role save(Role role) {
-        requireNonNull(role, "Role is null.");
+        requireNonNull(role, "The Role has a null value.");
         return roleRepository.save(role);
     }
 

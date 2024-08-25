@@ -26,7 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        requireNonNull(username, "Username or E-mail is null.");
+        requireNonNull(username, "The Username or E-mail has a null value.");
         Optional<Account> accountOptional = accountService.findOneByUsername(username);
         if (accountOptional.isEmpty()) {
             accountOptional = accountService.findOneByEmail(username);

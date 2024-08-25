@@ -19,14 +19,14 @@ public class FileFacadeImpl implements FileFacade {
 
     @Override
     public Optional<Resource> load(String imageUri) {
-        requireNonNull(imageUri, "ImageURI is null.");
+        requireNonNull(imageUri, "The ImageURI has a null value.");
         return fileService.load(imageUri);
     }
 
     @Override
     @SneakyThrows
     public void save(MultipartFile file) {
-        requireNonNull(file, "MultipartFile is null.");
+        requireNonNull(file, "The MultipartFile has a null value.");
         fileService.save(file);
     }
 }

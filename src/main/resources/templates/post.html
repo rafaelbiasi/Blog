@@ -10,7 +10,8 @@
         <article class="post">
             <header>
                 <img alt="Post image" class="img-fluid"
-                     loading="lazy" th:if="${not #strings.isEmpty(post.imageFilePath)}" th:src="@{'/images/' + ${post.imageFilePath}}"/>
+                     loading="lazy" th:if="${not #strings.isEmpty(post.imageFilePath)}"
+                     th:src="@{'/images/' + ${post.imageFilePath}}"/>
                 <h1 th:text="${post.title}">Title</h1>
                 <p class="meta">
                     <span th:text="#{post.metadata.author(${post.author.name})}">Written by Author</span>
@@ -25,10 +26,12 @@
         <div sec:authorize="isAuthenticated()">
             <a class="btn btn-primary"
                th:href="@{'/post/' + ${post.code} + '/edit'}"
-               th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_USER'')')}" th:text="#{post.edit}">Edit</a>
+               th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_USER'')')}"
+               th:text="#{post.edit}">Edit</a>
             <a class="btn btn-danger"
                th:href="@{'/post/' + ${post.code} + '/delete'}"
-               th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_USER'')')}" th:text="#{post.delete}">Delete</a>
+               th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_USER'')')}"
+               th:text="#{post.delete}">Delete</a>
         </div>
         <div class="comments mt-5">
             <h3>Comentários</h3>

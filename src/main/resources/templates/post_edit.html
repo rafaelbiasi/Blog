@@ -15,10 +15,12 @@
             <header>
                 <h2>Update Post</h2>
                 <img alt="Post image" class="img-fluid"
-                     loading="lazy" th:if="${not #strings.isEmpty(post.imageFilePath)}" th:src="@{'/images/' + *{imageFilePath}}"/>
+                     loading="lazy" th:if="${not #strings.isEmpty(post.imageFilePath)}"
+                     th:src="@{'/images/' + *{imageFilePath}}"/>
             </header>
             <div class="mb-3">
-                <input accept="image/png, image/jpeg, image/jpg, image/bmp" class="btn btn-outline-info" id="input-file" name="file"
+                <input accept="image/png, image/jpeg, image/jpg, image/bmp" class="btn btn-outline-info" id="input-file"
+                       name="file"
                        type="file"/>
             </div>
             <div class="mb-3">

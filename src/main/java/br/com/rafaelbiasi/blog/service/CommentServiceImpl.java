@@ -24,14 +24,14 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Optional<Comment> findByCode(String code) {
-        return commentRepository.findByCode(code);
-    }
-
-    @Override
     @PreAuthorize("hasRole('ROLE_ADMIN') or #comment.author.username == authentication.principal.username")
     public void delete(Comment comment) {
         commentRepository.delete(comment);
+    }
+
+    @Override
+    public Optional<Comment> findByCode(String code) {
+        return commentRepository.findByCode(code);
     }
 
     @Override

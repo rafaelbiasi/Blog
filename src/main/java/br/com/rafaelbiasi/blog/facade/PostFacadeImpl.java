@@ -51,7 +51,7 @@ public class PostFacadeImpl implements PostFacade {
 
     @Override
     public Page<PostData> findAll(Pageable pageable) {
-        requireNonNull(pageable, "Pageable is null.");
+        requireNonNull(pageable, "The Pageable has a null value.");
         return postService.findAll(pageable).map(postDataTransformer::convert);
     }
 
@@ -62,16 +62,24 @@ public class PostFacadeImpl implements PostFacade {
 
     @Override
     public void save(PostData postData) {
-        requireNonNull(postData, "Post is null.");
+        requireNonNull(postData, "The Post has a null value.");
         ofNullable(postData.getCode())
                 .flatMap(postService::findByCode)
                 .ifPresentOrElse(post -> update(postData, post), () -> create(postData));
     }
 
     @Override
+    public void save(PostData postData, Principal user) {
+        requireNonNull(postData, "The Post has a null value.");
+        requireNonNull(user, "The User has a null value.");
+        postData.setAuthor(AccountData.builder().username(user.getName()).build());
+        save(postData);
+    }
+
+    @Override
     public void save(PostData postData, MultipartFile file) throws IOException {
-        requireNonNull(postData, "Post is null.");
-        requireNonNull(file, "File is null.");
+        requireNonNull(postData, "The Post has a null value.");
+        requireNonNull(file, "The File has a null value.");
         Optional<String> originalFilename = of(file)
                 .map(MultipartFile::getOriginalFilename)
                 .filter(not(String::isBlank));
@@ -81,40 +89,33 @@ public class PostFacadeImpl implements PostFacade {
     }
 
     @Override
-    public void save(PostData postData, Principal user) {
-        requireNonNull(postData, "Post is null.");
-        requireNonNull(user, "User is null.");
-        postData.setAuthor(AccountData.builder().username(user.getName()).build());
-        save(postData);
-    }
-
-    @Override
     public void save(PostData postData, MultipartFile file, Principal user) throws IOException {
-        requireNonNull(postData, "Post is null.");
-        requireNonNull(file, "File is null.");
-        requireNonNull(user, "User is null.");
+        requireNonNull(postData, "The Post has a null value.");
+        requireNonNull(file, "The File has a null value.");
+        requireNonNull(user, "The User has a null value.");
         postData.setAuthor(AccountData.builder().username(user.getName()).build());
         save(postData, file);
     }
 
     @Override
-    public void delete(String code) {
-        requireNonNull(code, "Code is null.");
-        Post post = postService.findByCode(code).orElseThrow(() -> new RuntimeException("Code not found."));
-        postService.delete(post);
+    public boolean delete(String code) {
+        requireNonNull(code, "The Code has a null value.");
+        Optional<Post> post = postService.findByCode(code);
+        post.ifPresent(postService::delete);
+        return post.isPresent();
     }
 
     @Override
     public Optional<PostData> findByCode(String code) {
-        requireNonNull(code, "Code is null.");
+        requireNonNull(code, "The Code has a null value.");
         return postService.findByCode(code).map(postDataTransformer::convert);
-    }
-
-    private void create(PostData postData) {
-        postService.save(postTransformer.convert(postData));
     }
 
     private void update(PostData postData, Post post) {
         postService.save(postTransformer.convertTo(postData, post));
+    }
+
+    private void create(PostData postData) {
+        postService.save(postTransformer.convert(postData));
     }
 }

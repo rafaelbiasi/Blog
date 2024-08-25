@@ -7,7 +7,8 @@
         <div class="posts-container">
             <article class="post mb-3" th:each="post : ${posts}">
                 <img alt="Post Image" class="img-fluid"
-                     loading="lazy" th:if="${not #strings.isEmpty(post.imageFilePath)}" th:src="@{'/images/' + ${post.imageFilePath}}"/>
+                     loading="lazy" th:if="${not #strings.isEmpty(post.imageFilePath)}"
+                     th:src="@{'/images/' + ${post.imageFilePath}}"/>
                 <h2><a th:href="@{'/post/' + ${post.code}}" th:text="${post.title}">Title</a></h2>
                 <p class="meta">
                     <span th:text="#{post.metadata.author(${post.getAuthor.name})}">Written by Author </span>

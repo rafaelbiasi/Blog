@@ -28,16 +28,16 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public void save(MultipartFile file) throws IOException {
-        requireNonNull(file, "File is null.");
+        requireNonNull(file, "The File has a null value.");
         String originalFilename = file.getOriginalFilename();
-        requireNonNull(originalFilename, "Original filename is null.");
+        requireNonNull(originalFilename, "The Original filename has a null value.");
         fileRepository.copy(file.getInputStream(), fileRepository.resolve(originalFilename));
     }
 
     @Override
     @SneakyThrows
     public Optional<Resource> load(String filename) {
-        requireNonNull(filename, "Requested filename is null");
+        requireNonNull(filename, "The requested filename has a null value.");
         Resource resource = fileRepository.getUrlResource(fileRepository.resolve(filename).toUri());
         if (resource.exists() || resource.isReadable()) {
             return Optional.of(resource);

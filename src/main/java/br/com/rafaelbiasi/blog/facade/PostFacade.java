@@ -26,7 +26,7 @@ public interface PostFacade {
 
     void save(PostData postData, MultipartFile file, Principal user) throws IOException;
 
-    void delete(String code);
+    boolean delete(String code);
 
     Optional<PostData> findByCode(String code);
 }

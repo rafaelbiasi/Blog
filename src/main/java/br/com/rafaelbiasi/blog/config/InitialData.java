@@ -49,14 +49,6 @@ public class InitialData implements CommandLineRunner {
         }
     }
 
-    RolesResult createRoles() {
-        log.info("Creating default roles");
-        Role user = createRole("ROLE_USER");
-        Role admin = createRole("ROLE_ADMIN");
-        Role guest = createRole("ROLE_GUEST");
-        return RolesResult.builder().user(user).admin(admin).guest(guest).build();
-    }
-
     private AccountsResult createAccounts(RolesResult roles) {
         log.info("Creating default accounts");
         Account user = createAccount("User", "Resu", "user@domain.com", "user", "resu", roles.user());
@@ -123,6 +115,14 @@ public class InitialData implements CommandLineRunner {
                 .build();
         postService.save(post1);
         log.debug("Post created: {}", title);
+    }
+
+    RolesResult createRoles() {
+        log.info("Creating default roles");
+        Role user = createRole("ROLE_USER");
+        Role admin = createRole("ROLE_ADMIN");
+        Role guest = createRole("ROLE_GUEST");
+        return RolesResult.builder().user(user).admin(admin).guest(guest).build();
     }
 
     @Builder

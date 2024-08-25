@@ -33,6 +33,17 @@ public class Transformer<S, T> extends AbstractTransformer<S, T> implements Mapp
                 });
     }
 
+    @Override
+    public List<Mapper<S, T>> getMappers() {
+        return mappers;
+    }
+
+    @Override
+    public void setMappers(final List<Mapper<S, T>> mappers) {
+        this.mappers = mappers;
+        log.debug("Set {} mappers for EnhancedTransformer {}", mappers != null ? mappers.size() : 0, getBeanName());
+    }
+
     @PostConstruct
     public void removeMappersDuplicates() {
         final Optional<List<Mapper<S, T>>> mapperList = ofNullable(getMappers());
@@ -49,17 +60,6 @@ public class Transformer<S, T> extends AbstractTransformer<S, T> implements Mapp
         } else {
             log.warn("No mappers configured for {}.", getBeanName());
         }
-    }
-
-    @Override
-    public List<Mapper<S, T>> getMappers() {
-        return mappers;
-    }
-
-    @Override
-    public void setMappers(final List<Mapper<S, T>> mappers) {
-        this.mappers = mappers;
-        log.debug("Set {} mappers for EnhancedTransformer {}", mappers != null ? mappers.size() : 0, getBeanName());
     }
 
 }

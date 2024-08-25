@@ -32,19 +32,14 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> findAll() {
-        return postRepository.findAll();
-    }
-
-    @Override
-    public Page<Post> findAll(Pageable pageable) {
-        requireNonNull(pageable, "Pageable is null.");
-        return postRepository.findAll(pageable);
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #post.author.username == authentication.principal.username")
+    public void delete(Post post) {
+        postRepository.delete(post);
     }
 
     @Override
     public Post save(Post post) {
-        requireNonNull(post, "Post is null.");
+        requireNonNull(post, "The Post has a null value.");
         Account account = accountService.findOneByUsername(post.getAuthor().getUsername())
                 .orElseThrow(() -> new IllegalArgumentException("Account not found"));
         post.setAuthor(account);
@@ -56,14 +51,19 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Optional<Post> findByCode(String code) {
-        requireNonNull(code, "Code is null.");
-        return postRepository.findByCode(code);
+    public List<Post> findAll() {
+        return postRepository.findAll();
     }
 
     @Override
-    @PreAuthorize("hasRole('ROLE_ADMIN') or #post.author.username == authentication.principal.username")
-    public void delete(Post post) {
-        postRepository.delete(post);
+    public Page<Post> findAll(Pageable pageable) {
+        requireNonNull(pageable, "The Pageable has a null value.");
+        return postRepository.findAll(pageable);
+    }
+
+    @Override
+    public Optional<Post> findByCode(String code) {
+        requireNonNull(code, "The Code has a null value.");
+        return postRepository.findByCode(code);
     }
 }

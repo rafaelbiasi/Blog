@@ -95,17 +95,6 @@ class RssFeedControllerTest {
         verify(request).getScheme();
     }
 
-    @Test
-    void rssFeedException() {
-        //GIVEN
-        when(postFacade.findAll(any())).thenThrow(new RuntimeException());
-        //WHEN
-        Executable executable = () -> rssFeedController.rssFeed(request);
-        //GIVEN
-        assertThrows(RuntimeException.class, executable);
-        verify(postFacade).findAll(any());
-    }
-
     private List<PostData> createPosts(int size, LocalDateTime date) {
         List<PostData> posts = new ArrayList<>();
         for (int i = 0; i < size; i++) {
@@ -121,6 +110,17 @@ class RssFeedControllerTest {
                     .build());
         }
         return posts;
+    }
+
+    @Test
+    void rssFeedException() {
+        //GIVEN
+        when(postFacade.findAll(any())).thenThrow(new RuntimeException());
+        //WHEN
+        Executable executable = () -> rssFeedController.rssFeed(request);
+        //GIVEN
+        assertThrows(RuntimeException.class, executable);
+        verify(postFacade).findAll(any());
     }
 
     //@Test

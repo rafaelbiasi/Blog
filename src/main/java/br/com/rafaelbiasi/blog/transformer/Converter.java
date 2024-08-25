@@ -12,8 +12,6 @@ public interface Converter<S, T> {
 
     Logger log = LoggerFactory.getLogger(Converter.class);
 
-    T convert(S source);
-
     T convertTo(S source, T target);
 
     default List<T> convertAll(List<S> sources) {
@@ -34,6 +32,8 @@ public interface Converter<S, T> {
         log.debug("Completed conversion of list. Total converted elements: {}", targets.size());
         return targets;
     }
+
+    T convert(S source);
 
     default Set<T> convertAll(Set<S> sources) {
         log.debug("Converting set of sources. Total elements: {}", sources == null ? 0 : sources.size());

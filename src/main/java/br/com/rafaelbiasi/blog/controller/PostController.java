@@ -30,16 +30,6 @@ public class PostController {
 
     private final PostFacade postFacade;
 
-    private static void addFlashAttributeWhenError(Model model, HttpServletRequest request) {
-        ofNullable(RequestContextUtils.getInputFlashMap(request)).ifPresent(model::addAllAttributes);
-    }
-
-    private static void addCommentAttribute(Model model) {
-        if (!model.containsAttribute("comment")) {
-            model.addAttribute("comment", new CommentData());
-        }
-    }
-
     @GetMapping("/{code}")
     public String post(@PathVariable String code, Model model, HttpServletRequest request) {
         log.info("Entering the post page. Parameters [{}={}]",
@@ -135,8 +125,20 @@ public class PostController {
         log.info("Deleting the post. Parameters [{}={}]",
                 "Code", code
         );
-        postFacade.delete(code);
-        return "redirect:/";
+        if (postFacade.delete(code)) {
+            return "redirect:/";
+        }
+        throw new ResourceNotFoundException("Post not found for [code=" + code + "]");
+    }
+
+    private void addFlashAttributeWhenError(Model model, HttpServletRequest request) {
+        ofNullable(RequestContextUtils.getInputFlashMap(request)).ifPresent(model::addAllAttributes);
+    }
+
+    private void addCommentAttribute(Model model) {
+        if (!model.containsAttribute("comment")) {
+            model.addAttribute("comment", new CommentData());
+        }
     }
 
     @SneakyThrows

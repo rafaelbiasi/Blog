@@ -219,13 +219,13 @@ class PostFacadeImplTest {
     }
 
     @Test
-    void deleteThrowExcetion() {
+    void deletePostNotFound() {
         //GIVEN
         when(postService.findByCode("code")).thenReturn(empty());
         //WHEN
-        Executable executable = () -> postFacade.delete("code");
+        boolean deleted = postFacade.delete("code");
         //THEN
-        assertThrows(RuntimeException.class, executable);
+        assertFalse(deleted);
     }
 
     @Test

@@ -21,16 +21,6 @@ public abstract class AbstractTransformer<S, T> implements Converter<S, T>, Mapp
     @Getter(AccessLevel.PRIVATE)
     private Class<T> targetClass;
 
-    @Override
-    public abstract void map(final S source, final T target);
-
-    @SneakyThrows
-    protected T createFromClass() {
-        T instance = targetClass.getDeclaredConstructor().newInstance();
-        log.debug("Created new instance of target class: {}", targetClass.getSimpleName());
-        return instance;
-    }
-
     public T convertTo(S source, T target) {
         log.debug("Converting/mapping source object of type {} into target object of type {}", source.getClass().getSimpleName(), target.getClass().getSimpleName());
         map(source, target);
@@ -46,6 +36,9 @@ public abstract class AbstractTransformer<S, T> implements Converter<S, T>, Mapp
         return target;
     }
 
+    @Override
+    public abstract void map(final S source, final T target);
+
     public void setTargetClass(Class<T> targetClass) {
         Optional<Class<T>> targetClassOpt = ofNullable(targetClass);
         if (targetClassOpt.isPresent()) {
@@ -59,5 +52,12 @@ public abstract class AbstractTransformer<S, T> implements Converter<S, T>, Mapp
     @Override
     public void afterPropertiesSet() {
         //Empty
+    }
+
+    @SneakyThrows
+    protected T createFromClass() {
+        T instance = targetClass.getDeclaredConstructor().newInstance();
+        log.debug("Created new instance of target class: {}", targetClass.getSimpleName());
+        return instance;
     }
 }

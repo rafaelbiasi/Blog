@@ -33,27 +33,27 @@ public class AccountFacadeImpl implements AccountFacade {
 
     @Override
     public Optional<AccountData> findOneByEmail(String email) {
-        requireNonNull(email, "E-mail is null.");
+        requireNonNull(email, "The E-mail has a null value.");
         return accountService.findOneByEmail(email)
                 .map(accountDataTransformer::convert);
     }
 
     @Override
     public Optional<AccountData> findOneByUsername(String username) {
-        requireNonNull(username, "Username is null.");
+        requireNonNull(username, "The Username has a null value.");
         return accountService.findOneByUsername(username)
                 .map(accountDataTransformer::convert);
     }
 
     @Override
     public void save(AccountData account) {
-        requireNonNull(account, "AccountData is null.");
+        requireNonNull(account, "The Account has a null value.");
         accountService.save(accountTransformer.convert(account));
     }
 
     @Override
     public RegistrationResponseData attemptUserRegistration(AccountData account) {
-        requireNonNull(account, "AccountData is null.");
+        requireNonNull(account, "The Account has a null value.");
         Account convert = accountTransformer.convert(account);
         RegistrationResponse registrationResponse = accountService.attemptUserRegistration(convert);
         return RegistrationResponseData.builder()
@@ -64,7 +64,7 @@ public class AccountFacadeImpl implements AccountFacade {
 
     @Override
     public RegistrationResponseData checkEmailAndUsernameExists(AccountData account) {
-        requireNonNull(account, "AccountData is null.");
+        requireNonNull(account, "The Account has a null value.");
         RegistrationResponse registrationResponse = accountService.checkEmailAndUsernameExists(accountTransformer.convert(account));
         return RegistrationResponseData.builder()
                 .emailExists(registrationResponse.emailExists())

@@ -27,10 +27,6 @@ public class ImageController {
     private final FileFacade fileService;
     private final ServletContext servletContext;
 
-    private static String inlineFilename(Resource image) {
-        return "inline; filename=\"" + image.getFilename() + "\"";
-    }
-
     @GetMapping("/images/{id}")
     public ResponseEntity<Resource> image(@PathVariable("id") String imageUri) throws IOException {
         log.info("Fetching image. Parameters [{}={}]",
@@ -53,6 +49,10 @@ public class ImageController {
                     .body(resource);
         }
         throw new ResourceNotFoundException("Error loading image with null or empty URI. [Image URI=" + imageUri + "] ");
+    }
+
+    private static String inlineFilename(Resource image) {
+        return "inline; filename=\"" + image.getFilename() + "\"";
     }
 
     private MediaType mediaType(Resource image) {

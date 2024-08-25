@@ -19,8 +19,7 @@ import java.security.Principal;
 
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class PostControllerTest {
@@ -226,10 +225,22 @@ class PostControllerTest {
     @Test
     void delete() {
         //GIVEN
+        when(postFacade.delete("title-code")).thenReturn(true);
         //WHEN
         String view = postController.delete("title-code");
         //THEN
         assertEquals("redirect:/", view);
+        verify(postFacade).delete("title-code");
+    }
+
+    @Test
+    void deletePostNotFound() {
+        //GIVEN
+        when(postFacade.delete("title-code")).thenReturn(false);
+        //WHEN
+        Executable executable = () -> postController.delete("title-code");
+        //THEN
+        assertThrows(ResourceNotFoundException.class, executable);
         verify(postFacade).delete("title-code");
     }
 

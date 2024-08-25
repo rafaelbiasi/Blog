@@ -29,8 +29,13 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public void delete(Account account) {
+        accountRepository.delete(account);
+    }
+
+    @Override
     public Account save(Account account) {
-        requireNonNull(account, "Account is null.");
+        requireNonNull(account, "The Account has a null value.");
         of(account)
                 .filter(Account::isNew)
                 .filter(Account::hasNoHoles)
@@ -45,22 +50,21 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Optional<Account> findOneByEmail(String email) {
-        requireNonNull(email, "Email is null.");
+        requireNonNull(email, "The E-mail has a null value.");
         return accountRepository.findOneByEmailIgnoreCase(email);
     }
 
     @Override
     public Optional<Account> findOneByUsername(String username) {
-        requireNonNull(username, "Username is null.");
+        requireNonNull(username, "The Username has a null value.");
         return accountRepository.findOneByUsernameIgnoreCase(username);
     }
 
     @Override
     public RegistrationResponse attemptUserRegistration(Account account) {
-        requireNonNull(account, "Account is null.");
+        requireNonNull(account, "The Account has a null value.");
         Optional<RegistrationResponse> registrationResponse = of(checkEmailAndUsernameExists(account));
-        registrationResponse
-                .filter(RegistrationResponse::success)
+        registrationResponse.filter(RegistrationResponse::success)
                 .ifPresent(response -> save(account));
         return registrationResponse.get();
     }
@@ -68,13 +72,16 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public RegistrationResponse checkEmailAndUsernameExists(Account account) {
         return RegistrationResponse.builder()
-                .emailExists(accountRepository.findOneByEmailIgnoreCase(account.getEmail()).isPresent())
-                .usernameExists(accountRepository.findOneByUsernameIgnoreCase(account.getUsername()).isPresent())
+                .emailExists(isEmailExists(account))
+                .usernameExists(isUsernameExists(account))
                 .build();
     }
 
-    @Override
-    public void delete(Account account) {
-        accountRepository.delete(account);
+    private boolean isUsernameExists(Account account) {
+        return accountRepository.findOneByUsernameIgnoreCase(account.getUsername()).isPresent();
+    }
+
+    private boolean isEmailExists(Account account) {
+        return accountRepository.findOneByEmailIgnoreCase(account.getEmail()).isPresent();
     }
 }

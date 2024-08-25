@@ -30,9 +30,9 @@ public class CommentFacadeImpl implements CommentFacade {
 
     @Override
     public void save(CommentData comment, String postCode, Principal principal) {
-        requireNonNull(comment, "Comment is null");
-        requireNonNull(postCode, "Post Code is null");
-        requireNonNull(principal, "Principal is null");
+        requireNonNull(comment, "The Comment has a null value.");
+        requireNonNull(postCode, "The Post Code has a null value.");
+        requireNonNull(principal, "The Principal has a null value.");
         comment.setAuthor(AccountData.builder().username(principal.getName()).build());
         comment.setPost(PostData.builder().code(postCode).build());
         commentService.save(commentTransformer.convert(comment));
