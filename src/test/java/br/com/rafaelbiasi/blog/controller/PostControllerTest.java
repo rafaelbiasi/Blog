@@ -167,7 +167,7 @@ class PostControllerTest {
         //WHEN
         String view = postController.create(model);
         //THEN
-        assertEquals("post_new", view);
+        assertEquals("post_create", view);
     }
 
     @Test
@@ -218,7 +218,7 @@ class PostControllerTest {
         //WHEN
         String view = postController.create(post, bindingResult, model, file, principal);
         //THEN
-        assertEquals("post_new", view);
+        assertEquals("post_create", view);
         verify(bindingResult).hasErrors();
     }
 

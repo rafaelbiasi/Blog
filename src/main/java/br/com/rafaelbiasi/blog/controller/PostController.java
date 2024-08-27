@@ -89,7 +89,7 @@ public class PostController {
     public String create(Model model) {
         log.info("Entering the new post page.");
         model.addAttribute("post", new PostData());
-        return "post_new";
+        return "post_create";
     }
 
     @PostMapping("/create")
@@ -107,7 +107,7 @@ public class PostController {
         );
         if (result.hasErrors()) {
             model.addAttribute("post", post);
-            return "post_new";
+            return "post_create";
         }
         log.info("Fetching principal. Parameters [{}={}]",
                 "Principal", principal
