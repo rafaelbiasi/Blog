@@ -17,14 +17,14 @@ public class CustomErrorController implements ErrorController {
     @RequestMapping("/error")
     public String handleError(HttpServletRequest request) {
         int statusCode = Integer.parseInt(request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE).toString());
-        return ERROR_VIEW_MAP.getOrDefault(statusCode, "error");
+        return ERROR_VIEW_MAP.getOrDefault(statusCode, "error/generic");
     }
 
     private static Map<Integer, String> createErrorViewMap() {
         Map<Integer, String> map = new HashMap<>();
-        map.put(403, "error403");
-        map.put(404, "error404");
-        map.put(500, "error500");
+        map.put(403, "error/403");
+        map.put(404, "error/404");
+        map.put(500, "error/500");
         return map;
     }
 }

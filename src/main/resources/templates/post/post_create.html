@@ -1,7 +1,7 @@
 <!--/*@thymesVar id="post" type="br.com.rafaelbiasi.blog.model.Post"*/-->
 <!doctype html>
 <html lang="en"
-      th:replace="~{base :: layout (~{:: div})}"
+      th:replace="~{fragment/base :: layout (~{:: div})}"
       xmlns:th="http://www.thymeleaf.org">
 <body>
 <main class="container mt-4">
@@ -9,11 +9,11 @@
         <form action="#"
               enctype="multipart/form-data"
               method="post"
-              th:action="@{'/post/{id}'(id=${post.code})}"
+              th:action="@{'/post/create'}"
               th:object="${post}">
             <input th:field="*{creation}" type="hidden"/>
             <header>
-                <h2>Update Post</h2>
+                <h2>Write New Post</h2>
                 <img alt="Post image" class="img-fluid"
                      loading="lazy" th:if="${not #strings.isEmpty(post.imageFilePath)}"
                      th:src="@{'/images/' + *{imageFilePath}}"/>
@@ -38,7 +38,7 @@
                     Body error
                 </div>
             </div>
-            <button class="btn btn-primary" type="submit">Update Post</button>
+            <button class="btn btn-primary" type="submit">Publish Post</button>
         </form>
     </div>
 </main>

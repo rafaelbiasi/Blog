@@ -25,7 +25,7 @@ public class RegisterController {
     public String register(Model model) {
         log.info("Entering register page.");
         model.addAttribute("account", new AccountData());
-        return "register";
+        return "user/register";
     }
 
     @PostMapping("/register")
@@ -34,7 +34,7 @@ public class RegisterController {
         checkError(result, account);
         if (result.hasErrors()) {
             model.addAttribute("account", account);
-            return "register";
+            return "user/register";
         }
         accountFacade.attemptUserRegistration(account);
         return "redirect:/";

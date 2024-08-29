@@ -40,7 +40,7 @@ public class PostController {
             model.addAttribute("post", post.get());
             addFlashAttributeWhenError(model, request);
             addCommentAttribute(model);
-            return "post";
+            return "post/post";
         } else {
             throw new ResourceNotFoundException("Post not found for [code=" + code + "]");
         }
@@ -55,7 +55,7 @@ public class PostController {
         Optional<PostData> post = postFacade.findByCode(code);
         if (post.isPresent()) {
             model.addAttribute("post", post.get());
-            return "post_edit";
+            return "post/post_edit";
         } else {
             throw new ResourceNotFoundException("Post not found for code: " + code);
         }
@@ -75,7 +75,7 @@ public class PostController {
         );
         if (result.hasErrors()) {
             model.addAttribute("post", post);
-            return "post_edit";
+            return "post/post_edit";
         }
         ofNullable(file).ifPresentOrElse(
                 multipartFile -> save(post, multipartFile),
@@ -89,7 +89,7 @@ public class PostController {
     public String create(Model model) {
         log.info("Entering the new post page.");
         model.addAttribute("post", new PostData());
-        return "post_create";
+        return "post/post_create";
     }
 
     @PostMapping("/create")
@@ -107,7 +107,7 @@ public class PostController {
         );
         if (result.hasErrors()) {
             model.addAttribute("post", post);
-            return "post_create";
+            return "post/post_create";
         }
         log.info("Fetching principal. Parameters [{}={}]",
                 "Principal", principal

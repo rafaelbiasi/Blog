@@ -13,13 +13,13 @@ public class AuthController {
     @GetMapping("/auth")
     public String auth() {
         log.info("Entering the auth page.");
-        return "auth";
+        return "user/auth";
     }
 
     @PostMapping("/auth/error")
     public String error(Model model) {
         model.addAttribute("authError", true);
-        return "auth";
+        return "user/auth";
     }
 
 }
