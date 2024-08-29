@@ -42,13 +42,19 @@ public class RegisterController {
 
     private void checkError(BindingResult result, AccountData account) {
         RegistrationResponseData registrationResponse = accountFacade.checkEmailAndUsernameExists(account);
-        if (registrationResponse.fail()) {
-            if (registrationResponse.usernameExists()) {
-                result.addError(new FieldError("account", "username", "Username is already taken"));
-            }
-            if (registrationResponse.emailExists()) {
-                result.addError(new FieldError("account", "email", "E-mail is already taken"));
-            }
+        if (registrationResponse.success()) {
+            return;
+        }
+        if (registrationResponse.usernameExists()) {
+            result.addError(new FieldError("account",
+                    "username",
+                    "Another user has already registered this username."));
+        }
+        if (registrationResponse.emailExists()) {
+            result.addError(new FieldError("account",
+                    "email",
+                    "Another user has already registered this e-mail."
+            ));
         }
     }
 }
