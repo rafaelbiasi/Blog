@@ -5,10 +5,8 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
 @Builder
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -16,8 +14,9 @@ public class RoleData {
 
     @EqualsAndHashCode.Include
     private long code;
-    @NotBlank(message = "Role name is mandatory")
+    @NotBlank(message = "Provide a Role name")
     private String name;
     private LocalDateTime creation;
     private LocalDateTime modified;
+
 }

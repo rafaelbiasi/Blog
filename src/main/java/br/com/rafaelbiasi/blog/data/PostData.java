@@ -7,10 +7,8 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
 @Builder
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -18,13 +16,15 @@ public class PostData {
 
     @EqualsAndHashCode.Include
     private String code;
-    @NotBlank(message = "Title is mandatory")
+    @NotBlank(message = "Provide a title")
     private String title;
-    @NotBlank(message = "Body is mandatory")
+    @NotBlank(message = "Provide a Body")
     private String body;
     private String imageFilePath;
     private AccountData author;
+    @Builder.Default
     private Set<CommentData> comments = new HashSet<>();
     private LocalDateTime creation;
     private LocalDateTime modified;
+
 }

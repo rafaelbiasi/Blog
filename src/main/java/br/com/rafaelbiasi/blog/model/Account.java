@@ -9,14 +9,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Getter
-@Setter
+@Data
 @SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "account")
 @DiscriminatorValue("account")
 @ToString(exclude = "password")
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class Account extends ItemEntity {
 
     @Column(unique = true, nullable = false)
@@ -54,4 +53,5 @@ public class Account extends ItemEntity {
                 .parallelStream()
                 .anyMatch(role -> role.getName().equals("ROLE_ADMIN"));
     }
+
 }

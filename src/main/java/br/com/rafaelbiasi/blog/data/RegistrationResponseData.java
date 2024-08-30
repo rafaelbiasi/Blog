@@ -11,4 +11,4 @@ public record RegistrationResponseData(
         return !usernameExists && !emailExists;
     }
 
-  }
+}

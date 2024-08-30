@@ -9,13 +9,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Getter
-@Setter
+@Data
 @SuperBuilder
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "post")
 @DiscriminatorValue("post")
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class Post extends ItemEntity {
 
     @Column(unique = true, nullable = false)
@@ -32,4 +31,5 @@ public class Post extends ItemEntity {
     @Builder.Default
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments = new HashSet<>();
+
 }

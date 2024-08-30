@@ -11,8 +11,4 @@ public record RegistrationResponse(
         return !usernameExists && !emailExists;
     }
 
-    public boolean fail() {
-        return usernameExists || emailExists;
-    }
-
 }

@@ -2,23 +2,21 @@ package br.com.rafaelbiasi.blog.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-@jakarta.persistence.Entity
-@Getter
-@Setter
-@NoArgsConstructor
+@Entity
+@Data
 @SuperBuilder
-@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "role")
 @DiscriminatorValue("role")
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class Role extends ItemEntity {
 
     @Column(length = 16, nullable = false)
     private String name;
+
 }

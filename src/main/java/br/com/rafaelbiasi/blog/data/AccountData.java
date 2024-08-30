@@ -9,27 +9,25 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"posts"})
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class AccountData {
 
     @EqualsAndHashCode.Include
     private Long code;
     @Email(message = "Invalid e-mail")
-    @NotBlank(message = "E-mail is mandatory")
+    @NotBlank(message = "Provide the e-mail")
     private String email;
-    @NotBlank(message = "Username is mandatory")
+    @NotBlank(message = "Enter a username")
     private String username;
-    @NotBlank(message = "Password is mandatory")
+    @NotBlank(message = "Create a password")
     private String password;
-    @NotBlank(message = "First name is mandatory")
+    @NotBlank(message = "Provide the first name")
     private String firstName;
-    @NotBlank(message = "Last name is mandatory")
+    @NotBlank(message = "Provide the last name")
     private String lastName;
     @JsonIgnore
     @Builder.Default
@@ -42,4 +40,5 @@ public class AccountData {
     public String getName() {
         return getFirstName() + " " + getLastName();
     }
+
 }
