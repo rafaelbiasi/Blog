@@ -1,12 +1,11 @@
 package br.com.rafaelbiasi.blog.model;
 
-import br.com.rafaelbiasi.blog.model.keygen.TSIDKeyGenerator;
+import br.com.rafaelbiasi.blog.model.keygen.TSIDKeyIdGenerator;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
 
@@ -23,7 +22,7 @@ public abstract class ItemEntity {
     @Id
     @EqualsAndHashCode.Include
     @GeneratedValue(generator = "tsid_gen")
-    @GenericGenerator(name = "tsid_gen", type = TSIDKeyGenerator.class)
+    @TSIDKeyIdGenerator
     private Long id;
     @Column(nullable = false)
     private LocalDateTime creation;
