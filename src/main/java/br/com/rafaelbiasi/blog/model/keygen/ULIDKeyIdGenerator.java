@@ -1,7 +1,6 @@
 package br.com.rafaelbiasi.blog.model.keygen;
 
 import org.hibernate.annotations.IdGeneratorType;
-import org.hibernate.annotations.Parameter;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -14,5 +13,4 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Target({METHOD, FIELD})
 public @interface ULIDKeyIdGenerator {
-  Parameter[] parameters() default {};
 }
