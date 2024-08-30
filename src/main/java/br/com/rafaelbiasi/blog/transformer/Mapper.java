@@ -1,49 +1,47 @@
 package br.com.rafaelbiasi.blog.transformer;
 
+import br.com.rafaelbiasi.blog.exception.ConversionException;
+
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
 
-public interface Mapper<S, T> {
+public interface Mapper<Source, Target> {
 
-    void map(S source, T target) throws ConversionException;
+    void map(Source source, Target target) throws ConversionException;
 
-    default <TT> void mapGet(Supplier<TT> getter, Consumer<TT> setter) {
+    default <TargetProperty> void mapGet(
+            Supplier<TargetProperty> getter,
+            Consumer<TargetProperty> setter
+    ) {
         ofNullable(getter.get()).ifPresent(setter);
     }
 
-    default <TT> void mapGet(Supplier<TT> getter, Consumer<TT> setter, Runnable orElse) {
+    default <TargetProperty> void mapGet(
+            Supplier<TargetProperty> getter,
+            Consumer<TargetProperty> setter,
+            Runnable orElse
+    ) {
         ofNullable(getter.get()).ifPresentOrElse(setter, orElse);
     }
 
-    default <ST, TT> void mapGet(Supplier<ST> getter, Function<ST, TT> getterConverter, Consumer<TT> setter) {
+    default <SourceProperty, TargetProperty> void mapGet(
+            Supplier<SourceProperty> getter,
+            Function<SourceProperty, TargetProperty> getterConverter,
+            Consumer<TargetProperty> setter
+    ) {
         ofNullable(getter.get()).map(getterConverter).ifPresent(setter);
     }
 
-    default <ST, TT> void mapGet(Supplier<ST> getter, Function<ST, TT> getterConverter, Consumer<TT> setter, Runnable orElse) {
+    default <SourceProperty, TargetProperty> void mapGet(
+            Supplier<SourceProperty> getter,
+            Function<SourceProperty, TargetProperty> getterConverter,
+            Consumer<TargetProperty> setter,
+            Runnable orElse
+    ) {
         ofNullable(getter.get()).map(getterConverter).ifPresentOrElse(setter, orElse);
     }
 
-    @Deprecated(forRemoval = true)
-    default <S, TT> void mapSource(S source, Function<S, TT> getter, Consumer<TT> setter) {
-        of(source).map(getter).ifPresent(setter);
-    }
-
-    @Deprecated(forRemoval = true)
-    default <S, TT> void mapSource(S source, Function<S, TT> getter, Consumer<TT> setter, Runnable orElse) {
-        of(source).map(getter).ifPresentOrElse(setter, orElse);
-    }
-
-    @Deprecated(forRemoval = true)
-    default <S, ST, TT> void mapSource(S source, Function<S, ST> getter, Function<ST, TT> getterConverter, Consumer<TT> setter) {
-        of(source).map(getter).map(getterConverter).ifPresent(setter);
-    }
-
-    @Deprecated(forRemoval = true)
-    default <S, ST, TT> void mapSource(S source, Function<S, ST> getter, Function<ST, TT> getterConverter, Consumer<TT> setter, Runnable orElse) {
-        of(source).map(getter).map(getterConverter).ifPresentOrElse(setter, orElse);
-    }
 }

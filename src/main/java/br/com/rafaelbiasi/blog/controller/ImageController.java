@@ -48,7 +48,9 @@ public class ImageController {
                     .header(HttpHeaders.CONTENT_DISPOSITION, inlineFilename(resource))
                     .body(resource);
         }
-        throw new ResourceNotFoundException("Error loading image with null or empty URI. [Image URI=" + imageUri + "] ");
+        throw new ResourceNotFoundException(
+                "Error loading image with null or empty URI. [Image URI=%s] ".formatted(imageUri)
+        );
     }
 
     private static String inlineFilename(Resource image) {
@@ -61,6 +63,8 @@ public class ImageController {
                 "File name", image.getFilename(),
                 "Mine type", mimeType
         );
-        return mimeType != null ? MediaType.parseMediaType(mimeType) : MediaType.APPLICATION_OCTET_STREAM;
+        return mimeType != null
+                ? MediaType.parseMediaType(mimeType)
+                : MediaType.APPLICATION_OCTET_STREAM;
     }
 }

@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -89,7 +88,7 @@ public class PostFacadeImpl implements PostFacade {
     }
 
     @Override
-    public void save(PostData postData, MultipartFile file, Principal user) throws IOException {
+    public void save(PostData postData, MultipartFile file, Principal user) {
         requireNonNull(postData, "The Post has a null value.");
         requireNonNull(file, "The File has a null value.");
         requireNonNull(user, "The User has a null value.");

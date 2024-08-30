@@ -65,7 +65,7 @@ public interface Converter<S, T> {
                 T target = convert(source);
                 targets.add(target);
             } catch (Exception e) {
-                log.warn("Element conversion failed: " + source + ". Reason: " + e.getMessage(), e);
+                log.warn("Element conversion failed: {}. Reason: {}", source, e.getMessage(), e);
             }
         }
         return targets;
@@ -83,7 +83,7 @@ public interface Converter<S, T> {
                 T target = convert(source);
                 targets.add(target);
             } catch (Exception e) {
-                log.warn("Element conversion failed: " + source + ". Reason: " + e.getMessage(), e);
+                log.warn("Element conversion failed: {}. Reason: {}", source, e.getMessage(), e);
             }
         }
         return targets;

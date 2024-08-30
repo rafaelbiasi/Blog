@@ -24,7 +24,11 @@ public class Transformer<S, T> extends AbstractTransformer<S, T> implements Mapp
             log.debug("No mappers configured for transformation.");
             return;
         }
-        log.debug("Applying {} mappers to source object of type {}", getMappers().size(), source.getClass().getSimpleName());
+        log.debug(
+                "Applying {} mappers to source object of type {}",
+                getMappers().size(),
+                source.getClass().getSimpleName()
+        );
         getMappers().stream()
                 .filter(Objects::nonNull)
                 .forEach(mapper -> {
@@ -41,7 +45,11 @@ public class Transformer<S, T> extends AbstractTransformer<S, T> implements Mapp
     @Override
     public void setMappers(final List<Mapper<S, T>> mappers) {
         this.mappers = mappers;
-        log.debug("Set {} mappers for EnhancedTransformer {}", mappers != null ? mappers.size() : 0, getBeanName());
+        log.debug(
+                "Set {} mappers for EnhancedTransformer {}",
+                mappers != null ? mappers.size() : 0,
+                getBeanName()
+        );
     }
 
     @PostConstruct
@@ -52,11 +60,19 @@ public class Transformer<S, T> extends AbstractTransformer<S, T> implements Mapp
 
             for (final Mapper<S, T> mapper : mapperList.get()) {
                 if (!uniqueMappers.add(mapper)) {
-                    log.warn("Removing duplicate mapper: {}. Ensuring unique mapper for {}", mapper.getClass().getSimpleName(), getBeanName());
+                    log.warn(
+                            "Removing duplicate mapper: {}. Ensuring unique mapper for {}",
+                            mapper.getClass().getSimpleName(),
+                            getBeanName()
+                    );
                 }
             }
             setMappers(new ArrayList<>(uniqueMappers));
-            log.debug("Mappers deduplication completed for {}. Total unique mappers: {}", getBeanName(), uniqueMappers.size());
+            log.debug(
+                    "Mappers deduplication completed for {}. Total unique mappers: {}",
+                    getBeanName(),
+                    uniqueMappers.size()
+            );
         } else {
             log.warn("No mappers configured for {}.", getBeanName());
         }

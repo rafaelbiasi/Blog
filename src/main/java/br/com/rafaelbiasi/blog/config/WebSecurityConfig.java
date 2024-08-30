@@ -38,7 +38,9 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder(strength);
     }
 
-    private void authorizeHttpRequests(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auth) {
+    private void authorizeHttpRequests(
+            AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auth
+    ) {
         auth.requestMatchers("/**")
                 .permitAll()
                 .requestMatchers("/admin/**")

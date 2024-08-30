@@ -1,9 +1,9 @@
 package br.com.rafaelbiasi.blog.facade.mapper.comment;
 
 import br.com.rafaelbiasi.blog.data.CommentData;
+import br.com.rafaelbiasi.blog.exception.ConversionException;
 import br.com.rafaelbiasi.blog.facade.mapper.comment.bidirectional.CommentCodeBidiMapper;
 import br.com.rafaelbiasi.blog.model.Comment;
-import br.com.rafaelbiasi.blog.transformer.ConversionException;
 import br.com.rafaelbiasi.blog.transformer.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

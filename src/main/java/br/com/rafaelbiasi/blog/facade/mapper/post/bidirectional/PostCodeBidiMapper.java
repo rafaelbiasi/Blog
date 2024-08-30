@@ -1,9 +1,9 @@
 package br.com.rafaelbiasi.blog.facade.mapper.post.bidirectional;
 
 import br.com.rafaelbiasi.blog.data.PostData;
+import br.com.rafaelbiasi.blog.exception.ConversionException;
 import br.com.rafaelbiasi.blog.model.Post;
 import br.com.rafaelbiasi.blog.transformer.BidirectionalMapper;
-import br.com.rafaelbiasi.blog.transformer.ConversionException;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -40,6 +40,23 @@ class RssFeedControllerTest {
     private HttpServletRequest request;
     private AutoCloseable closeable;
 
+    private List<PostData> createPosts(int size, LocalDateTime date) {
+        List<PostData> posts = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            posts.add(PostData.builder()
+                    .code("code" + i)
+                    .title("title" + i)
+                    .body("body" + i)
+                    .modified(date)
+                    .author(AccountData.builder()
+                            .firstName("first" + i)
+                            .lastName("last" + i)
+                            .build())
+                    .build());
+        }
+        return posts;
+    }
+
     @BeforeEach
     void setUp() {
         //GIVEN
@@ -93,23 +110,6 @@ class RssFeedControllerTest {
         verify(request).getServerName();
         verify(request).getServerPort();
         verify(request).getScheme();
-    }
-
-    private List<PostData> createPosts(int size, LocalDateTime date) {
-        List<PostData> posts = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            posts.add(PostData.builder()
-                    .code("code" + i)
-                    .title("title" + i)
-                    .body("body" + i)
-                    .modified(date)
-                    .author(AccountData.builder()
-                            .firstName("first" + i)
-                            .lastName("last" + i)
-                            .build())
-                    .build());
-        }
-        return posts;
     }
 
     @Test

@@ -29,7 +29,11 @@ public class RegisterController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute("account") AccountData account, BindingResult result, Model model) {
+    public String register(
+            @Valid @ModelAttribute("account") AccountData account,
+            BindingResult result,
+            Model model
+    ) {
         log.info("Saving new user. Parameters: [{}={}]", "Account", account);
         checkError(result, account);
         if (result.hasErrors()) {

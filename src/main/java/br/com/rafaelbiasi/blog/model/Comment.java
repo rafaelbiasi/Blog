@@ -3,7 +3,9 @@ package br.com.rafaelbiasi.blog.model;
 import com.github.f4b6a3.tsid.TsidCreator;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.sqids.Sqids;
 

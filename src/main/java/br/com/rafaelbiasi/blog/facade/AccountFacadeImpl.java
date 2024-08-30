@@ -65,7 +65,8 @@ public class AccountFacadeImpl implements AccountFacade {
     @Override
     public RegistrationResponseData checkEmailAndUsernameExists(AccountData account) {
         requireNonNull(account, "The Account has a null value.");
-        RegistrationResponse registrationResponse = accountService.checkEmailAndUsernameExists(accountTransformer.convert(account));
+        RegistrationResponse registrationResponse =
+                accountService.checkEmailAndUsernameExists(accountTransformer.convert(account));
         return RegistrationResponseData.builder()
                 .emailExists(registrationResponse.emailExists())
                 .usernameExists(registrationResponse.usernameExists())

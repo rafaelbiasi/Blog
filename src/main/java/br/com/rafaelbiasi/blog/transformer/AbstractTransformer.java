@@ -22,14 +22,22 @@ public abstract class AbstractTransformer<S, T> implements Converter<S, T>, Mapp
     private Class<T> targetClass;
 
     public T convertTo(S source, T target) {
-        log.debug("Converting/mapping source object of type {} into target object of type {}", source.getClass().getSimpleName(), target.getClass().getSimpleName());
+        log.debug(
+                "Converting/mapping source object of type {} into target object of type {}",
+                source.getClass().getSimpleName(),
+                target.getClass().getSimpleName()
+        );
         map(source, target);
         log.debug("Successfully mapped/converted source object into target object");
         return target;
     }
 
     public T convert(S source) {
-        log.debug("Converting source object of type {} into new target object of type {}", source.getClass().getSimpleName(), targetClass.getSimpleName());
+        log.debug(
+                "Converting source object of type {} into new target object of type {}",
+                source.getClass().getSimpleName(),
+                targetClass.getSimpleName()
+        );
         T target = createFromClass();
         map(source, target);
         log.debug("Successfully converted source object into new target object");
