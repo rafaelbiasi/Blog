@@ -22,7 +22,7 @@ public interface PostFacade {
 
     void save(PostData postData, Principal user);
 
-    void save(PostData post, MultipartFile file) throws IOException;
+    void save(PostData post, MultipartFile file);
 
     void save(PostData postData, MultipartFile file, Principal user) throws IOException;
 

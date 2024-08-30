@@ -77,7 +77,7 @@ public class PostFacadeImpl implements PostFacade {
     }
 
     @Override
-    public void save(PostData postData, MultipartFile file) throws IOException {
+    public void save(PostData postData, MultipartFile file) {
         requireNonNull(postData, "The Post has a null value.");
         requireNonNull(file, "The File has a null value.");
         Optional<String> originalFilename = of(file)

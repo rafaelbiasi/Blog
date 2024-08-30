@@ -22,7 +22,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class WebSecurityConfig {
 
     @Value("${security.encoding-strength}")
-    int strength = 14;
+    final int strength = 14;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
