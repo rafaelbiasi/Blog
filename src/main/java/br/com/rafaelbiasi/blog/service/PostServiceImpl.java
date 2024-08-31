@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static br.com.rafaelbiasi.blog.exception.ResourceNotFoundExceptionFactory.accountNotFound;
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
 
@@ -41,7 +42,7 @@ public class PostServiceImpl implements PostService {
     public Post save(Post post) {
         requireNonNull(post, "The Post has a null value.");
         Account account = accountService.findOneByUsername(post.getAuthor().getUsername())
-                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
+                .orElseThrow(() -> accountNotFound(post.getAuthor().getUsername()));
         post.setAuthor(account);
         Optional<String> code = ofNullable(post.getCode());
         if (code.isEmpty()) {
@@ -66,4 +67,5 @@ public class PostServiceImpl implements PostService {
         requireNonNull(code, "The Code has a null value.");
         return postRepository.findByCode(code);
     }
+
 }

@@ -18,6 +18,8 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class Account extends ItemEntity {
 
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
+
     @Column(unique = true, nullable = false)
     private String email;
     @Column(unique = true, nullable = false)
@@ -48,10 +50,14 @@ public class Account extends ItemEntity {
         return this.getRoles().isEmpty();
     }
 
+    public String getName() {
+        return getFirstName() + " " + getLastName();
+    }
+
     public boolean isAdmin() {
         return getRoles()
                 .parallelStream()
-                .anyMatch(role -> role.getName().equals("ROLE_ADMIN"));
+                .anyMatch(role -> role.getName().equals(ROLE_ADMIN));
     }
 
 }

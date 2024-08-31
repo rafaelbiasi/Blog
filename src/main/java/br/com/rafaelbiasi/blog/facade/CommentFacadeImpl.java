@@ -40,8 +40,6 @@ public class CommentFacadeImpl implements CommentFacade {
 
     @Override
     public void delete(String code) {
-        Comment comment = commentService.findByCode(code)
-                .orElseThrow(() -> new RuntimeException("Comment not found"));
-        commentService.delete(comment);
+        commentService.delete(Comment.builder().code(code).build());
     }
 }

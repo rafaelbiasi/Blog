@@ -1,9 +1,9 @@
 package br.com.rafaelbiasi.blog.controller;
 
-import br.com.rafaelbiasi.blog.exception.ResourceNotFoundException;
 import br.com.rafaelbiasi.blog.facade.FileFacade;
 import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.Optional;
 
+import static br.com.rafaelbiasi.blog.exception.ResourceNotFoundExceptionFactory.imageFileNotFound;
 import static java.util.Optional.ofNullable;
 import static java.util.function.Predicate.not;
 
@@ -32,29 +32,25 @@ public class ImageController {
         log.info("Fetching image. Parameters [{}={}]",
                 "Image URI", imageUri
         );
-        Optional<Resource> imageUriOpt = ofNullable(imageUri)
+        return ofNullable(imageUri)
                 .filter(not(String::isBlank))
-                .flatMap(fileService::load);
-        if (imageUriOpt.isPresent()) {
-            Resource resource = imageUriOpt.get();
-            MediaType contentType = mediaType(resource);
-            log.info("Image fetched. [{}={}, {}={}, {}={} {}]",
-                    "File name", resource.getFilename(),
-                    "Content type", contentType,
-                    "Content length", resource.contentLength(), "bytes"
-            );
-            return ResponseEntity.ok()
-                    .contentType(contentType)
-                    .header(HttpHeaders.CONTENT_DISPOSITION, inlineFilename(resource))
-                    .body(resource);
-        }
-        throw new ResourceNotFoundException(
-                "Error loading image with null or empty URI. [Image URI=%s] ".formatted(imageUri)
-        );
+                .flatMap(fileService::load)
+                .map(this::resourceResponseEntity)
+                .orElseThrow(() -> imageFileNotFound(imageUri));
     }
 
-    private static String inlineFilename(Resource image) {
-        return "inline; filename=\"" + image.getFilename() + "\"";
+    @SneakyThrows
+    private ResponseEntity<Resource> resourceResponseEntity(Resource resource) {
+        MediaType contentType = mediaType(resource);
+        log.info("Image fetched. [{}={}, {}={}, {}={} {}]",
+                "File name", resource.getFilename(),
+                "Content type", contentType,
+                "Content length", resource.contentLength(), "bytes"
+        );
+        return ResponseEntity.ok()
+                .contentType(contentType)
+                .header(HttpHeaders.CONTENT_DISPOSITION, inlineFilename(resource))
+                .body(resource);
     }
 
     private MediaType mediaType(Resource image) {
@@ -67,4 +63,9 @@ public class ImageController {
                 ? MediaType.parseMediaType(mimeType)
                 : MediaType.APPLICATION_OCTET_STREAM;
     }
+
+    private static String inlineFilename(Resource image) {
+        return "inline; filename=\"" + image.getFilename() + "\"";
+    }
+
 }

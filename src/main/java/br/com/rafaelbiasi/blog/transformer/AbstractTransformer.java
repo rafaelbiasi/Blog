@@ -49,12 +49,12 @@ public abstract class AbstractTransformer<S, T> implements Converter<S, T>, Mapp
 
     public void setTargetClass(Class<T> targetClass) {
         Optional<Class<T>> targetClassOpt = ofNullable(targetClass);
-        if (targetClassOpt.isPresent()) {
+        targetClassOpt.ifPresent(tClass -> {
             log.debug("Setting target class for transformer: {}", targetClass.getSimpleName());
             this.targetClass = targetClass;
             log.debug("Creating test instance of target class: {}", targetClass.getSimpleName());
             createFromClass();
-        }
+        });
     }
 
     @Override

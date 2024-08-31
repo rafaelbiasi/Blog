@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static br.com.rafaelbiasi.blog.exception.ResourceNotFoundExceptionFactory.*;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -26,7 +28,8 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @PreAuthorize("hasRole('ROLE_ADMIN') or #comment.author.username == authentication.principal.username")
     public void delete(Comment comment) {
-        commentRepository.delete(comment);
+        findByCode(comment.getCode())
+                .ifPresentOrElse(commentRepository::delete, () -> throwCommentNotFound(comment.getCode()));
     }
 
     @Override
@@ -36,10 +39,14 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment save(Comment comment) {
-        comment.setAuthor(accountService.findOneByUsername(comment.getAuthor().getUsername())
-                .orElseThrow(() -> new IllegalArgumentException("Account not found")));
-        comment.setPost(postService.findByCode(comment.getPost().getCode())
-                .orElseThrow(() -> new IllegalArgumentException("Post not found")));
+        String username = comment.getAuthor().getUsername();
+        String code = comment.getPost().getCode();
+        accountService.findOneByUsername(username)
+                .ifPresentOrElse(comment::setAuthor, () -> throwAccountNotFound(username));
+        postService.findByCode(code)
+                .ifPresentOrElse(comment::setPost, () -> throwPostNoFound(code));
         return commentRepository.save(comment);
     }
+
+
 }

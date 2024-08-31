@@ -16,6 +16,8 @@ import java.util.Set;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class AccountData {
 
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
+
     @EqualsAndHashCode.Include
     private Long code;
     @Email(message = "Invalid e-mail")
@@ -39,6 +41,12 @@ public class AccountData {
 
     public String getName() {
         return getFirstName() + " " + getLastName();
+    }
+
+    public boolean isAdmin() {
+        return getRoles()
+                .parallelStream()
+                .anyMatch(role -> role.getName().equals(ROLE_ADMIN));
     }
 
 }

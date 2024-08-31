@@ -2,7 +2,6 @@ package br.com.rafaelbiasi.blog.controller;
 
 import br.com.rafaelbiasi.blog.data.CommentData;
 import br.com.rafaelbiasi.blog.data.PostData;
-import br.com.rafaelbiasi.blog.exception.ResourceNotFoundException;
 import br.com.rafaelbiasi.blog.facade.PostFacade;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -18,8 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import java.security.Principal;
-import java.util.Optional;
 
+import static br.com.rafaelbiasi.blog.exception.ResourceNotFoundExceptionFactory.postNoFound;
+import static br.com.rafaelbiasi.blog.exception.ResourceNotFoundExceptionFactory.throwPostNoFound;
 import static java.util.Optional.ofNullable;
 
 @Slf4j
@@ -35,15 +35,14 @@ public class PostController {
         log.info("Entering the post page. Parameters [{}={}]",
                 "Code", code
         );
-        Optional<PostData> post = postFacade.findByCode(code);
-        if (post.isPresent()) {
-            model.addAttribute("post", post.get());
-            addFlashAttributeWhenError(model, request);
-            addCommentAttribute(model);
-            return "post/post";
-        } else {
-            throw new ResourceNotFoundException("Post not found for [code=" + code + "]");
-        }
+        postFacade.findByCode(code).ifPresentOrElse(
+                post -> {
+                    model.addAttribute("post", post);
+                    addFlashAttributeWhenError(model, request);
+                    addCommentAttribute(model);
+                }, () -> throwPostNoFound(code)
+        );
+        return "post/post";
     }
 
     @GetMapping("/{code}/edit")
@@ -52,13 +51,11 @@ public class PostController {
         log.info("Entering the post edit page. Parameters [{}={}]",
                 "Code", code
         );
-        Optional<PostData> post = postFacade.findByCode(code);
-        if (post.isPresent()) {
-            model.addAttribute("post", post.get());
-            return "post/post_edit";
-        } else {
-            throw new ResourceNotFoundException("Post not found for code: " + code);
-        }
+        postFacade.findByCode(code).ifPresentOrElse(
+                post -> model.addAttribute("post", post),
+                () -> throwPostNoFound(code)
+        );
+        return "post/post_edit";
     }
 
     @PostMapping("/{code}")
@@ -128,7 +125,7 @@ public class PostController {
         if (postFacade.delete(code)) {
             return "redirect:/";
         }
-        throw new ResourceNotFoundException("Post not found for [code=" + code + "]");
+        throw postNoFound(code);
     }
 
     private void addFlashAttributeWhenError(Model model, HttpServletRequest request) {

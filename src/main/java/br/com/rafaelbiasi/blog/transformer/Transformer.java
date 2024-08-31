@@ -55,10 +55,10 @@ public class Transformer<S, T> extends AbstractTransformer<S, T> implements Mapp
     @PostConstruct
     public void removeMappersDuplicates() {
         final Optional<List<Mapper<S, T>>> mapperList = ofNullable(getMappers());
-        if (mapperList.isPresent()) {
+        mapperList.ifPresentOrElse(list -> {
             final LinkedHashSet<Mapper<S, T>> uniqueMappers = new LinkedHashSet<>();
 
-            for (final Mapper<S, T> mapper : mapperList.get()) {
+            for (final Mapper<S, T> mapper : list) {
                 if (!uniqueMappers.add(mapper)) {
                     log.warn(
                             "Removing duplicate mapper: {}. Ensuring unique mapper for {}",
@@ -73,9 +73,7 @@ public class Transformer<S, T> extends AbstractTransformer<S, T> implements Mapp
                     getBeanName(),
                     uniqueMappers.size()
             );
-        } else {
-            log.warn("No mappers configured for {}.", getBeanName());
-        }
+        }, () -> log.warn("No mappers configured for {}.", getBeanName()));
     }
 
 }

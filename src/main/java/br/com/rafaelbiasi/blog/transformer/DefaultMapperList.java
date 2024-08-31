@@ -39,20 +39,19 @@ public class DefaultMapperList<S, T> implements Mapper<S, T>, MapperList<S, T>, 
     @PostConstruct
     public void removeMappersDuplicates() {
         final Optional<List<Mapper<S, T>>> mapperList = ofNullable(getMappers());
-        if (mapperList.isPresent()) {
-            final LinkedHashSet<Mapper<S, T>> uniqueMappers = new LinkedHashSet<>();
-            for (final Mapper<S, T> mapper : mapperList.get()) {
-                if (!uniqueMappers.add(mapper)) {
-                    LOGGER.warn(
-                            "Removing duplicate mapper: {}. Ensuring unique mapper for {}",
-                            mapper.getClass().getSimpleName(),
-                            getBeanName()
-                    );
-                }
-            }
-            setMappers(new ArrayList<>(uniqueMappers));
-        } else {
-            LOGGER.warn("No mappers configured for {}.", getBeanName());
-        }
+        mapperList.ifPresentOrElse(list -> {
+                    final LinkedHashSet<Mapper<S, T>> uniqueMappers = new LinkedHashSet<>();
+                    for (final Mapper<S, T> mapper : list) {
+                        if (!uniqueMappers.add(mapper)) {
+                            LOGGER.warn(
+                                    "Removing duplicate mapper: {}. Ensuring unique mapper for {}",
+                                    mapper.getClass().getSimpleName(),
+                                    getBeanName()
+                            );
+                        }
+                    }
+                    setMappers(new ArrayList<>(uniqueMappers));
+                }, () -> LOGGER.warn("No mappers configured for {}.", getBeanName())
+        );
     }
 }
