@@ -1,6 +1,5 @@
 package br.com.rafaelbiasi.blog.service;
 
-import br.com.rafaelbiasi.blog.model.Account;
 import br.com.rafaelbiasi.blog.model.Post;
 import br.com.rafaelbiasi.blog.repository.PostRepository;
 import com.github.slugify.Slugify;
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static br.com.rafaelbiasi.blog.exception.ResourceNotFoundExceptionFactory.accountNotFound;
+import static br.com.rafaelbiasi.blog.exception.ResourceNotFoundExceptionFactory.throwAccountNotFound;
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
 
@@ -41,13 +40,12 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post save(Post post) {
         requireNonNull(post, "The Post has a null value.");
-        Account account = accountService.findOneByUsername(post.getAuthor().getUsername())
-                .orElseThrow(() -> accountNotFound(post.getAuthor().getUsername()));
-        post.setAuthor(account);
-        Optional<String> code = ofNullable(post.getCode());
-        if (code.isEmpty()) {
-            post.setCode(slugify.slugify(post.getTitle()));
-        }
+        accountService.findOneByUsername(post.getAuthor().getUsername())
+                .ifPresentOrElse(
+                        post::setAuthor,
+                        () -> throwAccountNotFound(post.getAuthor().getUsername())
+                );
+        ofNullable(post.getCode()).ifPresent(code -> post.setCode(slugify.slugify(post.getTitle())));
         return postRepository.save(post);
     }
 

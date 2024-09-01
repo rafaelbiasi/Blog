@@ -3,7 +3,6 @@ package br.com.rafaelbiasi.blog.controller;
 import br.com.rafaelbiasi.blog.facade.FileFacade;
 import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -42,14 +41,12 @@ public class ImageController {
                 .orElseThrow(() -> imageFileNotFound(imageUri));
     }
 
-    @SneakyThrows
     private ResponseEntity<Resource> resourceResponseEntity(Resource resource) {
         MediaType contentType = mediaType(resource);
         log.info(
-                "Image fetched. [{}={}, {}={}, {}={} {}]",
+                "Image fetched. [{}={}, {}={}]",
                 "File name", resource.getFilename(),
-                "Content type", contentType,
-                "Content length", resource.contentLength(), "bytes"
+                "Content type", contentType
         );
         return ResponseEntity.ok()
                 .contentType(contentType)
@@ -57,11 +54,11 @@ public class ImageController {
                 .body(resource);
     }
 
-    private MediaType mediaType(Resource image) {
-        String mimeType = servletContext.getMimeType(image.getFilename());
+    private MediaType mediaType(Resource resource) {
+        String mimeType = servletContext.getMimeType(resource.getFilename());
         log.debug(
                 "Getting image mime type. [{}={}, {}={}]",
-                "File name", image.getFilename(),
+                "File name", resource.getFilename(),
                 "Mine type", mimeType
         );
         return mimeType != null
