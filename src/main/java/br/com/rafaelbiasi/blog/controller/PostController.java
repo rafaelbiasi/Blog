@@ -6,7 +6,6 @@ import br.com.rafaelbiasi.blog.facade.PostFacade;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -31,9 +30,8 @@ public class PostController {
 
     public static final String REDIRECT_POST = "redirect:/post/";
 
-    private static final String POST_EDIT_VIEW = "post/post_edit";
+    private static final String POST_FORM_VIEW = "post/post_form";
     private static final String POST_VIEW = "post/post";
-    private static final String POST_CREATE_VIEW = "post/post_create";
 
     private final PostFacade postFacade;
 
@@ -65,7 +63,7 @@ public class PostController {
                 post -> model.addAttribute("post", post),
                 () -> throwPostNoFound(code)
         );
-        return POST_EDIT_VIEW;
+        return POST_FORM_VIEW;
     }
 
     @PostMapping("/udpate/{code}/")
@@ -82,7 +80,7 @@ public class PostController {
         );
         if (result.hasErrors()) {
             model.addAttribute("post", post);
-            return POST_EDIT_VIEW;
+            return POST_FORM_VIEW;
         }
         ofNullable(file).ifPresentOrElse(
                 multipartFile -> save(post, multipartFile),
@@ -96,7 +94,7 @@ public class PostController {
     public String create(Model model) {
         log.info("Entering the new post page.");
         model.addAttribute("post", new PostData());
-        return POST_CREATE_VIEW;
+        return POST_FORM_VIEW;
     }
 
     @PostMapping("/create/")
@@ -114,7 +112,7 @@ public class PostController {
         );
         if (result.hasErrors()) {
             model.addAttribute("post", post);
-            return POST_CREATE_VIEW;
+            return POST_FORM_VIEW;
         }
         log.info("Fetching principal. Parameters [{}={}]",
                 "Principal", principal
@@ -148,12 +146,10 @@ public class PostController {
         }
     }
 
-    @SneakyThrows
     private void save(PostData post, MultipartFile multipartFile) {
         postFacade.save(post, multipartFile);
     }
 
-    @SneakyThrows
     private void save(PostData post, Principal principal, MultipartFile multipartFile) {
         postFacade.save(post, multipartFile, principal);
     }

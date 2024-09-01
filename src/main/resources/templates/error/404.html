@@ -1,27 +1,13 @@
-<!doctype html>
-<html lang="en"
+<!DOCTYPE html>
+<html lang="en" th:replace="~{base :: layout (~{::div})}"
       xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8">
-    <meta content="IE=edge" http-equiv="X-UA-Compatible">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <meta content="404 Error Page" name="description">
-    <meta content="blog,404,error,not found" name="keywords">
-    <title th:text="'Blog :: 404 Error'">Blog :: 404</title>
-    <link th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}" th:rel="stylesheet"/>
-</head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-        <a class="navbar-brand" th:href="@{/}" th:text="#{base.home}">Home</a>
-    </div>
-</nav>
-<main class="container mt-4">
+<div th:fragment="content">
     <header>
-        <h1 th:text="#{error.not.found.title}">404 Post Not Found</h1>
+        <h1 th:text="#{error.not.found.title}">404 Not Found</h1>
         <hr/>
     </header>
-    <p th:text="#{error.not.found.text}">Sorry, the post you are looking for could not be found.</p>
-</main>
+    <p th:text="#{error.not.found.text}">Sorry, the page you are looking for could not be found.</p>
+</div>
 </body>
 </html>

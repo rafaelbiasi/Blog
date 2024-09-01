@@ -1,0 +1,25 @@
+<nav th:fragment="nav" class="navbar navbar-expand-lg navbar-light bg-light"
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}" th:text="#{base.home}">Home</a>
+        <ul class="navbar-nav ml-auto">
+            <li sec:authorize="isAuthenticated()">
+                <form method="POST" th:action="@{/logout}">
+                    <button class="nav-link btn btn-primary" type="submit">
+                        <span th:text="#{base.logout}">Logout</span>
+                        <span sec:authentication="name">Username</span>
+                    </button>
+                </form>
+            </li>
+            <li class="nav-item" sec:authorize="!isAuthenticated()">
+                <a class="nav-link" th:href="@{/register/}" th:text="#{base.register}">Register</a>
+            </li>
+            <li class="nav-item" sec:authorize="!isAuthenticated()">
+                <a class="nav-link" th:href="@{/auth/}" th:text="#{base.authentication}">Authentication</a>
+            </li>
+            <li class="nav-item" sec:authorize="isAuthenticated()">
+                <a class="nav-link" th:href="@{/post/create/}" th:text="#{base.newPost}">New Post</a>
+            </li>
+        </ul>
+    </div>
+</nav>

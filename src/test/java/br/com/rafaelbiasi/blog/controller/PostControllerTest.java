@@ -81,7 +81,7 @@ class PostControllerTest {
         //WHEN
         String view = postController.edit("title-code", model);
         //THEN
-        assertEquals("post_edit", view);
+        assertEquals("post_form", view);
         verify(postFacade).findByCode("title-code");
     }
 
@@ -158,7 +158,7 @@ class PostControllerTest {
         //WHEN
         String view = postController.update(post, bindingResult, model, "title-code", file);
         //THEN
-        assertEquals("post_edit", view);
+        assertEquals("post_form", view);
         verify(bindingResult).hasErrors();
     }
 
@@ -168,7 +168,7 @@ class PostControllerTest {
         //WHEN
         String view = postController.create(model);
         //THEN
-        assertEquals("post_create", view);
+        assertEquals("post_form", view);
     }
 
     @Test
@@ -219,7 +219,7 @@ class PostControllerTest {
         //WHEN
         String view = postController.create(post, bindingResult, model, file, principal);
         //THEN
-        assertEquals("post_create", view);
+        assertEquals("post_form", view);
         verify(bindingResult).hasErrors();
     }
 

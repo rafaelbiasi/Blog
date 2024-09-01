@@ -1,64 +1,52 @@
-<!--/*@thymesVar id="account" type="br.com.rafaelbiasi.blog.model.Account"*/-->
-<!DOCTYPE HTML>
-<html lang="en"
-      th:replace="~{fragment/base :: layout (~{:: div})}"
+<!DOCTYPE html>
+<html lang="en" th:replace="~{base :: layout (~{::div})}"
       xmlns:th="http://www.thymeleaf.org">
 <body>
-<main class="container mt-4">
-    <div>
-        <h2 th:text="#{register.new.account}">Register New Account</h2>
-        <form action="#"
-              method="POST"
-              th:action="@{/register/}"
-              th:object="${account}">
-            <div>
-                <label class="form-label" for="firstname" th:text="#{register.firstname.label}">First Name</label>
-                <input class="form-control" id="firstname" placeholder="First Name"
-                       th:field="*{firstName}" th:placeholder="#{register.firstname.placeholder}"
-                       type="text"/>
-                <div th:errorclass="invalid-feedback" th:errors="*{firstName}"
-                     th:if="${#fields.hasErrors('firstName')}">
-                    Fist name error
-                </div>
+<div th:fragment="content">
+    <h2 th:text="#{register.new.account}">Register New Account</h2>
+    <form action="#" method="POST" th:action="@{/register/}" th:object="${account}">
+        <div>
+            <label class="form-label" for="firstname" th:text="#{register.firstname.label}">First Name</label>
+            <input class="form-control" id="firstname" placeholder="First Name"
+                   th:field="*{firstName}" th:placeholder="#{register.firstname.placeholder}" type="text"/>
+            <div th:errorclass="invalid-feedback" th:errors="*{firstName}" th:if="${#fields.hasErrors('firstName')}">
+                First name error
             </div>
-            <div>
-                <label class="form-label" for="lastname" th:text="#{register.lastname.label}">Last Name</label>
-                <input class="form-control" id="lastname" placeholder="Last Name"
-                       th:errorclass="is-invalid" th:field="*{lastName}"
-                       th:placeholder="#{register.lastname.placeholder}" type="text"/>
-                <div th:errorclass="invalid-feedback" th:errors="*{lastName}" th:if="${#fields.hasErrors('lastName')}">
-                    Last name error
-                </div>
+        </div>
+        <div>
+            <label class="form-label" for="lastname" th:text="#{register.lastname.label}">Last Name</label>
+            <input class="form-control" id="lastname" placeholder="Last Name"
+                   th:errorclass="is-invalid" th:field="*{lastName}" th:placeholder="#{register.lastname.placeholder}" type="text"/>
+            <div th:errorclass="invalid-feedback" th:errors="*{lastName}" th:if="${#fields.hasErrors('lastName')}">
+                Last name error
             </div>
-            <div>
-                <label class="form-label" for="username" th:text="#{register.username.label}">Username</label>
-                <input class="form-control" id="username" placeholder="Username"
-                       th:errorclass="is-invalid" th:field="*{username}"
-                       th:placeholder="#{register.username.placeholder}" type="text"/>
-                <div th:errorclass="invalid-feedback" th:errors="*{username}" th:if="${#fields.hasErrors('username')}">
-                    Username error
-                </div>
+        </div>
+        <div>
+            <label class="form-label" for="username" th:text="#{register.username.label}">Username</label>
+            <input class="form-control" id="username" placeholder="Username"
+                   th:errorclass="is-invalid" th:field="*{username}" th:placeholder="#{register.username.placeholder}" type="text"/>
+            <div th:errorclass="invalid-feedback" th:errors="*{username}" th:if="${#fields.hasErrors('username')}">
+                Username error
             </div>
-            <div>
-                <label class="form-label" for="email" th:text="#{register.email.label}">E-mail</label>
-                <input class="form-control" id="email" placeholder="E-mail" th:errorclass="is-invalid"
-                       th:field="*{email}" th:placeholder="#{register.email.placeholder}" type="text"/>
-                <div th:errorclass="invalid-feedback" th:errors="*{email}" th:if="${#fields.hasErrors('email')}">
-                    E-mail error
-                </div>
+        </div>
+        <div>
+            <label class="form-label" for="email" th:text="#{register.email.label}">E-mail</label>
+            <input class="form-control" id="email" placeholder="E-mail" th:errorclass="is-invalid"
+                   th:field="*{email}" th:placeholder="#{register.email.placeholder}" type="text"/>
+            <div th:errorclass="invalid-feedback" th:errors="*{email}" th:if="${#fields.hasErrors('email')}">
+                E-mail error
             </div>
-            <div>
-                <label class="form-label" for="password" th:text="#{register.password.label}">Password</label>
-                <input class="form-control" id="password" placeholder="Password" th:errorclass="is-invalid"
-                       th:field="*{password}" th:placeholder="#{register.password.placeholder}"
-                       type="password"/>
-                <div th:errorclass="invalid-feedback" th:errors="*{password}" th:if="${#fields.hasErrors('password')}">
-                    Password error
-                </div>
+        </div>
+        <div>
+            <label class="form-label" for="password" th:text="#{register.password.label}">Password</label>
+            <input class="form-control" id="password" placeholder="Password" th:errorclass="is-invalid"
+                   th:field="*{password}" th:placeholder="#{register.password.placeholder}" type="password"/>
+            <div th:errorclass="invalid-feedback" th:errors="*{password}" th:if="${#fields.hasErrors('password')}">
+                Password error
             </div>
-            <button class="btn btn-primary" th:text="#{register.register.button}" type="submit">Register!</button>
-        </form>
-    </div>
-</main>
+        </div>
+        <button class="btn btn-primary" th:text="#{register.register.button}" type="submit">Register</button>
+    </form>
+</div>
 </body>
 </html>

@@ -14,7 +14,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Table(name = "account")
 @DiscriminatorValue("account")
-@ToString(exclude = "password")
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class Account extends ItemEntity {
 
@@ -24,6 +23,7 @@ public class Account extends ItemEntity {
     private String email;
     @Column(unique = true, nullable = false)
     private String username;
+    @ToString.Exclude
     @Column(nullable = false)
     private String password;
     @Column(nullable = false)
@@ -32,6 +32,7 @@ public class Account extends ItemEntity {
     private String lastName;
     @JsonIgnore
     @Builder.Default
+    @ToString.Exclude
     @OneToMany(mappedBy = "author")
     private Set<Post> posts = new HashSet<>();
     @Builder.Default

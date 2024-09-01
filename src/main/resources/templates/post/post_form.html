@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{base :: layout (~{::div})}"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="content">
+    <form enctype="multipart/form-data" method="post"
+          th:action="${post?.code} == null ? @{/post/create/} : @{|/post/update/${post.code}/|}"
+          th:object="${post}">
+        <input th:field="*{creation}" type="hidden"/>
+        <header>
+            <h2 th:text="${post?.code} == null ? 'Write New Post' : 'Update Post'">Post Form</h2>
+            <img alt="Post image" class="img-fluid"
+                 loading="lazy" th:if="${not #strings.isEmpty(post.imageFilePath)}"
+                 th:src="@{/images/*{imageFilePath}/|}"/>
+        </header>
+        <div class="mb-3">
+            <input accept="image/png, image/jpeg, image/jpg, image/bmp" class="btn btn-outline-info"
+                   id="input-file" name="file" type="file"/>
+        </div>
+        <div class="mb-3">
+            <label for="post-title">Title</label>
+            <input id="post-title" placeholder="Title" th:errorclass="is-invalid" th:field="*{title}" type="text"/>
+            <div th:errorclass="invalid-feedback" th:errors="*{title}" th:if="${#fields.hasErrors('title')}">
+                Title error
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="post-body">Body</label>
+            <textarea id="post-body" th:errorclass="is-invalid" th:field="*{body}"></textarea>
+            <div th:errorclass="invalid-feedback" th:errors="*{body}" th:if="${#fields.hasErrors('body')}">
+                Body error
+            </div>
+        </div>
+        <button class="btn btn-primary" th:text="${post?.code} == null ? 'Publish Post' : 'Update Post'"
+                type="submit">Save Post</button>
+    </form>
+</div>
+</body>
+</html>

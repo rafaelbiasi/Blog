@@ -1,27 +1,13 @@
-<!doctype html>
-<html lang="en"
+<!DOCTYPE html>
+<html lang="en" th:replace="~{base :: layout (~{::div})}"
       xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8">
-    <meta content="IE=edge" http-equiv="X-UA-Compatible">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <meta content="??? Error Page" name="description">
-    <meta content="blog,???,error,not found" name="keywords">
-    <title th:text="'Blog :: ??? Error'">Blog :: ???</title>
-    <link th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}" th:rel="stylesheet"/>
-</head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-        <a class="navbar-brand" th:href="@{/}" th:text="#{base.home}">Home</a>
-    </div>
-</nav>
-<main class="container mt-4">
+<div th:fragment="content">
     <header>
         <h1 th:text="#{error.server.error.title}">Unknown error.</h1>
         <hr/>
     </header>
     <p th:text="#{error.server.error.text}">Sorry, an unexpected unknown error occurred.</p>
-</main>
+</div>
 </body>
 </html>

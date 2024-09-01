@@ -15,7 +15,7 @@ import java.util.Optional;
 
 import static br.com.rafaelbiasi.blog.exception.ResourceNotFoundExceptionFactory.throwAccountNotFound;
 import static java.util.Objects.requireNonNull;
-import static java.util.Optional.ofNullable;
+import static java.util.Optional.of;
 
 @Slf4j
 @Service
@@ -45,7 +45,11 @@ public class PostServiceImpl implements PostService {
                         post::setAuthor,
                         () -> throwAccountNotFound(post.getAuthor().getUsername())
                 );
-        ofNullable(post.getCode()).ifPresent(code -> post.setCode(slugify.slugify(post.getTitle())));
+        //TODO: verificar se o cdigo slugify já existe.
+        of(post).map(Post::getCode)
+                .ifPresentOrElse(
+                        code -> {
+                        }, () -> post.setCode(slugify.slugify(post.getTitle())));
         return postRepository.save(post);
     }
 
