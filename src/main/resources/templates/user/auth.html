@@ -6,7 +6,7 @@
     <div>
         <section>
             <h2 th:text="#{auth.title}">Authentication</h2>
-            <form class="needs-validation" method="POST" novalidate th:action="@{/auth}">
+            <form class="needs-validation" method="POST" novalidate th:action="@{/auth/}">
                 <div class="alert alert-danger" role="alert" th:if="${authError}" th:text="#{auth.error}">
                     This is a danger alert—check it out!
                 </div>

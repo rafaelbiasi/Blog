@@ -48,12 +48,12 @@ public class WebSecurityConfig {
     }
 
     private void formAuth(FormLoginConfigurer<HttpSecurity> form) {
-        form.loginPage("/auth")
-                .loginProcessingUrl("/auth")
+        form.loginPage("/auth/")
+                .loginProcessingUrl("/auth/")
                 .usernameParameter("user")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/")
-                .failureForwardUrl("/auth/error")
+                .failureForwardUrl("/auth/error/")
                 .permitAll();
     }
 }

@@ -9,7 +9,7 @@
         <h2 th:text="#{register.new.account}">Register New Account</h2>
         <form action="#"
               method="POST"
-              th:action="@{/register}"
+              th:action="@{/register/}"
               th:object="${account}">
             <div>
                 <label class="form-label" for="firstname" th:text="#{register.firstname.label}">First Name</label>

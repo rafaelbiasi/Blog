@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -22,14 +23,16 @@ import static java.util.function.Predicate.not;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/images/")
 public class ImageController {
 
     private final FileFacade fileService;
     private final ServletContext servletContext;
 
-    @GetMapping("/images/{id}")
+    @GetMapping("/{id}/")
     public ResponseEntity<Resource> image(@PathVariable("id") String imageUri) throws IOException {
-        log.info("Fetching image. Parameters [{}={}]",
+        log.info(
+                "Fetching image. Parameters [{}={}]",
                 "Image URI", imageUri
         );
         return ofNullable(imageUri)
@@ -42,7 +45,8 @@ public class ImageController {
     @SneakyThrows
     private ResponseEntity<Resource> resourceResponseEntity(Resource resource) {
         MediaType contentType = mediaType(resource);
-        log.info("Image fetched. [{}={}, {}={}, {}={} {}]",
+        log.info(
+                "Image fetched. [{}={}, {}={}, {}={} {}]",
                 "File name", resource.getFilename(),
                 "Content type", contentType,
                 "Content length", resource.contentLength(), "bytes"
@@ -55,7 +59,8 @@ public class ImageController {
 
     private MediaType mediaType(Resource image) {
         String mimeType = servletContext.getMimeType(image.getFilename());
-        log.debug("Getting image mime type. [{}={}, {}={}]",
+        log.debug(
+                "Getting image mime type. [{}={}, {}={}]",
                 "File name", image.getFilename(),
                 "Mine type", mimeType
         );

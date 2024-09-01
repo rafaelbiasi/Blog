@@ -16,36 +16,40 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 
+import static br.com.rafaelbiasi.blog.controller.PostController.REDIRECT_POST;
+
 @Slf4j
 @Controller
-@RequestMapping("comment")
+@RequestMapping("/comment/")
 @RequiredArgsConstructor
 public class CommentController {
 
     private final CommentFacade commentFacade;
 
-    @PostMapping("/add/post/{postCode}")
+    @PostMapping("/add/post/{postCode}/")
     @PreAuthorize("isAuthenticated()")
     public String add(
             @Valid @ModelAttribute("comment") CommentData comment,
             BindingResult result,
             RedirectAttributes redirectAttributes,
             @PathVariable String postCode,
-            Principal principal) {
+            Principal principal
+    ) {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("comment", comment);
         } else {
             commentFacade.save(comment, postCode, principal);
         }
-        return "redirect:/post/" + postCode;
+        return REDIRECT_POST + postCode + "/";
     }
 
-    @PostMapping("/delete/{commentCode}/post/{postCode}")
+    @PostMapping("/delete/{commentCode}/post/{postCode}/")
     @PreAuthorize("isAuthenticated()")
     public String delete(
             @PathVariable("commentCode") String commentCode,
-            @PathVariable("postCode") String postCode) {
+            @PathVariable("postCode") String postCode
+    ) {
         commentFacade.delete(commentCode);
-        return "redirect:/post/" + postCode;
+        return REDIRECT_POST + postCode + "/";
     }
 }

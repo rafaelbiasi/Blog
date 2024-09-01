@@ -10,11 +10,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
+@RequestMapping("/error/")
 public class CustomErrorController implements ErrorController {
 
     private static final Map<Integer, String> ERROR_VIEW_MAP = createErrorViewMap();
 
-    @RequestMapping("/error")
+    @RequestMapping("/")
     public String handleError(HttpServletRequest request) {
         int statusCode = Integer.parseInt(request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE).toString());
         return ERROR_VIEW_MAP.getOrDefault(statusCode, "error/generic");

@@ -5,21 +5,25 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
 @Controller
+@RequestMapping("/auth/")
 public class AuthController {
 
-    @GetMapping("/auth")
+    private static final String AUTH_VIEW = "user/auth";
+
+    @GetMapping("/")
     public String auth() {
         log.info("Entering the auth page.");
-        return "user/auth";
+        return AUTH_VIEW;
     }
 
-    @PostMapping("/auth/error")
+    @PostMapping("/error/")
     public String error(Model model) {
         model.addAttribute("authError", true);
-        return "user/auth";
+        return AUTH_VIEW;
     }
 
 }

@@ -11,7 +11,7 @@
             <header>
                 <img alt="Post image" class="img-fluid"
                      loading="lazy" th:if="${not #strings.isEmpty(post.imageFilePath)}"
-                     th:src="@{'/images/' + ${post.imageFilePath}}"/>
+                     th:src="@{|/images/${post.imageFilePath}/|}"/>
                 <h1 th:text="${post.title}">Title</h1>
                 <p class="meta">
                     <span th:text="#{post.metadata.author(${post.author.name})}">Written by Author</span>
@@ -25,11 +25,11 @@
         </article>
         <div sec:authorize="isAuthenticated()">
             <a class="btn btn-primary"
-               th:href="@{'/post/' + ${post.code} + '/edit'}"
+               th:href="@{|/post/edit/${post.code}/|}"
                th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_USER'')')}"
                th:text="#{post.edit}">Edit</a>
             <a class="btn btn-danger"
-               th:href="@{'/post/' + ${post.code} + '/delete'}"
+               th:href="@{|/post/delete/${post.code}/|}"
                th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_USER'')')}"
                th:text="#{post.delete}">Delete</a>
         </div>
@@ -43,7 +43,7 @@
                         <small th:text="${#temporals.format(comment.creation, 'dd MMM yyyy HH:mm')}">Data de
                             Criação</small>
                     </footer>
-                    <form method="post" th:action="@{'/comment/delete/' + ${comment.code} + '/post/' + ${post.code}}">
+                    <form method="post" th:action="@{|/comment/delete/${comment.code}/post/${post.code}/|}">
                         <button class="btn btn-danger btn-sm delete-comment-btn"
                                 th:if="${comment.author.username eq #authentication?.principal?.username
                         or #authorization.expression('hasRole(''ROLE_ADMIN'')')
@@ -56,7 +56,7 @@
         </div>
         <div class="mt-5" sec:authorize="isAuthenticated()">
             <h3>Adicionar um Comentário</h3>
-            <form method="post" th:action="@{'/comment/add/post/' + ${post.code}}" th:object="${comment}">
+            <form method="post" th:action="@{|/comment/add/post/${post.code}/|}" th:object="${comment}">
                 <div class="form-group">
                     <label for="commentText">Comentário</label>
                     <textarea class="form-control" id="commentText" placeholder="Write your comment here..." rows="3"

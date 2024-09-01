@@ -75,22 +75,22 @@ class PostControllerTest {
     }
 
     @Test
-    void update() {
+    void edit() {
         //GIVEN
         when(postFacade.findByCode("title-code")).thenReturn(of(PostData.builder().code("title-code").build()));
         //WHEN
-        String view = postController.update("title-code", model);
+        String view = postController.edit("title-code", model);
         //THEN
         assertEquals("post_edit", view);
         verify(postFacade).findByCode("title-code");
     }
 
     @Test
-    void updateNotFound() {
+    void editNotFound() {
         //GIVEN
         when(postFacade.findByCode("title-code")).thenReturn(empty());
         //WHEN
-        Executable executable = () -> postController.update("title-code", model);
+        Executable executable = () -> postController.edit("title-code", model);
         //THEN
         assertThrows(ResourceNotFoundException.class, executable);
         verify(postFacade).findByCode("title-code");

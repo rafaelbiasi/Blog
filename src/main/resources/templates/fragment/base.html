@@ -24,13 +24,13 @@
                 </form>
             </li>
             <li class="nav-item" sec:authorize="!isAuthenticated()">
-                <a class="nav-link" th:href="@{/register}" th:text="#{base.register}">Register</a>
+                <a class="nav-link" th:href="@{/register/}" th:text="#{base.register}">Register</a>
             </li>
             <li class="nav-item" sec:authorize="!isAuthenticated()">
-                <a class="nav-link" th:href="@{/auth}" th:text="#{base.authentication}">Authentication</a>
+                <a class="nav-link" th:href="@{/auth/}" th:text="#{base.authentication}">Authentication</a>
             </li>
             <li class="nav-item" sec:authorize="isAuthenticated()">
-                <a class="nav-link" th:href="@{/post/create}" th:text="#{base.newPost}">New Post</a>
+                <a class="nav-link" th:href="@{/post/create/}" th:text="#{base.newPost}">New Post</a>
             </li>
         </ul>
     </div>

@@ -13,22 +13,28 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/register/")
 public class RegisterController {
 
+    public static final String REGISTER_VIEW = "user/register";
+    
+    private static final String REDIRECT_HOME = "redirect:/";
+    
     private final AccountFacade accountFacade;
 
-    @GetMapping("/register")
+    @GetMapping("/")
     public String register(Model model) {
         log.info("Entering register page.");
         model.addAttribute("account", new AccountData());
-        return "user/register";
+        return REGISTER_VIEW;
     }
 
-    @PostMapping("/register")
+    @PostMapping("/")
     public String register(
             @Valid @ModelAttribute("account") AccountData account,
             BindingResult result,
@@ -38,10 +44,10 @@ public class RegisterController {
         checkError(result, account);
         if (result.hasErrors()) {
             model.addAttribute("account", account);
-            return "user/register";
+            return REGISTER_VIEW;
         }
         accountFacade.attemptUserRegistration(account);
-        return "redirect:/";
+        return REDIRECT_HOME;
     }
 
     private void checkError(BindingResult result, AccountData account) {
@@ -50,12 +56,14 @@ public class RegisterController {
             return;
         }
         if (registrationResponse.usernameExists()) {
-            result.addError(new FieldError("account",
+            result.addError(new FieldError(
+                    "account",
                     "username",
                     "Another user has already registered this username."));
         }
         if (registrationResponse.emailExists()) {
-            result.addError(new FieldError("account",
+            result.addError(new FieldError(
+                    "account",
                     "email",
                     "Another user has already registered this e-mail."
             ));

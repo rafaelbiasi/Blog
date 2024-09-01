@@ -18,36 +18,46 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 
 import java.security.Principal;
 
+import static br.com.rafaelbiasi.blog.controller.HomeController.REDIRECT_HOME;
 import static br.com.rafaelbiasi.blog.exception.ResourceNotFoundExceptionFactory.postNoFound;
 import static br.com.rafaelbiasi.blog.exception.ResourceNotFoundExceptionFactory.throwPostNoFound;
 import static java.util.Optional.ofNullable;
 
 @Slf4j
-@RequestMapping("post")
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/post/")
 public class PostController {
+
+    public static final String REDIRECT_POST = "redirect:/post/";
+
+    private static final String POST_EDIT_VIEW = "post/post_edit";
+    private static final String POST_VIEW = "post/post";
+    private static final String POST_CREATE_VIEW = "post/post_create";
 
     private final PostFacade postFacade;
 
-    @GetMapping("/{code}")
+    @GetMapping("/{code}/")
     public String post(@PathVariable String code, Model model, HttpServletRequest request) {
         log.info("Entering the post page. Parameters [{}={}]",
                 "Code", code
         );
         postFacade.findByCode(code).ifPresentOrElse(
-                post -> {
-                    model.addAttribute("post", post);
-                    addFlashAttributeWhenError(model, request);
-                    addCommentAttribute(model);
-                }, () -> throwPostNoFound(code)
+                post -> addToModelAttribute(model, request, post),
+                () -> throwPostNoFound(code)
         );
-        return "post/post";
+        return POST_VIEW;
     }
 
-    @GetMapping("/{code}/edit")
+    private void addToModelAttribute(Model model, HttpServletRequest request, PostData post) {
+        model.addAttribute("post", post);
+        addFlashAttributeWhenError(model, request);
+        addCommentAttribute(model);
+    }
+
+    @GetMapping("/edit/{code}/")
     @PreAuthorize("isAuthenticated()")
-    public String update(@PathVariable String code, Model model) {
+    public String edit(@PathVariable String code, Model model) {
         log.info("Entering the post edit page. Parameters [{}={}]",
                 "Code", code
         );
@@ -55,10 +65,10 @@ public class PostController {
                 post -> model.addAttribute("post", post),
                 () -> throwPostNoFound(code)
         );
-        return "post/post_edit";
+        return POST_EDIT_VIEW;
     }
 
-    @PostMapping("/{code}")
+    @PostMapping("/udpate/{code}/")
     @PreAuthorize("isAuthenticated()")
     public String update(
             @Valid @ModelAttribute("post") PostData post,
@@ -72,24 +82,24 @@ public class PostController {
         );
         if (result.hasErrors()) {
             model.addAttribute("post", post);
-            return "post/post_edit";
+            return POST_EDIT_VIEW;
         }
         ofNullable(file).ifPresentOrElse(
                 multipartFile -> save(post, multipartFile),
                 () -> postFacade.save(post)
         );
-        return "redirect:/post/" + code;
+        return REDIRECT_POST + code + "/";
     }
 
-    @GetMapping("/create")
+    @GetMapping("/create/")
     @PreAuthorize("isAuthenticated()")
     public String create(Model model) {
         log.info("Entering the new post page.");
         model.addAttribute("post", new PostData());
-        return "post/post_create";
+        return POST_CREATE_VIEW;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/create/")
     @PreAuthorize("isAuthenticated()")
     public String create(
             @Valid @ModelAttribute("post") PostData post,
@@ -104,7 +114,7 @@ public class PostController {
         );
         if (result.hasErrors()) {
             model.addAttribute("post", post);
-            return "post/post_create";
+            return POST_CREATE_VIEW;
         }
         log.info("Fetching principal. Parameters [{}={}]",
                 "Principal", principal
@@ -113,19 +123,19 @@ public class PostController {
                 multipartFile -> save(post, principal, multipartFile),
                 () -> postFacade.save(post, principal)
         );
-        return "redirect:/";
+        return REDIRECT_HOME;
     }
 
-    @GetMapping("/{code}/delete")
+    @GetMapping("/delete/{code}/")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String delete(@PathVariable String code) {
         log.info("Deleting the post. Parameters [{}={}]",
                 "Code", code
         );
-        if (postFacade.delete(code)) {
-            return "redirect:/";
+        if (!postFacade.delete(code)) {
+            throw postNoFound(code);
         }
-        throw postNoFound(code);
+        return REDIRECT_HOME;
     }
 
     private void addFlashAttributeWhenError(Model model, HttpServletRequest request) {
