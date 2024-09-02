@@ -68,12 +68,12 @@ Textos e imagens de exemplos gerados por IA.
 - ~~Internacionalização/localização~~
 - ~~Testes de unidade~~
 - ~~Comentários~~
+- ~~Melhor estruturação dos templates~~
+- Painel Administrativo
+- Melhoria no layout (Novo layout, responsividade, acessibilidade, SEO)
 - Tags
 - Busca
-- Painel Administrativo
-- Melhoria no layout (Novo layout, responsividade e acessibilidade)
-- SEO
-- Editor WYSIWYG
+- Editor WYSIWYG (talvez Markdown)
 
 ## Licença
 
