@@ -2,7 +2,6 @@ package br.com.rafaelbiasi.blog.service;
 
 import br.com.rafaelbiasi.blog.model.Post;
 import br.com.rafaelbiasi.blog.repository.PostRepository;
-import com.github.slugify.Slugify;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -15,7 +14,6 @@ import java.util.Optional;
 
 import static br.com.rafaelbiasi.blog.exception.ResourceNotFoundExceptionFactory.throwAccountNotFound;
 import static java.util.Objects.requireNonNull;
-import static java.util.Optional.of;
 
 @Slf4j
 @Service
@@ -24,7 +22,6 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final AccountService accountService;
-    private final Slugify slugify = Slugify.builder().build();
 
     @Override
     public Optional<Post> findById(long id) {
@@ -45,11 +42,6 @@ public class PostServiceImpl implements PostService {
                         post::setAuthor,
                         () -> throwAccountNotFound(post.getAuthor().getUsername())
                 );
-        //TODO: verificar se o cdigo slugify já existe.
-        of(post).map(Post::getCode)
-                .ifPresentOrElse(
-                        code -> {
-                        }, () -> post.setCode(slugify.slugify(post.getTitle())));
         return postRepository.save(post);
     }
 

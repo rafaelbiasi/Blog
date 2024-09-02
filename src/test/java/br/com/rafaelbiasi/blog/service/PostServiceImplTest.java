@@ -86,7 +86,8 @@ class PostServiceImplTest {
         //GIVEN
         Account account = Account.builder().username("username").build();
         Post post = Post.builder()
-                .title("Título a ser slugificado")
+                .title("Title")
+                .body("Body")
                 .author(account)
                 .build();
         when(accountService.findOneByUsername("username")).thenReturn(of(account));
@@ -95,7 +96,6 @@ class PostServiceImplTest {
         Post postResponse = postService.save(post);
         //THEN
         assertEquals(post, postResponse);
-        assertEquals("titulo-a-ser-slugificado", postResponse.getCode());
         verify(accountService).findOneByUsername("username");
         verify(postRepository).save(post);
     }

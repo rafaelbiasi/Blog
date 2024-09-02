@@ -60,7 +60,7 @@ class CommentControllerTest {
         //WHEN
         String view = commentController.add(comment, result, redirectAttributes, "post-code", principal);
         //THEN
-        assertEquals("redirect:/post/post-code", view);
+        assertEquals("redirect:/post/post-code/", view);
         verify(redirectAttributes).addFlashAttribute("comment", comment);
     }
 
@@ -70,7 +70,7 @@ class CommentControllerTest {
         //WHEN
         String view = commentController.delete("code", "post-code");
         //THEN
-        assertEquals("redirect:/post/post-code", view);
+        assertEquals("redirect:/post/post-code/", view);
         verify(commentFacade).delete("code");
     }
 

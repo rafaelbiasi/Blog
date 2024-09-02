@@ -1,6 +1,5 @@
 package br.com.rafaelbiasi.blog.facade;
 
-import br.com.rafaelbiasi.blog.data.AccountData;
 import br.com.rafaelbiasi.blog.data.PostData;
 import br.com.rafaelbiasi.blog.model.Post;
 import br.com.rafaelbiasi.blog.service.PostServiceImpl;
@@ -109,26 +108,6 @@ class PostFacadeImplTest {
     }
 
     @Test
-    void saveWithPrincipal() {
-        //GIVEN
-        PostData postData = PostData.builder().code("code").build();
-        Post post = Post.builder().code("code").build();
-        AccountData account = AccountData.builder().build();
-        when(principal.getName()).thenReturn("user@domain.com");
-        when(postService.findByCode("code")).thenReturn(of(post));
-        when(postTransformer.convertTo(postData, post)).thenReturn(post);
-        when(postService.save(post)).thenReturn(post);
-        //WHEN
-        postFacade.save(postData, principal);
-        //THEN
-        assertEquals(account, postData.getAuthor());
-        verify(principal).getName();
-        verify(postService).findByCode("code");
-        verify(postTransformer).convertTo(postData, post);
-        verify(postService).save(post);
-    }
-
-    @Test
     void saveUpdateWithFile() throws IOException {
         //GIVEN
         PostData postData = PostData.builder().code("code").build();
@@ -136,6 +115,7 @@ class PostFacadeImplTest {
         when(file.getOriginalFilename()).thenReturn("image.png");
         when(postService.findByCode("code")).thenReturn(of(post));
         when(postTransformer.convertTo(postData, post)).thenReturn(post);
+        when(postDataTransformer.convert(post)).thenReturn(postData);
         when(postService.save(post)).thenReturn(post);
         //WHEN
         postFacade.save(postData, file);
@@ -143,6 +123,7 @@ class PostFacadeImplTest {
         verify(file).getOriginalFilename();
         verify(postService).findByCode("code");
         verify(postTransformer).convertTo(postData, post);
+        verify(postDataTransformer).convert(post);
         verify(postService).save(post);
         verify(fileFacade).save(file);
     }
@@ -155,12 +136,14 @@ class PostFacadeImplTest {
         when(file.getOriginalFilename()).thenReturn("image.png");
         when(postService.findByCode("code")).thenReturn(empty());
         when(postTransformer.convert(postData)).thenReturn(post);
+        when(postDataTransformer.convert(post)).thenReturn(postData);
         when(postService.save(post)).thenReturn(post);
         //WHEN
         postFacade.save(postData, file);
         //THEN
         verify(file).getOriginalFilename();
         verify(postService).findByCode("code");
+        verify(postDataTransformer).convert(post);
         verify(postTransformer).convert(postData);
         verify(postService).save(post);
     }
@@ -173,6 +156,7 @@ class PostFacadeImplTest {
         when(file.getOriginalFilename()).thenReturn("image.png");
         when(postService.findByCode("code")).thenReturn(of(post));
         when(postTransformer.convertTo(postData, post)).thenReturn(post);
+        when(postDataTransformer.convert(post)).thenReturn(postData);
         when(postService.save(post)).thenReturn(post);
         doThrow(new RuntimeException()).when(fileFacade).save(file);
         //WHEN
@@ -182,27 +166,7 @@ class PostFacadeImplTest {
         verify(file).getOriginalFilename();
         verify(postService).findByCode("code");
         verify(postTransformer).convertTo(postData, post);
-        verify(postService).save(post);
-        verify(fileFacade).save(file);
-    }
-
-    @Test
-    void saveUpdateWithFileAndPrincipal() throws IOException {
-        //GIVEN
-        PostData postData = PostData.builder().code("code").build();
-        Post post = Post.builder().code("code").build();
-        when(principal.getName()).thenReturn("user@domain.com");
-        when(file.getOriginalFilename()).thenReturn("image.png");
-        when(postService.findByCode("code")).thenReturn(of(post));
-        when(postTransformer.convertTo(postData, post)).thenReturn(post);
-        when(postService.save(post)).thenReturn(post);
-        //WHEN
-        postFacade.save(postData, file, principal);
-        //THEN
-        verify(principal).getName();
-        verify(file).getOriginalFilename();
-        verify(postService).findByCode("code");
-        verify(postTransformer).convertTo(postData, post);
+        verify(postDataTransformer).convert(post);
         verify(postService).save(post);
         verify(fileFacade).save(file);
     }

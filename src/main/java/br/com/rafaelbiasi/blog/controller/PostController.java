@@ -1,5 +1,6 @@
 package br.com.rafaelbiasi.blog.controller;
 
+import br.com.rafaelbiasi.blog.data.AccountData;
 import br.com.rafaelbiasi.blog.data.CommentData;
 import br.com.rafaelbiasi.blog.data.PostData;
 import br.com.rafaelbiasi.blog.facade.PostFacade;
@@ -37,7 +38,8 @@ public class PostController {
 
     @GetMapping("/{code}/")
     public String post(@PathVariable String code, Model model, HttpServletRequest request) {
-        log.info("Entering the post page. Parameters [{}={}]",
+        log.info(
+                "Entering the post page. Parameters [{}={}]",
                 "Code", code
         );
         postFacade.findByCode(code).ifPresentOrElse(
@@ -56,7 +58,8 @@ public class PostController {
     @GetMapping("/edit/{code}/")
     @PreAuthorize("isAuthenticated()")
     public String edit(@PathVariable String code, Model model) {
-        log.info("Entering the post edit page. Parameters [{}={}]",
+        log.info(
+                "Entering the post edit page. Parameters [{}={}]",
                 "Code", code
         );
         postFacade.findByCode(code).ifPresentOrElse(
@@ -64,29 +67,6 @@ public class PostController {
                 () -> throwPostNoFound(code)
         );
         return POST_FORM_VIEW;
-    }
-
-    @PostMapping("/udpate/{code}/")
-    @PreAuthorize("isAuthenticated()")
-    public String update(
-            @Valid @ModelAttribute("post") PostData post,
-            BindingResult result,
-            Model model,
-            @PathVariable String code,
-            @RequestParam("file") MultipartFile file) {
-        log.info("Updating the post. Parameters [{}={}, {}={}]",
-                "Code", code,
-                "File", file
-        );
-        if (result.hasErrors()) {
-            model.addAttribute("post", post);
-            return POST_FORM_VIEW;
-        }
-        ofNullable(file).ifPresentOrElse(
-                multipartFile -> save(post, multipartFile),
-                () -> postFacade.save(post)
-        );
-        return REDIRECT_POST + code + "/";
     }
 
     @GetMapping("/create/")
@@ -97,37 +77,53 @@ public class PostController {
         return POST_FORM_VIEW;
     }
 
-    @PostMapping("/create/")
+    @PostMapping("/save/")
     @PreAuthorize("isAuthenticated()")
-    public String create(
+    public String save(
             @Valid @ModelAttribute("post") PostData post,
             BindingResult result,
             Model model,
             @RequestParam("file") MultipartFile file,
             Principal principal) {
-        log.info("Saving the new post. Parameters [{}={}, {}={}, {}={}]",
+        log.info(
+                "Saving the post. Parameters [{}={}, {}={}]",
                 "Post", post,
-                "File", file,
-                "Principal", principal
+                "File", file
         );
         if (result.hasErrors()) {
             model.addAttribute("post", post);
             return POST_FORM_VIEW;
         }
-        log.info("Fetching principal. Parameters [{}={}]",
-                "Principal", principal
+        PostData savedPostData = post.getCode() == null
+                ? create(post, file, principal)
+                : update(post, file);
+        return REDIRECT_POST + savedPostData.getCode() + "/";
+
+    }
+
+    private PostData create(PostData post, MultipartFile file, Principal principal) {
+        log.info("Creating a new post.");
+        post.setAuthor(AccountData.builder().username(principal.getName()).build());
+        return file == null || file.isEmpty()
+                ? postFacade.save(post)
+                : postFacade.save(post, file);
+    }
+
+    private PostData update(PostData post, MultipartFile file) {
+        log.info(
+                "Updating the post. [{}={}]",
+                "Code", post.getCode()
         );
-        ofNullable(file).ifPresentOrElse(
-                multipartFile -> save(post, principal, multipartFile),
-                () -> postFacade.save(post, principal)
-        );
-        return REDIRECT_HOME;
+        return file == null || file.isEmpty()
+                ? postFacade.save(post)
+                : postFacade.save(post, file);
     }
 
     @GetMapping("/delete/{code}/")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String delete(@PathVariable String code) {
-        log.info("Deleting the post. Parameters [{}={}]",
+        log.info(
+                "Deleting the post. Parameters [{}={}]",
                 "Code", code
         );
         if (!postFacade.delete(code)) {
@@ -145,13 +141,4 @@ public class PostController {
             model.addAttribute("comment", new CommentData());
         }
     }
-
-    private void save(PostData post, MultipartFile multipartFile) {
-        postFacade.save(post, multipartFile);
-    }
-
-    private void save(PostData post, Principal principal, MultipartFile multipartFile) {
-        postFacade.save(post, multipartFile, principal);
-    }
-
 }

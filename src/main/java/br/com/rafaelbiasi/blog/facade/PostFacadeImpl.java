@@ -1,6 +1,5 @@
 package br.com.rafaelbiasi.blog.facade;
 
-import br.com.rafaelbiasi.blog.data.AccountData;
 import br.com.rafaelbiasi.blog.data.PostData;
 import br.com.rafaelbiasi.blog.model.Post;
 import br.com.rafaelbiasi.blog.service.PostService;
@@ -13,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,40 +58,26 @@ public class PostFacadeImpl implements PostFacade {
     }
 
     @Override
-    public void save(PostData postData) {
+    public PostData save(PostData postData) {
         requireNonNull(postData, "The Post has a null value.");
-        ofNullable(postData.getCode())
-                .flatMap(postService::findByCode)
-                .ifPresentOrElse(post -> update(postData, post), () -> create(postData));
+        Optional<Post> postOpt = ofNullable(postData.getCode())
+                .flatMap(postService::findByCode);
+        return postOpt.isPresent()
+                ? update(postData, postOpt.get())
+                : create(postData);
     }
 
     @Override
-    public void save(PostData postData, Principal user) {
-        requireNonNull(postData, "The Post has a null value.");
-        requireNonNull(user, "The User has a null value.");
-        postData.setAuthor(AccountData.builder().username(user.getName()).build());
-        save(postData);
-    }
-
-    @Override
-    public void save(PostData postData, MultipartFile file) {
+    public PostData save(PostData postData, MultipartFile file) {
         requireNonNull(postData, "The Post has a null value.");
         requireNonNull(file, "The File has a null value.");
         Optional<String> originalFilename = of(file)
                 .map(MultipartFile::getOriginalFilename)
                 .filter(not(String::isBlank));
         originalFilename.ifPresent(postData::setImageFilePath);
-        save(postData);
+        PostData savedPostData = save(postData);
         originalFilename.ifPresent(s -> fileFacade.save(file));
-    }
-
-    @Override
-    public void save(PostData postData, MultipartFile file, Principal user) {
-        requireNonNull(postData, "The Post has a null value.");
-        requireNonNull(file, "The File has a null value.");
-        requireNonNull(user, "The User has a null value.");
-        postData.setAuthor(AccountData.builder().username(user.getName()).build());
-        save(postData, file);
+        return savedPostData;
     }
 
     @Override
@@ -110,11 +94,15 @@ public class PostFacadeImpl implements PostFacade {
         return postService.findByCode(code).map(postDataTransformer::convert);
     }
 
-    private void update(PostData postData, Post post) {
-        postService.save(postTransformer.convertTo(postData, post));
+    private PostData update(PostData postData, Post post) {
+        return of(postService.save(postTransformer.convertTo(postData, post)))
+                .map(postDataTransformer::convert)
+                .orElseThrow();
     }
 
-    private void create(PostData postData) {
-        postService.save(postTransformer.convert(postData));
+    private PostData create(PostData postData) {
+        return of(postService.save(postTransformer.convert(postData)))
+                .map(postDataTransformer::convert)
+                .orElseThrow();
     }
 }

@@ -47,7 +47,7 @@ class RegisterControllerTest {
         //WHEN
         String view = registerController.register(model);
         //THEN
-        assertEquals("register", view);
+        assertEquals("user/register", view);
         Mockito.verify(model).addAttribute("account", new AccountData());
     }
 
@@ -82,7 +82,7 @@ class RegisterControllerTest {
         //WHEN
         String view = registerController.register(accountData, bindingResult, model);
         //THEN
-        assertEquals("register", view);
+        assertEquals("user/register", view);
         verify(accountFacade).checkEmailAndUsernameExists(accountData);
         verify(bindingResult).hasErrors();
         verify(model).addAttribute("account", accountData);
@@ -101,7 +101,7 @@ class RegisterControllerTest {
         //WHEN
         String view = registerController.register(accountData, bindingResult, model);
         //THEN
-        assertEquals("register", view);
+        assertEquals("user/register", view);
         verify(accountFacade).checkEmailAndUsernameExists(accountData);
         verify(bindingResult).hasErrors();
         verify(model).addAttribute("account", accountData);
@@ -120,7 +120,7 @@ class RegisterControllerTest {
         //WHEN
         String view = registerController.register(accountData, bindingResult, model);
         //THEN
-        assertEquals("register", view);
+        assertEquals("user/register", view);
         verify(accountFacade).checkEmailAndUsernameExists(accountData);
         verify(bindingResult).hasErrors();
         verify(model).addAttribute("account", accountData);

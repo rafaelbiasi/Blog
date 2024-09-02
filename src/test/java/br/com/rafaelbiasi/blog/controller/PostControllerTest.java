@@ -14,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.security.Principal;
 
 import static java.util.Optional.empty;
@@ -59,7 +58,7 @@ class PostControllerTest {
         //WHEN
         String view = postController.post("title-code", model, request);
         //THEN
-        assertEquals("post", view);
+        assertEquals("post/post", view);
         verify(postFacade).findByCode("title-code");
     }
 
@@ -81,7 +80,7 @@ class PostControllerTest {
         //WHEN
         String view = postController.edit("title-code", model);
         //THEN
-        assertEquals("post_form", view);
+        assertEquals("post/post_form", view);
         verify(postFacade).findByCode("title-code");
     }
 
@@ -97,129 +96,65 @@ class PostControllerTest {
     }
 
     @Test
-    void updateSaveWithFile() {
-        //GIVEN
-        PostData post = PostData.builder().code("title-code").build();
-        when(bindingResult.hasErrors()).thenReturn(false);
-        //WHEN
-        String view = postController.update(post, bindingResult, model, "title-code", null);
-        //THEN
-        assertEquals("redirect:/post/title-code", view);
-        verify(bindingResult).hasErrors();
-        verify(postFacade).save(post);
-    }
-
-    @Test
-    void updateSave() throws IOException {
-        //GIVEN
-        PostData post = PostData.builder().code("title-code").build();
-        when(bindingResult.hasErrors()).thenReturn(false);
-        //WHEN
-        String view = postController.update(post, bindingResult, model, "title-code", file);
-        //THEN
-        assertEquals("redirect:/post/title-code", view);
-        verify(bindingResult).hasErrors();
-        verify(postFacade).save(post, file);
-    }
-
-    @Test
-    void updateSaveFileSaveException() throws IOException {
-        //GIVEN
-        PostData post = PostData.builder().code("title-code").build();
-        when(bindingResult.hasErrors()).thenReturn(false);
-        doThrow(new RuntimeException()).when(postFacade).save(post, file);
-        //WHEN
-        Executable executable = () -> postController.update(post, bindingResult, model, "title-code", file);
-        //THEN
-        assertThrows(RuntimeException.class, executable);
-        verify(bindingResult).hasErrors();
-        verify(postFacade).save(post, file);
-    }
-
-    @Test
-    void updateSaveExceptionErro500() throws IOException {
-        //GIVEN
-        PostData post = PostData.builder().code("title-code").build();
-        when(bindingResult.hasErrors()).thenReturn(false);
-        doThrow(RuntimeException.class).when(postFacade).save(post, file);
-        //WHEN
-        Executable executable = () -> postController.update(post, bindingResult, model, "title-code", file);
-        //THEN
-        assertThrows(RuntimeException.class, executable);
-        verify(bindingResult).hasErrors();
-        verify(postFacade).save(post, file);
-    }
-
-    @Test
-    void updateSaveHasErrors() {
-        //GIVEN
-        PostData post = PostData.builder().code("title-code").build();
-        when(bindingResult.hasErrors()).thenReturn(true);
-        //WHEN
-        String view = postController.update(post, bindingResult, model, "title-code", file);
-        //THEN
-        assertEquals("post_form", view);
-        verify(bindingResult).hasErrors();
-    }
-
-    @Test
     void create() {
         //GIVEN
         //WHEN
         String view = postController.create(model);
         //THEN
-        assertEquals("post_form", view);
+        assertEquals("post/post_form", view);
     }
 
     @Test
-    void createSave() {
+    void save() {
         //GIVEN
         PostData post = PostData.builder().code("title-code").build();
+        when(postFacade.save(post)).thenReturn(post);
         when(bindingResult.hasErrors()).thenReturn(false);
         //WHEN
-        String view = postController.create(post, bindingResult, model, null, principal);
+        String view = postController.save(post, bindingResult, model, null, principal);
         //THEN
-        assertEquals("redirect:/", view);
+        assertEquals("redirect:/post/title-code/", view);
         verify(bindingResult).hasErrors();
-        verify(postFacade).save(post, principal);
+        verify(postFacade).save(post);
     }
 
     @Test
-    void createSaveWithFile() throws IOException {
+    void saveWithFile() {
         //GIVEN
         PostData post = PostData.builder().code("title-code").build();
+        when(postFacade.save(post, file)).thenReturn(post);
         when(bindingResult.hasErrors()).thenReturn(false);
         //WHEN
-        String view = postController.create(post, bindingResult, model, file, principal);
+        String view = postController.save(post, bindingResult, model, file, principal);
         //THEN
-        assertEquals("redirect:/", view);
+        assertEquals("redirect:/post/title-code/", view);
         verify(bindingResult).hasErrors();
-        verify(postFacade).save(post, file, principal);
+        verify(postFacade).save(post, file);
     }
 
     @Test
-    void createSaveExceptionError500() throws IOException {
+    void saveExceptionError500() {
         //GIVEN
         PostData post = PostData.builder().code("title-code").build();
         when(bindingResult.hasErrors()).thenReturn(false);
-        doThrow(RuntimeException.class).when(postFacade).save(post, file, principal);
+        doThrow(RuntimeException.class).when(postFacade).save(post, file);
         //WHEN
-        Executable executable = () -> postController.create(post, bindingResult, model, file, principal);
+        Executable executable = () -> postController.save(post, bindingResult, model, file, principal);
         //THEN
         assertThrows(RuntimeException.class, executable);
         verify(bindingResult).hasErrors();
-        verify(postFacade).save(post, file, principal);
+        verify(postFacade).save(post, file);
     }
 
     @Test
-    void createSaveHasErrors() {
+    void saveHasErrors() {
         //GIVEN
         PostData post = PostData.builder().code("title-code").build();
         when(bindingResult.hasErrors()).thenReturn(true);
         //WHEN
-        String view = postController.create(post, bindingResult, model, file, principal);
+        String view = postController.save(post, bindingResult, model, file, principal);
         //THEN
-        assertEquals("post_form", view);
+        assertEquals("post/post_form", view);
         verify(bindingResult).hasErrors();
     }
 

@@ -4,9 +4,9 @@
 <body>
 <div th:fragment="content">
     <form enctype="multipart/form-data" method="post"
-          th:action="${post?.code} == null ? @{/post/create/} : @{|/post/update/${post.code}/|}"
+          th:action="@{/post/save/}"
           th:object="${post}">
-        <input th:field="*{creation}" type="hidden"/>
+        <input th:field="*{code}" th:if="${post?.code} != null" th:value="${post?.code}" type="hidden"/>
         <header>
             <h2 th:text="${post?.code} == null ? 'Write New Post' : 'Update Post'">Post Form</h2>
             <img alt="Post image" class="img-fluid"

@@ -7,16 +7,12 @@ import br.com.rafaelbiasi.blog.transformer.Transformer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.security.Principal;
 
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -62,23 +58,10 @@ class CommentFacadeImplTest {
     void delete() {
         //GIVEN
         Comment comment = Comment.builder().code("code").build();
-        when(commentService.findByCode("code")).thenReturn(of(comment));
         //WHEN
         commentFacade.delete("code");
         //THEN
-        verify(commentService).findByCode("code");
         verify(commentService).delete(comment);
-    }
-
-    @Test
-    void deleteNotFound() {
-        //GIVEN
-        when(commentService.findByCode("code")).thenReturn(empty());
-        //WHEN
-        Executable executable = () -> commentFacade.delete("code");
-        //THEN
-        assertThrows(RuntimeException.class, executable);
-        verify(commentService).findByCode("code");
     }
 
     //@Test

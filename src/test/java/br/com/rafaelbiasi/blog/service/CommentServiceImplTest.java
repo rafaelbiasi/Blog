@@ -1,5 +1,6 @@
 package br.com.rafaelbiasi.blog.service;
 
+import br.com.rafaelbiasi.blog.exception.ResourceNotFoundException;
 import br.com.rafaelbiasi.blog.model.Account;
 import br.com.rafaelbiasi.blog.model.Comment;
 import br.com.rafaelbiasi.blog.model.Post;
@@ -71,10 +72,12 @@ class CommentServiceImplTest {
     @Test
     void delete() {
         //GIVEN
-        Comment comment = Comment.builder().id(1L).build();
+        Comment comment = Comment.builder().code("code").build();
+        when(commentRepository.findByCode("code")).thenReturn(of(comment));
         //WHEN
         commentService.delete(comment);
         //THEN
+        verify(commentRepository).findByCode("code");
         verify(commentRepository).delete(comment);
     }
 
@@ -125,7 +128,7 @@ class CommentServiceImplTest {
         //WHEN
         Executable executable = () -> commentService.save(comment);
         //THEN
-        assertThrows(IllegalArgumentException.class, executable);
+        assertThrows(ResourceNotFoundException.class, executable);
         assertEquals(account, comment.getAuthor());
         assertNotEquals(post, comment.getPost());
         assertNotEquals(accountToFind, comment.getAuthor());
@@ -152,7 +155,7 @@ class CommentServiceImplTest {
         //WHEN
         Executable executable = () -> commentService.save(comment);
         //THEN
-        assertThrows(IllegalArgumentException.class, executable);
+        assertThrows(ResourceNotFoundException.class, executable);
         assertNotEquals(account, comment.getAuthor());
         assertNotEquals(post, comment.getPost());
         assertEquals(accountToFind, comment.getAuthor());

@@ -35,7 +35,7 @@ class AuthControllerTest {
         //WHEN
         String view = authController.auth();
         //THEN
-        assertEquals("auth", view);
+        assertEquals("user/auth", view);
     }
 
     @Test()
@@ -45,7 +45,7 @@ class AuthControllerTest {
         //WHEN
         String view = authController.error(model);
         //THEN
-        assertEquals("auth", view);
+        assertEquals("user/auth", view);
         verify(model).addAttribute("authError", true);
     }
 

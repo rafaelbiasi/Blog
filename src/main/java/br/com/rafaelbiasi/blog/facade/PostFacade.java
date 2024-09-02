@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,13 +16,9 @@ public interface PostFacade {
 
     Optional<PostData> findById(long id);
 
-    void save(PostData post);
+    PostData save(PostData post);
 
-    void save(PostData postData, Principal user);
-
-    void save(PostData post, MultipartFile file);
-
-    void save(PostData postData, MultipartFile file, Principal user);
+    PostData save(PostData post, MultipartFile file);
 
     boolean delete(String code);
 
