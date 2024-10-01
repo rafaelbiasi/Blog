@@ -1,7 +1,9 @@
 package br.com.rafaelbiasi.blog.service;
 
-import br.com.rafaelbiasi.blog.model.Role;
-import br.com.rafaelbiasi.blog.repository.RoleRepository;
+import br.com.rafaelbiasi.blog.domain.entity.Role;
+import br.com.rafaelbiasi.blog.domain.service.RoleService;
+import br.com.rafaelbiasi.blog.domain.service.impl.RoleServiceImpl;
+import br.com.rafaelbiasi.blog.infrastructure.repository.RoleRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

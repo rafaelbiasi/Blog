@@ -1,11 +1,12 @@
 package br.com.rafaelbiasi.blog.facade;
 
-import br.com.rafaelbiasi.blog.data.AccountData;
-import br.com.rafaelbiasi.blog.data.RegistrationResponseData;
-import br.com.rafaelbiasi.blog.model.Account;
-import br.com.rafaelbiasi.blog.model.RegistrationResponse;
-import br.com.rafaelbiasi.blog.service.AccountService;
-import br.com.rafaelbiasi.blog.transformer.Transformer;
+import br.com.rafaelbiasi.blog.application.data.AccountData;
+import br.com.rafaelbiasi.blog.application.facade.AccountFacade;
+import br.com.rafaelbiasi.blog.application.facade.impl.AccountFacadeImpl;
+import br.com.rafaelbiasi.blog.application.mapper.AccountMapper;
+import br.com.rafaelbiasi.blog.domain.entity.Account;
+import br.com.rafaelbiasi.blog.domain.microtype.RegistrationResponse;
+import br.com.rafaelbiasi.blog.domain.service.AccountService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,16 +28,15 @@ class AccountFacadeImplTest {
     @Mock
     private AccountService accountService;
     @Mock
-    private Transformer<Account, AccountData> accountDataTransformer;
+    private AccountMapper accountMapper;
     @Mock
-    private Transformer<AccountData, Account> accountTransformer;
     private AutoCloseable closeable;
 
     @BeforeEach
     void setUp() {
         //GIVEN
         closeable = MockitoAnnotations.openMocks(this);
-        accountFacade = new AccountFacadeImpl(accountService, accountDataTransformer, accountTransformer);
+        accountFacade = new AccountFacadeImpl(accountService, accountMapper);
     }
 
     @AfterEach
@@ -50,14 +50,12 @@ class AccountFacadeImplTest {
         Account account = new Account();
         AccountData accountData = new AccountData();
         when(accountService.findOneByEmail("emai@email.com")).thenReturn(of(account));
-        when(accountDataTransformer.convert(account)).thenReturn(accountData);
         //WHEN
         Optional<AccountData> accountResponse = accountFacade.findOneByEmail("emai@email.com");
         //THEN
         assertTrue(accountResponse.isPresent());
         assertEquals(accountData, accountResponse.get());
         verify(accountService).findOneByEmail("emai@email.com");
-        verify(accountDataTransformer).convert(account);
     }
 
     @Test
@@ -77,14 +75,12 @@ class AccountFacadeImplTest {
         Account account = new Account();
         AccountData accountData = new AccountData();
         when(accountService.findOneByUsername("username")).thenReturn(of(account));
-        when(accountDataTransformer.convert(account)).thenReturn(accountData);
         //WHEN
         Optional<AccountData> accountResponse = accountFacade.findOneByUsername("username");
         //THEN
         assertTrue(accountResponse.isPresent());
         assertEquals(accountData, accountResponse.get());
         verify(accountService).findOneByUsername("username");
-        verify(accountDataTransformer).convert(account);
     }
 
     @Test
@@ -104,30 +100,22 @@ class AccountFacadeImplTest {
         //GIVEN
         AccountData accountData = new AccountData();
         Account account = new Account();
-        when(accountTransformer.convert(accountData)).thenReturn(account);
         when(accountService.save(account)).thenReturn(account);
         //WHEN
         accountFacade.save(accountData);
         //THEN
-        verify(accountTransformer).convert(accountData);
         verify(accountService).save(account);
     }
 
     @Test()
-    void attemptUserRegistration() {
+    void registerUser() {
         //GIVENs
         AccountData accountData = new AccountData();
         Account account = new Account();
-        RegistrationResponseData resultData = new RegistrationResponseData(true, true);
-        RegistrationResponse result = new RegistrationResponse(true, true);
-        when(accountTransformer.convert(accountData)).thenReturn(account);
-        when(accountService.attemptUserRegistration(account)).thenReturn(result);
         //WHEN
-        RegistrationResponseData registrationResponse = accountFacade.attemptUserRegistration(accountData);
+        accountFacade.registerUser(accountData);
         //THEN
-        assertEquals(resultData, registrationResponse);
-        verify(accountTransformer).convert(accountData);
-        verify(accountService).attemptUserRegistration(account);
+        verify(accountService).registerUser(account);
     }
 
     @Test()
@@ -135,15 +123,13 @@ class AccountFacadeImplTest {
         //GIVENs
         AccountData accountData = new AccountData();
         Account account = new Account();
-        RegistrationResponseData resultData = new RegistrationResponseData(true, true);
+        RegistrationResponse resultData = new RegistrationResponse(true, true);
         RegistrationResponse result = new RegistrationResponse(true, true);
-        when(accountTransformer.convert(accountData)).thenReturn(account);
         when(accountService.checkEmailAndUsernameExists(account)).thenReturn(result);
         //WHEN
-        RegistrationResponseData registrationResponse = accountFacade.checkEmailAndUsernameExists(accountData);
+        RegistrationResponse registrationResponse = accountFacade.checkEmailAndUsernameExists(accountData);
         //THEN
         assertEquals(resultData, registrationResponse);
-        verify(accountTransformer).convert(accountData);
         verify(accountService).checkEmailAndUsernameExists(account);
     }
 

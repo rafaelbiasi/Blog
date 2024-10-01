@@ -1,7 +1,8 @@
 package br.com.rafaelbiasi.blog.controller;
 
-import br.com.rafaelbiasi.blog.data.PostData;
-import br.com.rafaelbiasi.blog.facade.PostFacade;
+import br.com.rafaelbiasi.blog.application.data.PostData;
+import br.com.rafaelbiasi.blog.application.facade.PostFacade;
+import br.com.rafaelbiasi.blog.ui.controller.HomeController;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

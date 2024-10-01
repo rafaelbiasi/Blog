@@ -1,6 +1,8 @@
 package br.com.rafaelbiasi.blog.service;
 
-import br.com.rafaelbiasi.blog.repository.FileRepository;
+import br.com.rafaelbiasi.blog.domain.service.FileService;
+import br.com.rafaelbiasi.blog.domain.service.impl.FileServiceImpl;
+import br.com.rafaelbiasi.blog.infrastructure.repository.FileRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

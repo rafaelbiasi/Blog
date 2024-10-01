@@ -1,0 +1,40 @@
+<!-- admin/users/list.html -->
+<!DOCTYPE html>
+<html lang="pt-BR" th:replace="~{base :: layout (~{::div})}"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="content">
+    <h2>Lista de Usuários</h2>
+    <a class="btn btn-success mb-3" th:href="@{/admin/user/create/}">Adicionar Novo Usuário</a>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.code}">1</td>
+            <td th:text="${user.firstName} + ' ' + ${user.lastName}">Nome Completo</td>
+            <td th:text="${user.email}">email@example.com</td>
+            <td th:text="${user.roles}">ROLE_USER</td>
+            <td>
+                <a class="btn btn-primary btn-sm" th:href="@{|/admin/user/edit/${user.code}/|}">Editar</a>
+                <form method="post" style="display:inline;" th:action="@{|/admin/user/delete/${user.code}/|}">
+                    <button class="btn btn-danger btn-sm"
+                            onclick="return confirm('Tem certeza que deseja deletar este usuário?');"
+                            type="submit">
+                        Deletar
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

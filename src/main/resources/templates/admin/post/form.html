@@ -1,0 +1,38 @@
+<!-- admin/posts/form.html -->
+<!DOCTYPE html>
+<html lang="pt-BR" th:replace="~{base :: layout (~{::div})}"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="content">
+    <h2 th:text="${post.code} != null ? 'Editar Postagem' : 'Criar Nova Postagem'">Formulário de Postagem</h2>
+    <form enctype="multipart/form-data" method="post"
+          th:action="@{/admin/post/save/}"
+          th:object="${post}">
+        <input th:field="*{code}" type="hidden"/>
+        <div class="mb-3">
+            <label class="form-label" for="title">Título</label>
+            <input class="form-control" id="title" placeholder="Título da Postagem" th:field="*{title}" type="text">
+            <div class="invalid-feedback" th:errors="*{title}" th:if="${#fields.hasErrors('title')}">Erro no Título
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="body">Conteúdo</label>
+            <textarea class="form-control" id="body" placeholder="Conteúdo da Postagem" rows="10"
+                      th:field="*{body}"></textarea>
+            <div class="invalid-feedback" th:errors="*{body}" th:if="${#fields.hasErrors('body')}">Erro no Conteúdo
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="file">Imagem</label>
+            <input accept="image/*" class="form-control" id="file" name="file" type="file">
+            <div th:if="${post.imageFilePath}">
+                <img alt="Imagem da Postagem" class="img-fluid mt-2" th:src="@{|/images/${post.imageFilePath}/|}"/>
+            </div>
+        </div>
+        <button class="btn btn-primary" th:text="${post.code} != null ? 'Atualizar' : 'Publicar'" type="submit">Salvar
+        </button>
+        <a class="btn btn-secondary" th:href="@{/admin/post/}">Cancelar</a>
+    </form>
+</div>
+</body>
+</html>

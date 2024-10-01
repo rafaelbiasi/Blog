@@ -1,9 +1,12 @@
 package br.com.rafaelbiasi.blog.facade;
 
-import br.com.rafaelbiasi.blog.data.PostData;
-import br.com.rafaelbiasi.blog.model.Post;
-import br.com.rafaelbiasi.blog.service.PostServiceImpl;
-import br.com.rafaelbiasi.blog.transformer.Transformer;
+import br.com.rafaelbiasi.blog.application.data.PostData;
+import br.com.rafaelbiasi.blog.application.facade.FileFacade;
+import br.com.rafaelbiasi.blog.application.facade.PostFacade;
+import br.com.rafaelbiasi.blog.application.facade.impl.PostFacadeImpl;
+import br.com.rafaelbiasi.blog.application.mapper.PostMapper;
+import br.com.rafaelbiasi.blog.domain.entity.Post;
+import br.com.rafaelbiasi.blog.domain.service.impl.PostServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,20 +37,18 @@ class PostFacadeImplTest {
     @Mock
     private PostServiceImpl postService;
     @Mock
-    private Transformer<Post, PostData> postDataTransformer;
-    @Mock
-    private Transformer<PostData, Post> postTransformer;
-    @Mock
     private MultipartFile file;
     @Mock
     private Principal principal;
+    @Mock
+    private PostMapper postMapper;
     private AutoCloseable closeable;
 
     @BeforeEach
     void setUp() {
         //GIVEN
         closeable = MockitoAnnotations.openMocks(this);
-        postFacade = new PostFacadeImpl(postService, fileFacade, postDataTransformer, postTransformer);
+        postFacade = new PostFacadeImpl(postService, fileFacade, postMapper);
     }
 
     @AfterEach
@@ -58,22 +59,20 @@ class PostFacadeImplTest {
     @Test
     void getAll() {
         //GIVEN
-        List<Post> posts = Collections.singletonList(Post.builder().code("code").build());
+        List<Post> posts = Collections.singletonList(Post.builder().slugifiedTitle("code").build());
         List<PostData> postDatas = Collections.singletonList(PostData.builder().code("code").build());
         when(postService.findAll()).thenReturn(posts);
-        when(postDataTransformer.convertAll(posts)).thenReturn(postDatas);
         //WHEN
         List<PostData> responsePostDatas = postFacade.findAll();
         //THEN
         assertEquals(postDatas, responsePostDatas);
         verify(postService).findAll();
-        verify(postDataTransformer).convertAll(posts);
     }
 
     @Test
     void getAllPageable() {
         //GIVEN
-        Post post = Post.builder().code("code").build();
+        Post post = Post.builder().slugifiedTitle("code").build();
         PostData postData = PostData.builder().code("code").build();
         List<Post> posts = Collections.singletonList(post);
         List<PostData> postDatas = Collections.singletonList(postData);
@@ -81,49 +80,41 @@ class PostFacadeImplTest {
         Page<Post> postPage = new PageImpl<>(posts);
         Page<PostData> postDataPage = new PageImpl<>(postDatas);
         when(postService.findAll(pageable)).thenReturn(postPage);
-        when(postDataTransformer.convert(post)).thenReturn(postData);
         //WHEN
         Page<PostData> responsePostDatas = postFacade.findAll(pageable);
         //THEN
         assertEquals(postDataPage, responsePostDatas);
         verify(postService).findAll(pageable);
-        verify(postDataTransformer).convert(post);
     }
 
     @Test
     void getById() {
         //GIVEN
         int id = 1;
-        Post post = Post.builder().code("code").build();
+        Post post = Post.builder().slugifiedTitle("code").build();
         PostData postData = PostData.builder().code("code").build();
         when(postService.findById(id)).thenReturn(of(post));
-        when(postDataTransformer.convert(post)).thenReturn(postData);
         //WHEN
         Optional<PostData> respondePostData = postFacade.findById(id);
         //THEN
         assertTrue(respondePostData.isPresent());
         assertEquals(postData, respondePostData.get());
         verify(postService).findById(id);
-        verify(postDataTransformer).convert(post);
     }
 
     @Test
     void saveUpdateWithFile() throws IOException {
         //GIVEN
         PostData postData = PostData.builder().code("code").build();
-        Post post = Post.builder().code("code").build();
+        Post post = Post.builder().slugifiedTitle("code").build();
         when(file.getOriginalFilename()).thenReturn("image.png");
-        when(postService.findByCode("code")).thenReturn(of(post));
-        when(postTransformer.convertTo(postData, post)).thenReturn(post);
-        when(postDataTransformer.convert(post)).thenReturn(postData);
+        when(postService.findById(1)).thenReturn(of(post));
         when(postService.save(post)).thenReturn(post);
         //WHEN
         postFacade.save(postData, file);
         //THEN
         verify(file).getOriginalFilename();
-        verify(postService).findByCode("code");
-        verify(postTransformer).convertTo(postData, post);
-        verify(postDataTransformer).convert(post);
+        verify(postService).findById(1);
         verify(postService).save(post);
         verify(fileFacade).save(file);
     }
@@ -132,19 +123,15 @@ class PostFacadeImplTest {
     void saveNewWithFile() throws IOException {
         //GIVEN
         PostData postData = PostData.builder().code("code").build();
-        Post post = Post.builder().code("code").build();
+        Post post = Post.builder().slugifiedTitle("code").build();
         when(file.getOriginalFilename()).thenReturn("image.png");
-        when(postService.findByCode("code")).thenReturn(empty());
-        when(postTransformer.convert(postData)).thenReturn(post);
-        when(postDataTransformer.convert(post)).thenReturn(postData);
+        when(postService.findById(1)).thenReturn(empty());
         when(postService.save(post)).thenReturn(post);
         //WHEN
         postFacade.save(postData, file);
         //THEN
         verify(file).getOriginalFilename();
-        verify(postService).findByCode("code");
-        verify(postDataTransformer).convert(post);
-        verify(postTransformer).convert(postData);
+        verify(postService).findById(1);
         verify(postService).save(post);
     }
 
@@ -152,11 +139,9 @@ class PostFacadeImplTest {
     void saveUpdateWithFileException() {
         //GIVEN
         PostData postData = PostData.builder().code("code").build();
-        Post post = Post.builder().code("code").build();
+        Post post = Post.builder().slugifiedTitle("code").build();
         when(file.getOriginalFilename()).thenReturn("image.png");
-        when(postService.findByCode("code")).thenReturn(of(post));
-        when(postTransformer.convertTo(postData, post)).thenReturn(post);
-        when(postDataTransformer.convert(post)).thenReturn(postData);
+        when(postService.findById(1)).thenReturn(of(post));
         when(postService.save(post)).thenReturn(post);
         doThrow(new RuntimeException()).when(fileFacade).save(file);
         //WHEN
@@ -164,9 +149,7 @@ class PostFacadeImplTest {
         //THEN
         assertThrows(RuntimeException.class, executable);
         verify(file).getOriginalFilename();
-        verify(postService).findByCode("code");
-        verify(postTransformer).convertTo(postData, post);
-        verify(postDataTransformer).convert(post);
+        verify(postService).findById(1);
         verify(postService).save(post);
         verify(fileFacade).save(file);
     }
@@ -174,8 +157,8 @@ class PostFacadeImplTest {
     @Test
     void delete() {
         //GIVEN
-        Post post = Post.builder().code("code").build();
-        when(postService.findByCode("code")).thenReturn(of(post));
+        Post post = Post.builder().slugifiedTitle("code").build();
+        when(postService.findById(1)).thenReturn(of(post));
         //WHEN
         postFacade.delete("code");
         //THEN
@@ -185,7 +168,7 @@ class PostFacadeImplTest {
     @Test
     void deletePostNotFound() {
         //GIVEN
-        when(postService.findByCode("code")).thenReturn(empty());
+        when(postService.findById(1)).thenReturn(empty());
         //WHEN
         boolean deleted = postFacade.delete("code");
         //THEN
@@ -195,17 +178,15 @@ class PostFacadeImplTest {
     @Test
     void getByCode() {
         //GIVEN
-        Post post = Post.builder().code("code").build();
+        Post post = Post.builder().slugifiedTitle("code").build();
         PostData postData = PostData.builder().code("code").build();
-        when(postService.findByCode("code")).thenReturn(of(post));
-        when(postDataTransformer.convert(post)).thenReturn(postData);
+        when(postService.findById(1)).thenReturn(of(post));
         //WHEN
         Optional<PostData> responsePostData = postFacade.findByCode("code");
         //THEN
         assertTrue(responsePostData.isPresent());
         assertEquals(postData, responsePostData.get());
-        verify(postService).findByCode("code");
-        verify(postDataTransformer).convert(post);
+        verify(postService).findById(1);
     }
 
     //@Test

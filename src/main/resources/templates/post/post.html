@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" th:replace="~{base :: layout (~{::div})}"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
 <body>
 <div th:fragment="content">
     <article class="post">
@@ -19,14 +19,6 @@
         </header>
         <section th:text="${post.body}">Body text</section>
     </article>
-    <div sec:authorize="isAuthenticated()">
-        <a class="btn btn-primary" th:href="@{|/post/edit/${post.code}/|}"
-           th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_USER'')')}"
-           th:text="#{post.edit}">Edit</a>
-        <a class="btn btn-danger" th:href="@{|/post/delete/${post.code}/|}"
-           th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_USER'')')}"
-           th:text="#{post.delete}">Delete</a>
-    </div>
     <div class="comments mt-5">
         <h3>Comments</h3>
         <div class="card mb-3" th:each="comment : ${post.comments}">
@@ -38,7 +30,7 @@
                 </footer>
                 <form method="post" th:action="@{|/comment/delete/${comment.code}/post/${post.code}/|}">
                     <button class="btn btn-danger btn-sm delete-comment-btn"
-                            th:if="${comment.author.username eq #authentication?.principal?.username
+                            th:if="${comment.author.username eq #authentication?.principal
                         or #authorization.expression('hasRole(''ROLE_ADMIN'')')
                         or #authorization.expression('hasRole(''ROLE_USER'')')}">
                         Delete

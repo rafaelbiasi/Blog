@@ -1,8 +1,11 @@
 package br.com.rafaelbiasi.blog.service;
 
-import br.com.rafaelbiasi.blog.model.Account;
-import br.com.rafaelbiasi.blog.model.Post;
-import br.com.rafaelbiasi.blog.repository.PostRepository;
+import br.com.rafaelbiasi.blog.domain.entity.Account;
+import br.com.rafaelbiasi.blog.domain.entity.Post;
+import br.com.rafaelbiasi.blog.domain.service.AccountService;
+import br.com.rafaelbiasi.blog.domain.service.PostService;
+import br.com.rafaelbiasi.blog.domain.service.impl.PostServiceImpl;
+import br.com.rafaelbiasi.blog.infrastructure.repository.PostRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -105,7 +108,7 @@ class PostServiceImplTest {
         //GIVEN
         Account account = Account.builder().username("username").build();
         Post post = Post.builder()
-                .code("titulo-slugificado")
+                .slugifiedTitle("titulo-slugificado")
                 .title("Título a não deve ser slugificado novamente")
                 .author(account)
                 .build();
@@ -115,7 +118,7 @@ class PostServiceImplTest {
         Post postResponse = postService.save(post);
         //THEN
         assertEquals(post, postResponse);
-        assertEquals("titulo-slugificado", postResponse.getCode());
+        assertEquals("titulo-slugificado", postResponse.getSlugifiedTitle());
         verify(accountService).findOneByUsername("username");
         verify(postRepository).save(post);
     }
@@ -123,24 +126,11 @@ class PostServiceImplTest {
     @Test
     void delete() {
         //GIVEN
-        Post post = Post.builder().code("code").build();
+        Post post = Post.builder().slugifiedTitle("code").build();
         //WHEN
         postService.delete(post);
         //THEN
         verify(postRepository).delete(post);
-    }
-
-    @Test
-    void findByCode() {
-        //GIVEN
-        Post post = Post.builder().code("code").build();
-        when(postRepository.findByCode("code")).thenReturn(of(post));
-        //WHEN
-        Optional<Post> postResponse = postService.findByCode("code");
-        //THEN
-        assertTrue(postResponse.isPresent());
-        assertEquals(post, postResponse.get());
-        verify(postRepository).findByCode("code");
     }
 
     //@Test

@@ -1,6 +1,8 @@
 package br.com.rafaelbiasi.blog.facade;
 
-import br.com.rafaelbiasi.blog.service.FileService;
+import br.com.rafaelbiasi.blog.application.facade.FileFacade;
+import br.com.rafaelbiasi.blog.application.facade.impl.FileFacadeImpl;
+import br.com.rafaelbiasi.blog.domain.service.FileService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

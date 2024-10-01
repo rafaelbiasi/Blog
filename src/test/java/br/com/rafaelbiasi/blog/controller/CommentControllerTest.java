@@ -1,7 +1,9 @@
 package br.com.rafaelbiasi.blog.controller;
 
-import br.com.rafaelbiasi.blog.data.CommentData;
-import br.com.rafaelbiasi.blog.facade.CommentFacade;
+import br.com.rafaelbiasi.blog.application.data.CommentData;
+import br.com.rafaelbiasi.blog.application.facade.CommentFacade;
+import br.com.rafaelbiasi.blog.application.facade.PostFacade;
+import br.com.rafaelbiasi.blog.ui.controller.CommentController;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +24,8 @@ class CommentControllerTest {
     @Mock
     private CommentFacade commentFacade;
     @Mock
+    private PostFacade postFacade;
+    @Mock
     private BindingResult result;
     @Mock
     private RedirectAttributes redirectAttributes;
@@ -33,7 +37,7 @@ class CommentControllerTest {
     void setUp() {
         //GIVEN
         closeable = MockitoAnnotations.openMocks(this);
-        commentController = new CommentController(commentFacade);
+        commentController = new CommentController(commentFacade, postFacade);
     }
 
     @AfterEach

@@ -1,5 +1,6 @@
 package br.com.rafaelbiasi.blog.controller;
 
+import br.com.rafaelbiasi.blog.ui.controller.AuthController;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

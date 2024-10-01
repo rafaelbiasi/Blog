@@ -1,7 +1,9 @@
 package br.com.rafaelbiasi.blog.service;
 
-import br.com.rafaelbiasi.blog.model.Account;
-import br.com.rafaelbiasi.blog.model.Role;
+import br.com.rafaelbiasi.blog.domain.entity.Account;
+import br.com.rafaelbiasi.blog.domain.entity.Role;
+import br.com.rafaelbiasi.blog.domain.service.AccountService;
+import br.com.rafaelbiasi.blog.domain.service.impl.UserDetailsServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,7 +57,8 @@ class UserDetailsServiceImplTest {
         //WHEN
         UserDetails userDetailsResponse = userDetailsService.loadUserByUsername("username");
         //THEN
-        UserDetails userDetails = new User("username", "drowssap", Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
+        UserDetails userDetails = new User("username", "drowssap",
+                Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
         assertEquals(userDetails, userDetailsResponse);
         verify(accountService).findOneByUsername("username");
     }
@@ -74,7 +77,8 @@ class UserDetailsServiceImplTest {
         //WHEN
         UserDetails userDetailsResponse = userDetailsService.loadUserByUsername("user@domain.com");
         //THEN
-        UserDetails userDetails = new User("username", "drowssap", Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
+        UserDetails userDetails = new User("username", "drowssap",
+                Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
         assertEquals(userDetails, userDetailsResponse);
         verify(accountService).findOneByUsername("user@domain.com");
         verify(accountService).findOneByEmail("user@domain.com");

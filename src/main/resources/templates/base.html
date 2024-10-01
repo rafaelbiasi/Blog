@@ -2,11 +2,11 @@
 <html th:fragment="layout (content)" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragment/head :: head"></head>
 <body>
-    <header th:replace="fragment/nav :: nav"></header>
-    <main class="container mt-4">
-        <div th:insert="${content}"></div>
-    </main>
-    <footer th:replace="fragment/footer :: footer"></footer>
-    <div th:replace="fragment/scripts :: scripts"></div>
+<header th:replace="fragment/nav :: nav"></header>
+<main class="container mt-4">
+    <div th:insert="${content}"></div>
+</main>
+<footer th:replace="fragment/footer :: footer"></footer>
+<div th:replace="fragment/scripts :: scripts"></div>
 </body>
 </html>

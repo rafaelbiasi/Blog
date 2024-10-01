@@ -1,10 +1,14 @@
 package br.com.rafaelbiasi.blog.service;
 
-import br.com.rafaelbiasi.blog.exception.ResourceNotFoundException;
-import br.com.rafaelbiasi.blog.model.Account;
-import br.com.rafaelbiasi.blog.model.Comment;
-import br.com.rafaelbiasi.blog.model.Post;
-import br.com.rafaelbiasi.blog.repository.CommentRepository;
+import br.com.rafaelbiasi.blog.domain.service.AccountService;
+import br.com.rafaelbiasi.blog.domain.service.CommentService;
+import br.com.rafaelbiasi.blog.domain.service.impl.CommentServiceImpl;
+import br.com.rafaelbiasi.blog.domain.service.PostService;
+import br.com.rafaelbiasi.blog.infrastructure.exception.ResourceNotFoundException;
+import br.com.rafaelbiasi.blog.domain.entity.Account;
+import br.com.rafaelbiasi.blog.domain.entity.Comment;
+import br.com.rafaelbiasi.blog.domain.entity.Post;
+import br.com.rafaelbiasi.blog.infrastructure.repository.CommentRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,25 +63,25 @@ class CommentServiceImplTest {
     @Test
     void findByCode() {
         //GIVEN
-        Comment comment = Comment.builder().id(1L).code("code").build();
-        when(commentRepository.findByCode("code")).thenReturn(of(comment));
+        Comment comment = Comment.builder().id(1L).build();
+        when(commentRepository.findById(1L)).thenReturn(of(comment));
         //WHEN
         Optional<Comment> commentResponse = commentService.findByCode("code");
         //THEN
         assertTrue(commentResponse.isPresent());
         assertEquals(comment, commentResponse.get());
-        verify(commentRepository).findByCode("code");
+        verify(commentRepository).findById(1L);
     }
 
     @Test
     void delete() {
         //GIVEN
-        Comment comment = Comment.builder().code("code").build();
-        when(commentRepository.findByCode("code")).thenReturn(of(comment));
+        Comment comment = Comment.builder().id(0L).build();
+        when(commentRepository.findById(1L)).thenReturn(of(comment));
         //WHEN
         commentService.delete(comment);
         //THEN
-        verify(commentRepository).findByCode("code");
+        verify(commentRepository).findById(1L);
         verify(commentRepository).delete(comment);
     }
 
@@ -85,18 +89,18 @@ class CommentServiceImplTest {
     void save() {
         //GIVEN
         Account accountToFind = Account.builder()
-                .username("username"
-                ).build();
-        Post postToFind = Post.builder().code("code").build();
+                .username("username")
+                .build();
+        Post postToFind = Post.builder().slugifiedTitle("code").build();
         Comment comment = Comment.builder()
                 .id(1L)
                 .author(accountToFind)
                 .post(postToFind)
                 .build();
         Account account = Account.builder().id(1L).username("username").build();
-        Post post = Post.builder().id(1L).code("code").build();
+        Post post = Post.builder().id(1L).slugifiedTitle("code").build();
         when(accountService.findOneByUsername("username")).thenReturn(of(account));
-        when(postService.findByCode("code")).thenReturn(of(post));
+        when(postService.findById(1)).thenReturn(of(post));
         //WHEN
         commentService.save(comment);
         //THEN
@@ -105,7 +109,7 @@ class CommentServiceImplTest {
         assertNotEquals(accountToFind, comment.getAuthor());
         assertNotEquals(postToFind, comment.getPost());
         verify(accountService).findOneByUsername("username");
-        verify(postService).findByCode("code");
+        verify(postService).findById(1);
         verify(commentRepository).save(comment);
     }
 
@@ -113,18 +117,17 @@ class CommentServiceImplTest {
     void savePostNotFound() {
         //GIVEN
         Account accountToFind = Account.builder()
-                .username("username"
-                ).build();
-        Post postToFind = Post.builder().code("code").build();
+                .username("username").build();
+        Post postToFind = Post.builder().slugifiedTitle("code").build();
         Comment comment = Comment.builder()
                 .id(1L)
                 .author(accountToFind)
                 .post(postToFind)
                 .build();
         Account account = Account.builder().id(1L).username("username").build();
-        Post post = Post.builder().id(1L).code("code").build();
+        Post post = Post.builder().id(1L).slugifiedTitle("code").build();
         when(accountService.findOneByUsername("username")).thenReturn(of(account));
-        when(postService.findByCode("code")).thenReturn(empty());
+        when(postService.findById(1)).thenReturn(empty());
         //WHEN
         Executable executable = () -> commentService.save(comment);
         //THEN
@@ -134,23 +137,22 @@ class CommentServiceImplTest {
         assertNotEquals(accountToFind, comment.getAuthor());
         assertEquals(postToFind, comment.getPost());
         verify(accountService).findOneByUsername("username");
-        verify(postService).findByCode("code");
+        verify(postService).findById(1);
     }
 
     @Test
     void saveAccountNotFound() {
         //GIVEN
         Account accountToFind = Account.builder()
-                .username("username"
-                ).build();
-        Post postToFind = Post.builder().code("code").build();
+                .username("username").build();
+        Post postToFind = Post.builder().slugifiedTitle("code").build();
         Comment comment = Comment.builder()
                 .id(1L)
                 .author(accountToFind)
                 .post(postToFind)
                 .build();
         Account account = Account.builder().id(1L).username("username").build();
-        Post post = Post.builder().id(1L).code("code").build();
+        Post post = Post.builder().id(1L).slugifiedTitle("code").build();
         when(accountService.findOneByUsername("username")).thenReturn(empty());
         //WHEN
         Executable executable = () -> commentService.save(comment);

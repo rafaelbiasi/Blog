@@ -1,8 +1,9 @@
 package br.com.rafaelbiasi.blog.controller;
 
-import br.com.rafaelbiasi.blog.data.AccountData;
-import br.com.rafaelbiasi.blog.data.PostData;
-import br.com.rafaelbiasi.blog.facade.PostFacade;
+import br.com.rafaelbiasi.blog.application.data.AccountData;
+import br.com.rafaelbiasi.blog.application.data.PostData;
+import br.com.rafaelbiasi.blog.application.facade.PostFacade;
+import br.com.rafaelbiasi.blog.ui.controller.RssFeedController;
 import com.rometools.rome.feed.rss.Channel;
 import com.rometools.rome.feed.rss.Item;
 import jakarta.servlet.http.HttpServletRequest;

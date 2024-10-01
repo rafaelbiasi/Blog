@@ -1,9 +1,11 @@
 package br.com.rafaelbiasi.blog.facade;
 
-import br.com.rafaelbiasi.blog.data.CommentData;
-import br.com.rafaelbiasi.blog.model.Comment;
-import br.com.rafaelbiasi.blog.service.CommentService;
-import br.com.rafaelbiasi.blog.transformer.Transformer;
+import br.com.rafaelbiasi.blog.application.data.CommentData;
+import br.com.rafaelbiasi.blog.application.facade.CommentFacade;
+import br.com.rafaelbiasi.blog.application.facade.impl.CommentFacadeImpl;
+import br.com.rafaelbiasi.blog.application.mapper.CommentMapper;
+import br.com.rafaelbiasi.blog.domain.entity.Comment;
+import br.com.rafaelbiasi.blog.domain.service.CommentService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,16 +24,16 @@ class CommentFacadeImplTest {
     @Mock
     private CommentService commentService;
     @Mock
-    private Transformer<CommentData, Comment> commentTransformer;
-    @Mock
     private Principal principal;
+    @Mock
+    private CommentMapper commentMapper;
     private AutoCloseable closeable;
 
     @BeforeEach
     void setUp() {
         //GIVEN
         closeable = MockitoAnnotations.openMocks(this);
-        commentFacade = new CommentFacadeImpl(commentService, commentTransformer);
+        commentFacade = new CommentFacadeImpl(commentService, commentMapper);
     }
 
     @AfterEach
@@ -45,7 +47,6 @@ class CommentFacadeImplTest {
         CommentData commentData = CommentData.builder().build();
         Comment comment = Comment.builder().build();
         when(principal.getName()).thenReturn("username");
-        when(commentTransformer.convert(commentData)).thenReturn(comment);
         //WHEN
         commentFacade.save(commentData, "post-code", principal);
         //THEN
@@ -57,7 +58,7 @@ class CommentFacadeImplTest {
     @Test
     void delete() {
         //GIVEN
-        Comment comment = Comment.builder().code("code").build();
+        Comment comment = Comment.builder().id(0L).build();
         //WHEN
         commentFacade.delete("code");
         //THEN

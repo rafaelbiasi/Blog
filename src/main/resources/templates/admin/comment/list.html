@@ -1,0 +1,41 @@
+<!-- admin/comments/list.html -->
+<!DOCTYPE html>
+<html lang="pt-BR" th:replace="~{base :: layout (~{::div})}"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="content">
+    <h2>Lista de Comentários</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Comentário</th>
+            <th>Autor</th>
+            <th>Postagem</th>
+            <th>Data de Criação</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="comment : ${comments}">
+            <td th:text="${comment.code}">1</td>
+            <td th:text="${comment.text}">Texto do Comentário</td>
+            <td th:text="${comment.author.username}">Nome do Autor</td>
+            <td>
+                <a th:href="@{|/post/${comment.post.code}|}" th:text="${comment.post.title}">Título da Postagem</a>
+            </td>
+            <td th:text="${#temporals.format(comment.creation, 'dd/MM/yyyy HH:mm')}">01/01/2024 12:00</td>
+            <td>
+                <form method="post" style="display:inline;" th:action="@{|/admin/comment/delete/${comment.code}/|}">
+                    <button class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja deletar este comentário?');"
+                            type="submit">
+                        Deletar
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

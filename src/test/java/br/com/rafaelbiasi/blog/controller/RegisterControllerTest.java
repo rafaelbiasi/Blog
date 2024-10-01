@@ -1,8 +1,9 @@
 package br.com.rafaelbiasi.blog.controller;
 
-import br.com.rafaelbiasi.blog.data.AccountData;
-import br.com.rafaelbiasi.blog.data.RegistrationResponseData;
-import br.com.rafaelbiasi.blog.facade.AccountFacade;
+import br.com.rafaelbiasi.blog.application.data.AccountData;
+import br.com.rafaelbiasi.blog.application.facade.AccountFacade;
+import br.com.rafaelbiasi.blog.domain.microtype.RegistrationResponse;
+import br.com.rafaelbiasi.blog.ui.controller.RegisterController;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,25 +56,24 @@ class RegisterControllerTest {
     void registerSuccess() {
         //GIVEN
         AccountData accountData = AccountData.builder().build();
-        RegistrationResponseData registrationResponse = RegistrationResponseData.builder()
+        RegistrationResponse registrationResponse = RegistrationResponse.builder()
                 .emailExists(false)
                 .usernameExists(false)
                 .build();
         when(accountFacade.checkEmailAndUsernameExists(accountData)).thenReturn(registrationResponse);
-        when(accountFacade.attemptUserRegistration(accountData)).thenReturn(registrationResponse);
         //WHEN
         String view = registerController.register(accountData, bindingResult, model);
         //THEN
         assertEquals("redirect:/", view);
         verify(accountFacade).checkEmailAndUsernameExists(accountData);
-        verify(accountFacade).attemptUserRegistration(accountData);
+        verify(accountFacade).registerUser(accountData);
     }
 
     @Test
     void registerUsernameExist() {
         //GIVEN
         AccountData accountData = AccountData.builder().build();
-        RegistrationResponseData registrationResponse = RegistrationResponseData.builder()
+        RegistrationResponse registrationResponse = RegistrationResponse.builder()
                 .emailExists(false)
                 .usernameExists(true)
                 .build();
@@ -92,7 +92,7 @@ class RegisterControllerTest {
     void registerEmailExist() {
         //GIVEN
         AccountData accountData = AccountData.builder().build();
-        RegistrationResponseData registrationResponse = RegistrationResponseData.builder()
+        RegistrationResponse registrationResponse = RegistrationResponse.builder()
                 .emailExists(true)
                 .usernameExists(false)
                 .build();
@@ -111,7 +111,7 @@ class RegisterControllerTest {
     void registerUsernameAndEmailExist() {
         //GIVEN
         AccountData accountData = AccountData.builder().build();
-        RegistrationResponseData registrationResponse = RegistrationResponseData.builder()
+        RegistrationResponse registrationResponse = RegistrationResponse.builder()
                 .emailExists(true)
                 .usernameExists(true)
                 .build();
@@ -130,18 +130,17 @@ class RegisterControllerTest {
     void registerException() {
         //GIVEN
         AccountData accountData = AccountData.builder().build();
-        RegistrationResponseData registrationResponse = RegistrationResponseData.builder()
+        RegistrationResponse registrationResponse = RegistrationResponse.builder()
                 .emailExists(false)
                 .usernameExists(false)
                 .build();
         when(accountFacade.checkEmailAndUsernameExists(accountData)).thenReturn(registrationResponse);
-        when(accountFacade.attemptUserRegistration(accountData)).thenThrow(RuntimeException.class);
         //WHEN
         Executable executable = () -> registerController.register(accountData, bindingResult, model);
         //THEN
         assertThrows(RuntimeException.class, executable);
         verify(accountFacade).checkEmailAndUsernameExists(accountData);
-        verify(accountFacade).attemptUserRegistration(accountData);
+        verify(accountFacade).registerUser(accountData);
     }
 
     //@Test

@@ -1,0 +1,43 @@
+<!-- admin/posts/list.html -->
+<!DOCTYPE html>
+<html lang="pt-BR" th:replace="~{base :: layout (~{::div})}"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="content">
+    <h2>Lista de Postagens</h2>
+    <a class="btn btn-success mb-3" th:href="@{/admin/post/create/}">Adicionar Nova Postagem</a>
+    <div class="pagination-container" th:replace="fragment/pagination :: pagination('/admin/post')"></div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Código</th>
+            <th>Título</th>
+            <th>Autor</th>
+            <th>Data de Criação</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="post : ${posts}">
+            <td th:text="${post.code}">1</td>
+            <td th:text="${post.title}">Título da Postagem</td>
+            <td th:text="${post.author.firstName} + ' ' + ${post.author.lastName}">Nome do Autor</td>
+            <td th:text="${#temporals.format(post.creation, 'dd/MM/yyyy HH:mm')}">01/01/2024 12:00</td>
+            <td>
+                <a class="btn btn-primary btn-sm" th:href="@{|/admin/post/edit/${post.code}/|}">Editar</a>
+                <form method="post" style="display:inline;" th:action="@{|/admin/post/delete/${post.code}/|}">
+                    <button class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja deletar esta postagem?');"
+                            type="submit">
+                        Deletar
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="pagination-container" th:replace="fragment/pagination :: pagination('/admin/post')"></div>
+
+</div>
+</body>
+</html>

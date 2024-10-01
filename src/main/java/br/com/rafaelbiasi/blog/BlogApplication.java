@@ -13,12 +13,12 @@ public class BlogApplication implements WebMvcConfigurer {
 
     private final LocaleChangeInterceptor localeChangeInterceptor;
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         SpringApplication.run(BlogApplication.class, args);
     }
 
     @Override
-    public void addInterceptors(InterceptorRegistry interceptorRegistry) {
+    public void addInterceptors(final InterceptorRegistry interceptorRegistry) {
         interceptorRegistry.addInterceptor(localeChangeInterceptor);
     }
 }

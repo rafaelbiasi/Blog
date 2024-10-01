@@ -3,13 +3,13 @@
       xmlns:th="http://www.thymeleaf.org">
 <body>
 <div th:fragment="content">
-    <div class="pagination-container" th:replace="fragment/pagination :: pagination"></div>
+    <div class="pagination-container" th:replace="fragment/pagination :: pagination('')"></div>
     <div class="posts-container">
         <article class="post mb-3" th:each="post : ${posts}">
             <img alt="Post Image" class="img-fluid"
                  loading="lazy" th:if="${not #strings.isEmpty(post.imageFilePath)}"
                  th:src="@{|/images/${post.imageFilePath}/|}"/>
-            <h2><a th:href="@{|/post/${post.code}/|}" th:text="${post.title}">Title</a></h2>
+            <h2><a th:href="@{|/post/${post.code}/${post.slugifiedTitle}/|}" th:text="${post.title}">Title</a></h2>
             <p class="meta">
                 <span th:text="#{post.metadata.author(${post.getAuthor.name})}">Written by Author </span>
                 <span th:text="#{post.metadata.separator}"> | </span>
@@ -20,7 +20,7 @@
             <p th:text="${post.body}">Body text</p>
         </article>
     </div>
-    <div class="pagination-container" th:replace="fragment/pagination :: pagination"></div>
+    <div class="pagination-container" th:replace="fragment/pagination :: pagination('')"></div>
 </div>
 </body>
 </html>

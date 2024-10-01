@@ -16,7 +16,8 @@
         <div>
             <label class="form-label" for="lastname" th:text="#{register.lastname.label}">Last Name</label>
             <input class="form-control" id="lastname" placeholder="Last Name"
-                   th:errorclass="is-invalid" th:field="*{lastName}" th:placeholder="#{register.lastname.placeholder}" type="text"/>
+                   th:errorclass="is-invalid" th:field="*{lastName}" th:placeholder="#{register.lastname.placeholder}"
+                   type="text"/>
             <div th:errorclass="invalid-feedback" th:errors="*{lastName}" th:if="${#fields.hasErrors('lastName')}">
                 Last name error
             </div>
@@ -24,7 +25,8 @@
         <div>
             <label class="form-label" for="username" th:text="#{register.username.label}">Username</label>
             <input class="form-control" id="username" placeholder="Username"
-                   th:errorclass="is-invalid" th:field="*{username}" th:placeholder="#{register.username.placeholder}" type="text"/>
+                   th:errorclass="is-invalid" th:field="*{username}" th:placeholder="#{register.username.placeholder}"
+                   type="text"/>
             <div th:errorclass="invalid-feedback" th:errors="*{username}" th:if="${#fields.hasErrors('username')}">
                 Username error
             </div>

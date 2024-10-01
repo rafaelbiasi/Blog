@@ -1,7 +1,8 @@
 package br.com.rafaelbiasi.blog.controller;
 
-import br.com.rafaelbiasi.blog.exception.ResourceNotFoundException;
-import br.com.rafaelbiasi.blog.facade.FileFacade;
+import br.com.rafaelbiasi.blog.infrastructure.exception.ResourceNotFoundException;
+import br.com.rafaelbiasi.blog.application.facade.FileFacade;
+import br.com.rafaelbiasi.blog.ui.controller.ImageController;
 import jakarta.servlet.ServletContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
