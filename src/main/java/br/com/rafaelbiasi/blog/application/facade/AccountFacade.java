@@ -1,7 +1,7 @@
 package br.com.rafaelbiasi.blog.application.facade;
 
 import br.com.rafaelbiasi.blog.application.data.AccountData;
-import br.com.rafaelbiasi.blog.domain.microtype.RegistrationResponse;
+import br.com.rafaelbiasi.blog.domain.model.RegistrationResponse;
 
 import java.util.Optional;
 

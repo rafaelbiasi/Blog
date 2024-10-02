@@ -1,4 +1,4 @@
-package br.com.rafaelbiasi.blog.domain.microtype;
+package br.com.rafaelbiasi.blog.domain.model;
 
 import lombok.Builder;
 

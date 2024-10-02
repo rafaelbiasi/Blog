@@ -2,7 +2,7 @@ package br.com.rafaelbiasi.blog.controller;
 
 import br.com.rafaelbiasi.blog.application.data.AccountData;
 import br.com.rafaelbiasi.blog.application.facade.AccountFacade;
-import br.com.rafaelbiasi.blog.domain.microtype.RegistrationResponse;
+import br.com.rafaelbiasi.blog.domain.model.RegistrationResponse;
 import br.com.rafaelbiasi.blog.ui.controller.RegisterController;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,6 +1,6 @@
 package br.com.rafaelbiasi.blog.domain.service.impl;
 
-import br.com.rafaelbiasi.blog.domain.entity.Post;
+import br.com.rafaelbiasi.blog.domain.model.Post;
 import br.com.rafaelbiasi.blog.domain.service.AccountService;
 import br.com.rafaelbiasi.blog.domain.service.PostService;
 import br.com.rafaelbiasi.blog.infrastructure.repository.PostRepository;

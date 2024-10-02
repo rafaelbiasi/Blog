@@ -1,6 +1,6 @@
 package br.com.rafaelbiasi.blog.domain.service.impl;
 
-import br.com.rafaelbiasi.blog.domain.entity.Comment;
+import br.com.rafaelbiasi.blog.domain.model.Comment;
 import br.com.rafaelbiasi.blog.domain.service.AccountService;
 import br.com.rafaelbiasi.blog.domain.service.CommentService;
 import br.com.rafaelbiasi.blog.domain.service.PostService;

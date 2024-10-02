@@ -4,7 +4,7 @@ import br.com.rafaelbiasi.blog.application.data.CommentData;
 import br.com.rafaelbiasi.blog.application.facade.CommentFacade;
 import br.com.rafaelbiasi.blog.application.facade.impl.CommentFacadeImpl;
 import br.com.rafaelbiasi.blog.application.mapper.CommentMapper;
-import br.com.rafaelbiasi.blog.domain.entity.Comment;
+import br.com.rafaelbiasi.blog.domain.model.Comment;
 import br.com.rafaelbiasi.blog.domain.service.CommentService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

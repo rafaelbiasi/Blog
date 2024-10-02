@@ -1,6 +1,6 @@
 package br.com.rafaelbiasi.blog.service;
 
-import br.com.rafaelbiasi.blog.domain.entity.Role;
+import br.com.rafaelbiasi.blog.domain.model.Role;
 import br.com.rafaelbiasi.blog.domain.service.RoleService;
 import br.com.rafaelbiasi.blog.domain.service.impl.RoleServiceImpl;
 import br.com.rafaelbiasi.blog.infrastructure.repository.RoleRepository;

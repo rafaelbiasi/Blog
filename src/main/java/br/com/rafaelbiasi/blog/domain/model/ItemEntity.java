@@ -1,4 +1,4 @@
-package br.com.rafaelbiasi.blog.domain.entity;
+package br.com.rafaelbiasi.blog.domain.model;
 
 import br.com.rafaelbiasi.keygen.TSIDKeyIdGenerator;
 import jakarta.persistence.*;

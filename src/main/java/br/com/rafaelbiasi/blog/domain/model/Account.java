@@ -1,4 +1,4 @@
-package br.com.rafaelbiasi.blog.domain.entity;
+package br.com.rafaelbiasi.blog.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

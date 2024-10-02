@@ -1,6 +1,6 @@
 package br.com.rafaelbiasi.blog.domain.service;
 
-import br.com.rafaelbiasi.blog.domain.entity.Post;
+import br.com.rafaelbiasi.blog.domain.model.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

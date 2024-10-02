@@ -1,6 +1,6 @@
 package br.com.rafaelbiasi.blog.domain.service;
 
-import br.com.rafaelbiasi.blog.domain.entity.Role;
+import br.com.rafaelbiasi.blog.domain.model.Role;
 
 import java.util.Optional;
 

@@ -5,7 +5,7 @@ import br.com.rafaelbiasi.blog.application.facade.FileFacade;
 import br.com.rafaelbiasi.blog.application.facade.PostFacade;
 import br.com.rafaelbiasi.blog.application.facade.impl.PostFacadeImpl;
 import br.com.rafaelbiasi.blog.application.mapper.PostMapper;
-import br.com.rafaelbiasi.blog.domain.entity.Post;
+import br.com.rafaelbiasi.blog.domain.model.Post;
 import br.com.rafaelbiasi.blog.domain.service.impl.PostServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

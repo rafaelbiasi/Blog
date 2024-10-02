@@ -3,7 +3,7 @@ package br.com.rafaelbiasi.blog.application.facade.impl;
 import br.com.rafaelbiasi.blog.application.facade.AccountFacade;
 import br.com.rafaelbiasi.blog.application.data.AccountData;
 import br.com.rafaelbiasi.blog.application.mapper.AccountMapper;
-import br.com.rafaelbiasi.blog.domain.microtype.RegistrationResponse;
+import br.com.rafaelbiasi.blog.domain.model.RegistrationResponse;
 import br.com.rafaelbiasi.blog.domain.service.AccountService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

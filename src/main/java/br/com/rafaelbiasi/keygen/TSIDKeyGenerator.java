@@ -1,6 +1,6 @@
 package br.com.rafaelbiasi.keygen;
 
-import br.com.rafaelbiasi.blog.domain.entity.ItemEntity;
+import br.com.rafaelbiasi.blog.domain.model.ItemEntity;
 import com.github.f4b6a3.tsid.TsidFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.HibernateException;

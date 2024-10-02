@@ -1,6 +1,6 @@
 package br.com.rafaelbiasi.blog.domain.service.impl;
 
-import br.com.rafaelbiasi.blog.domain.entity.Account;
+import br.com.rafaelbiasi.blog.domain.model.Account;
 import br.com.rafaelbiasi.blog.domain.service.AccountService;
 import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;

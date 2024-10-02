@@ -1,8 +1,8 @@
 package br.com.rafaelbiasi.blog.service;
 
-import br.com.rafaelbiasi.blog.domain.entity.Account;
-import br.com.rafaelbiasi.blog.domain.microtype.RegistrationResponse;
-import br.com.rafaelbiasi.blog.domain.entity.Role;
+import br.com.rafaelbiasi.blog.domain.model.Account;
+import br.com.rafaelbiasi.blog.domain.model.RegistrationResponse;
+import br.com.rafaelbiasi.blog.domain.model.Role;
 import br.com.rafaelbiasi.blog.domain.service.AccountService;
 import br.com.rafaelbiasi.blog.domain.service.impl.AccountServiceImpl;
 import br.com.rafaelbiasi.blog.domain.service.RoleService;

@@ -1,8 +1,8 @@
 package br.com.rafaelbiasi.blog.infrastructure.initial;
 
-import br.com.rafaelbiasi.blog.domain.entity.Account;
-import br.com.rafaelbiasi.blog.domain.entity.Post;
-import br.com.rafaelbiasi.blog.domain.entity.Role;
+import br.com.rafaelbiasi.blog.domain.model.Account;
+import br.com.rafaelbiasi.blog.domain.model.Post;
+import br.com.rafaelbiasi.blog.domain.model.Role;
 import br.com.rafaelbiasi.blog.domain.service.AccountService;
 import br.com.rafaelbiasi.blog.domain.service.FileService;
 import br.com.rafaelbiasi.blog.domain.service.PostService;

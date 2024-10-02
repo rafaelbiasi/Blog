@@ -1,6 +1,6 @@
 package br.com.rafaelbiasi.blog.infrastructure.repository;
 
-import br.com.rafaelbiasi.blog.domain.entity.Account;
+import br.com.rafaelbiasi.blog.domain.model.Account;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

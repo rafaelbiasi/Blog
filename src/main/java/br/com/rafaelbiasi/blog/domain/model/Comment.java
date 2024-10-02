@@ -1,4 +1,4 @@
-package br.com.rafaelbiasi.blog.domain.entity;
+package br.com.rafaelbiasi.blog.domain.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

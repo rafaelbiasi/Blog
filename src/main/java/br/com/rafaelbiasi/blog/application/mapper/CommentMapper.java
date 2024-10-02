@@ -1,7 +1,7 @@
 package br.com.rafaelbiasi.blog.application.mapper;
 
 import br.com.rafaelbiasi.blog.application.data.CommentData;
-import br.com.rafaelbiasi.blog.domain.entity.Comment;
+import br.com.rafaelbiasi.blog.domain.model.Comment;
 import org.mapstruct.*;
 
 @Mapper(
