@@ -1,4 +1,4 @@
-package br.com.rafaelbiasi.keygen;
+package br.com.rafaelbiasi.blog.infrastructure.keygen;
 
 import com.github.f4b6a3.uuid.UuidCreator;
 import org.hibernate.HibernateException;

@@ -1,6 +1,6 @@
 package br.com.rafaelbiasi.blog.domain.model;
 
-import br.com.rafaelbiasi.keygen.TSIDKeyIdGenerator;
+import br.com.rafaelbiasi.blog.infrastructure.keygen.TSIDKeyIdGenerator;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

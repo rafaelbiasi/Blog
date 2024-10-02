@@ -1,17 +1,19 @@
-package br.com.rafaelbiasi.keygen;
+package br.com.rafaelbiasi.blog.infrastructure.keygen;
 
-import com.github.f4b6a3.ulid.UlidCreator;
+import com.github.f4b6a3.ksuid.KsuidCreator;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
 
-public class ULIDKeyGenerator implements IdentifierGenerator {
+@Slf4j
+public class KSUIDKeyGenerator implements IdentifierGenerator {
 
     @Override
     public Object generate(
             final SharedSessionContractImplementor session,
             final Object object
     ) throws HibernateException {
-        return UlidCreator.getUlid().toString();
+        return KsuidCreator.getKsuid().toString();
     }
 }

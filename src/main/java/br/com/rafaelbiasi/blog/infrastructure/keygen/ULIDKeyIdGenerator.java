@@ -1,4 +1,4 @@
-package br.com.rafaelbiasi.keygen;
+package br.com.rafaelbiasi.blog.infrastructure.keygen;
 
 import org.hibernate.annotations.IdGeneratorType;
 
@@ -9,8 +9,8 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@IdGeneratorType(KSUIDKeyGenerator.class)
+@IdGeneratorType(ULIDKeyGenerator.class)
 @Retention(RUNTIME)
 @Target({METHOD, FIELD})
-    public @interface KSUIDKeyIdGenerator {
+public @interface ULIDKeyIdGenerator {
 }

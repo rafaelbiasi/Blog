@@ -1,4 +1,4 @@
-package br.com.rafaelbiasi.keygen;
+package br.com.rafaelbiasi.blog.infrastructure.keygen;
 
 import br.com.rafaelbiasi.blog.domain.model.ItemEntity;
 import com.github.f4b6a3.tsid.TsidFactory;
