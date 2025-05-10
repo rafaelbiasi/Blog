@@ -5,7 +5,7 @@
 <body>
 <div th:fragment="content">
     <h2 th:text="${comment.code} != null ? 'Editar Comentário' : 'Criar Novo Comentário'">Formulário de Comentário</h2>
-    <form method="post" th:action="${comment.code} != null ? @{/admin/comment/update/} : @{/admin/comment/save/}"
+    <form method="post" th:action="@{/admin/comment/save/}"
           th:object="${comment}">
         <input th:field="*{code}" type="hidden"/>
         <div class="mb-3">

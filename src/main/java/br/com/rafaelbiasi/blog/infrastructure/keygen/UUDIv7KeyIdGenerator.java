@@ -1,5 +1,6 @@
 package br.com.rafaelbiasi.blog.infrastructure.keygen;
 
+import br.com.rafaelbiasi.blog.infrastructure.keygen.impl.UUDIv7KeyGenerator;
 import org.hibernate.annotations.IdGeneratorType;
 
 import java.lang.annotation.Retention;

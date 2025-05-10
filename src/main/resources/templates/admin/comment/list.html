@@ -22,7 +22,7 @@
             <td th:text="${comment.text}">Texto do Comentário</td>
             <td th:text="${comment.author.username}">Nome do Autor</td>
             <td>
-                <a th:href="@{|/post/${comment.post.code}|}" th:text="${comment.post.title}">Título da Postagem</a>
+                <a th:href="@{|/post/${comment.post.code}/|}" th:text="${comment.post.title}">Título da Postagem</a>
             </td>
             <td th:text="${#temporals.format(comment.creation, 'dd/MM/yyyy HH:mm')}">01/01/2024 12:00</td>
             <td>

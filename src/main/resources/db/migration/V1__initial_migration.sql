@@ -8,7 +8,7 @@ CREATE TABLE `entity`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = UTF8;
 
-CREATE TABLE `account`
+CREATE TABLE `user`
 (
     `email`      varchar(255) NOT NULL,
     `first_name` varchar(255) NOT NULL,
@@ -17,9 +17,9 @@ CREATE TABLE `account`
     `username`   varchar(255) NOT NULL,
     `id`         bigint       NOT NULL,
     PRIMARY KEY (`id`),
-    UNIQUE KEY `UK_account_email` (`email`),
-    UNIQUE KEY `UK_account_username` (`username`),
-    CONSTRAINT `CFK_account_id` FOREIGN KEY (`id`) REFERENCES `entity` (`id`)
+    UNIQUE KEY `UK_user_email` (`email`),
+    UNIQUE KEY `UK_user_username` (`username`),
+    CONSTRAINT `CFK_user_id` FOREIGN KEY (`id`) REFERENCES `entity` (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = UTF8;
 
@@ -35,7 +35,7 @@ CREATE TABLE `post`
     UNIQUE KEY `UK_post_slugified_title` (`slugified_title`),
     KEY `FK_post_author_id` (`author_id`),
     CONSTRAINT `CFK_post_id` FOREIGN KEY (`id`) REFERENCES `entity` (`id`),
-    CONSTRAINT `CFK_post_author_id` FOREIGN KEY (`author_id`) REFERENCES `account` (`id`)
+    CONSTRAINT `CFK_post_author_id` FOREIGN KEY (`author_id`) REFERENCES `user` (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = UTF8;
 
@@ -48,28 +48,28 @@ CREATE TABLE `role`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = UTF8;
 
-CREATE TABLE `account_role`
+CREATE TABLE `user_role`
 (
-    `account_id` bigint NOT NULL,
-    `role_id`    bigint NOT NULL,
-    PRIMARY KEY (`account_id`, `role_id`),
-    KEY `FK_account_role_role_id` (`role_id`),
-    CONSTRAINT `CFK_account_role_account_id` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`),
-    CONSTRAINT `CFK_account_role_role_id` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
+    `user_id` bigint NOT NULL,
+    `role_id` bigint NOT NULL,
+    PRIMARY KEY (`user_id`, `role_id`),
+    KEY `FK_user_role_role_id` (`role_id`),
+    CONSTRAINT `CFK_user_role_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+    CONSTRAINT `CFK_user_role_role_id` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = UTF8;
 
 CREATE TABLE `comment`
 (
-    `text`       varchar(255) NOT NULL,
-    `id`         bigint       NOT NULL,
-    `account_id` bigint       NOT NULL,
-    `post_id`    bigint DEFAULT NULL,
+    `text`    varchar(255) NOT NULL,
+    `id`      bigint       NOT NULL,
+    `user_id` bigint       NOT NULL,
+    `post_id` bigint DEFAULT NULL,
     PRIMARY KEY (`id`),
-    KEY `FK_comment_account_id` (`account_id`),
+    KEY `FK_comment_user_id` (`user_id`),
     KEY `FK_comment_post_id` (`post_id`),
     CONSTRAINT `CFK_comment_id` FOREIGN KEY (`id`) REFERENCES `entity` (`id`),
-    CONSTRAINT `CFK_comment_account_id` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`),
+    CONSTRAINT `CFK_comment_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
     CONSTRAINT `CFK_comment_post_id` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = UTF8;

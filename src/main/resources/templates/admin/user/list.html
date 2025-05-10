@@ -21,7 +21,7 @@
             <td th:text="${user.code}">1</td>
             <td th:text="${user.firstName} + ' ' + ${user.lastName}">Nome Completo</td>
             <td th:text="${user.email}">email@example.com</td>
-            <td th:text="${user.roles}">ROLE_USER</td>
+            <td th:text="${user.rolesString}">ROLE_USER</td>
             <td>
                 <a class="btn btn-primary btn-sm" th:href="@{|/admin/user/edit/${user.code}/|}">Editar</a>
                 <form method="post" style="display:inline;" th:action="@{|/admin/user/delete/${user.code}/|}">

@@ -1,8 +1,8 @@
 package br.com.rafaelbiasi.blog.domain.service.impl;
 
 import br.com.rafaelbiasi.blog.domain.model.Post;
-import br.com.rafaelbiasi.blog.domain.service.AccountService;
 import br.com.rafaelbiasi.blog.domain.service.PostService;
+import br.com.rafaelbiasi.blog.domain.service.UserService;
 import br.com.rafaelbiasi.blog.infrastructure.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static br.com.rafaelbiasi.blog.infrastructure.exception.ResourceNotFoundExceptionFactory.throwAccountNotFound;
+import static br.com.rafaelbiasi.blog.infrastructure.exception.ResourceNotFoundExceptionFactory.throwUserNotFound;
 import static java.util.Objects.requireNonNull;
 
 @Slf4j
@@ -23,7 +23,7 @@ import static java.util.Objects.requireNonNull;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
-    private final AccountService accountService;
+    private final UserService userService;
 
     @Override
     public Optional<Post> findById(final long id) {
@@ -39,10 +39,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post save(final Post post) {
         requireNonNull(post, "The Post has a null value.");
-        accountService.findOneByUsername(post.getAuthor().getUsername())
+        userService.findOneByUsername(post.getAuthor().getUsername())
                 .ifPresentOrElse(
                         post::setAuthor,
-                        () -> throwAccountNotFound(post.getAuthor().getUsername())
+                        () -> throwUserNotFound(post.getAuthor().getUsername())
                 );
         return postRepository.save(post);
     }

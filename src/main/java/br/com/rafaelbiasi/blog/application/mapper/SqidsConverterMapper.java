@@ -12,12 +12,12 @@ import org.mapstruct.Named;
 )
 public interface SqidsConverterMapper {
 
-    @Named("IdToCodeSqids")
+    @Named("idToSqidsCode")
     default String idToSqidsCode(Long id) {
         return SqidsUtil.encodeId(id);
     }
 
-    @Named("CodeSqidsToId")
+    @Named("sqidsCodeToId")
     default Long sqidsCodeToId(String code) {
         return SqidsUtil.decodeId(code);
     }

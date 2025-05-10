@@ -16,7 +16,7 @@ public class CommentData {
     private String code;
     @NotBlank(message = "Add a comment")
     private String text;
-    private AccountData author;
+    private UserData author;
     private PostData post;
     private LocalDateTime creation;
     private LocalDateTime modified;

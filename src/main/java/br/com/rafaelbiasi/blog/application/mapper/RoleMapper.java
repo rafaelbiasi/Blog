@@ -8,16 +8,17 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 
 @Mapper(
+        uses = {SqidsConverterMapper.class},
         componentModel = MappingConstants.ComponentModel.SPRING,
         injectionStrategy = InjectionStrategy.SETTER
 )
 public interface RoleMapper {
 
-    @Mapping(source = "id", target = "code")
-    RoleData roleToRoleData(Role role);
+    @Mapping(source = "id", target = "code", qualifiedByName = "idToSqidsCode")
+    RoleData toData(Role role);
 
-    @Mapping(source = "code", target = "id")
     @Mapping(target = "creation", ignore = true)
     @Mapping(target = "modified", ignore = true)
-    Role roleDataToRole(RoleData roleData);
+    @Mapping(source = "code", target = "id", qualifiedByName = "sqidsCodeToId")
+    Role toModel(RoleData roleData);
 }

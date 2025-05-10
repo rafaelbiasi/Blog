@@ -12,10 +12,10 @@ import java.util.Set;
 @Data
 @SuperBuilder
 @NoArgsConstructor
-@Table(name = "account")
-@DiscriminatorValue("account")
+@Table(name = "user")
+@DiscriminatorValue("user")
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-public class Account extends ItemEntity {
+public class User extends ItemEntity {
 
     private static final int TYPE_CODE = 2;
     private static final String ROLE_ADMIN = "ROLE_ADMIN";
@@ -39,8 +39,8 @@ public class Account extends ItemEntity {
     @Builder.Default
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "account_role",
-            joinColumns = {@JoinColumn(name = "account_id", referencedColumnName = "id")},
+            name = "user_role",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
     private Set<Role> roles = new HashSet<>();
 

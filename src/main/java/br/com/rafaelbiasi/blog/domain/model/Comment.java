@@ -22,8 +22,8 @@ public class Comment extends ItemEntity {
     private String text;
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "account_id", referencedColumnName = "id", nullable = false)
-    private Account author;
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private User author;
     @ManyToOne
     @JoinColumn(name = "post_id", referencedColumnName = "id")
     private Post post;

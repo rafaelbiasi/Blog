@@ -1,7 +1,7 @@
 package br.com.rafaelbiasi.blog.ui.controller;
 
-import br.com.rafaelbiasi.blog.application.data.AccountData;
-import br.com.rafaelbiasi.blog.application.facade.AccountFacade;
+import br.com.rafaelbiasi.blog.application.data.UserData;
+import br.com.rafaelbiasi.blog.application.facade.UserFacade;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,48 +25,48 @@ public class RegisterController {
 
     private static final String REDIRECT_HOME = "redirect:/";
 
-    private final AccountFacade accountFacade;
+    private final UserFacade userFacade;
 
     @GetMapping("/")
     public String register(final Model model) {
         log.info("Entering register page.");
-        model.addAttribute("account", new AccountData());
+        model.addAttribute("user", new UserData());
         return REGISTER_VIEW;
     }
 
     @PostMapping("/")
     public String register(
-            final @Valid @ModelAttribute("account") AccountData account,
+            final @Valid @ModelAttribute("user") UserData userData,
             final BindingResult result,
             final Model model
     ) {
-        log.info("Saving new user. Parameters: [{}={}]", "Account", account);
-        checkError(result, account);
+        log.info("Saving new user. Parameters: [{}={}]", "UserData", userData);
+        checkError(result, userData);
         if (result.hasErrors()) {
-            model.addAttribute("account", account);
+            model.addAttribute("user", userData);
             return REGISTER_VIEW;
         }
-        accountFacade.registerUser(account);
+        userFacade.registerUser(userData);
         return REDIRECT_HOME;
     }
 
     private void checkError(
             final BindingResult result,
-            final AccountData account
+            final UserData userData
     ) {
-        val registrationResponse = accountFacade.checkEmailAndUsernameExists(account);
+        val registrationResponse = userFacade.checkEmailAndUsernameExists(userData);
         if (registrationResponse.success()) {
             return;
         }
         if (registrationResponse.usernameExists()) {
             result.addError(new FieldError(
-                    "account",
+                    "user",
                     "username",
                     "Another user has already registered this username."));
         }
         if (registrationResponse.emailExists()) {
             result.addError(new FieldError(
-                    "account",
+                    "user",
                     "email",
                     "Another user has already registered this e-mail."
             ));

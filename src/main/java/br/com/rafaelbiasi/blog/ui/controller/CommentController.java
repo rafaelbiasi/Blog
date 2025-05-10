@@ -1,9 +1,9 @@
 package br.com.rafaelbiasi.blog.ui.controller;
 
 import br.com.rafaelbiasi.blog.application.data.CommentData;
-import br.com.rafaelbiasi.blog.infrastructure.exception.ResourceNotFoundExceptionFactory;
 import br.com.rafaelbiasi.blog.application.facade.CommentFacade;
 import br.com.rafaelbiasi.blog.application.facade.PostFacade;
+import br.com.rafaelbiasi.blog.infrastructure.exception.ResourceNotFoundExceptionFactory;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +20,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.security.Principal;
 import java.util.Map;
 
-import static br.com.rafaelbiasi.blog.ui.controller.PostController.REDIRECT_POST;
 import static br.com.rafaelbiasi.blog.infrastructure.util.ControllerUtil.expand;
+import static br.com.rafaelbiasi.blog.ui.controller.PostController.REDIRECT_POST;
 
 @Slf4j
 @Controller

@@ -13,7 +13,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
+import java.util.Map;
+
+import static br.com.rafaelbiasi.blog.infrastructure.exception.ResourceNotFoundExceptionFactory.postNotFound;
 import static br.com.rafaelbiasi.blog.infrastructure.exception.ResourceNotFoundExceptionFactory.throwPostNotFound;
+import static br.com.rafaelbiasi.blog.infrastructure.util.ControllerUtil.expand;
 import static java.util.Optional.ofNullable;
 
 @Slf4j
@@ -44,6 +48,19 @@ public class PostController {
                 () -> throwPostNotFound(code)
         );
         return POST_VIEW;
+    }
+
+    @GetMapping("/{code}/")
+    public String post(
+            final @PathVariable String code,
+            final Model model,
+            final HttpServletRequest request
+    ) {
+        PostData postData = postFacade.findByCode(code).orElseThrow(() -> postNotFound(code));
+        return expand(REDIRECT_POST, Map.of(
+                "code", postData.getCode(),
+                "slugifiedTitle", postData.getSlugifiedTitle()
+        ));
     }
 
     private void addToModelAttribute(

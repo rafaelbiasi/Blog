@@ -1,18 +1,22 @@
 package br.com.rafaelbiasi.blog.application.facade.impl;
 
-import br.com.rafaelbiasi.blog.application.facade.CommentFacade;
-import br.com.rafaelbiasi.blog.application.data.AccountData;
 import br.com.rafaelbiasi.blog.application.data.CommentData;
 import br.com.rafaelbiasi.blog.application.data.PostData;
+import br.com.rafaelbiasi.blog.application.data.UserData;
+import br.com.rafaelbiasi.blog.application.facade.CommentFacade;
 import br.com.rafaelbiasi.blog.application.mapper.CommentMapper;
 import br.com.rafaelbiasi.blog.domain.service.CommentService;
+import br.com.rafaelbiasi.blog.infrastructure.util.SqidsUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.security.Principal;
+import java.util.Optional;
 
-import static br.com.rafaelbiasi.blog.infrastructure.exception.ResourceNotFoundExceptionFactory.throwCommentNotFound;
 import static java.util.Objects.requireNonNull;
 
 @Component
@@ -33,18 +37,32 @@ public class CommentFacadeImpl implements CommentFacade {
         requireNonNull(postCode, "The Post Code has a null value.");
         requireNonNull(principal, "The Principal has a null value.");
         comment.setAuthor(
-                AccountData.builder()
+                UserData.builder()
                         .username(principal.getName())
                         .build());
         comment.setPost(PostData.builder().code(postCode).build());
-        commentService.save(commentMapper.commentDataToComment(comment));
+        commentService.save(commentMapper.toModel(comment));
     }
 
     @Override
-    public void delete(final String code) {
-        commentService.findByCode(code).ifPresentOrElse(
-                commentService::delete,
-                () -> throwCommentNotFound(code)
-        );
+    public boolean delete(final String code) {
+        requireNonNull(code, "The Code has a null value.");
+        val post = commentService.findById(SqidsUtil.decodeId(code));
+        post.ifPresent(commentService::delete);
+        return post.isPresent();
     }
+
+    @Override
+    public Page<CommentData> findAll(PageRequest pageable) {
+        requireNonNull(pageable, "The Pageable has a null value.");
+        return commentService.findAll(pageable).map(commentMapper::toData);
+    }
+
+    @Override
+    public Optional<CommentData> findByCode(String code) {
+        requireNonNull(code, "The Code has a null value.");
+        return commentService.findById(SqidsUtil.decodeId(code))
+                .map(commentMapper::toData);
+    }
+
 }

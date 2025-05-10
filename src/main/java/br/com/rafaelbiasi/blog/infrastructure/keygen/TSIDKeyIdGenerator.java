@@ -1,5 +1,6 @@
 package br.com.rafaelbiasi.blog.infrastructure.keygen;
 
+import br.com.rafaelbiasi.blog.infrastructure.keygen.impl.TSIDKeyGenerator;
 import org.hibernate.annotations.IdGeneratorType;
 
 import java.lang.annotation.Retention;
@@ -12,5 +13,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @IdGeneratorType(TSIDKeyGenerator.class)
 @Retention(RUNTIME)
 @Target({METHOD, FIELD})
-    public @interface TSIDKeyIdGenerator {
+public @interface TSIDKeyIdGenerator {
 }

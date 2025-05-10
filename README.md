@@ -66,7 +66,6 @@ Textos e imagens de exemplos gerados por IA.
 - ~~Dockerize (DockerFile/Compose)~~
 - ~~Validações~~
 - ~~Internacionalização/localização~~
-- ~~Testes de unidade~~
 - ~~Comentários~~
 - ~~Melhor estruturação dos templates~~
 - Painel Administrativo

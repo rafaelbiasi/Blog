@@ -10,22 +10,22 @@ import org.mapstruct.*;
         uses = {
                 SqidsConverterMapper.class,
                 PostMapper.class,
-                AccountMapper.class
+                UserMapper.class
         }
 )
 public interface CommentMapper {
 
-    @Mapping(source = "id", target = "code", qualifiedByName = "IdToCodeSqids")
-    CommentData commentToCommentData(Comment comment);
+    @Mapping(source = "id", target = "code", qualifiedByName = "idToSqidsCode")
+    CommentData toData(Comment comment);
 
     @Named("CommentWithoutPost")
     @Mapping(target = "post", ignore = true)
-    @Mapping(source = "id", target = "code", qualifiedByName = "IdToCodeSqids")
-    CommentData commentToCommentDataWithoutPost(Comment comment);
+    @Mapping(source = "id", target = "code", qualifiedByName = "idToSqidsCode")
+    CommentData toDataWithoutPost(Comment comment);
 
     @Mapping(target = "creation", ignore = true)
     @Mapping(target = "modified", ignore = true)
-    @Mapping(source = "code", target = "id", qualifiedByName = "CodeSqidsToId")
-    Comment commentDataToComment(CommentData commentData);
+    @Mapping(source = "code", target = "id", qualifiedByName = "sqidsCodeToId")
+    Comment toModel(CommentData commentData);
 
 }

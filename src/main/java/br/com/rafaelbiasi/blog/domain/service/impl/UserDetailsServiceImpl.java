@@ -1,12 +1,11 @@
 package br.com.rafaelbiasi.blog.domain.service.impl;
 
-import br.com.rafaelbiasi.blog.domain.model.Account;
-import br.com.rafaelbiasi.blog.domain.service.AccountService;
+import br.com.rafaelbiasi.blog.domain.model.User;
+import br.com.rafaelbiasi.blog.domain.service.UserService;
 import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,7 +23,7 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final AccountService accountService;
+    private final UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(final String usernameOrEmail) throws UsernameNotFoundException {
@@ -32,36 +31,36 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return findOneByUsername(usernameOrEmail)
                 .or(() -> findOneByEmail(usernameOrEmail))
                 .map(this::user)
-                .orElseThrow(() -> new UsernameNotFoundException("Account not found or password is not correct"));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found or password is not correct"));
     }
 
-    private static User user(
-            final Account account,
+    private static org.springframework.security.core.userdetails.User user(
+            final User user,
             final List<SimpleGrantedAuthority> grantedAuthorities
     ) {
-        return new User(
-                account.getUsername(),
-                account.getPassword(),
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
                 grantedAuthorities
         );
     }
 
-    private Optional<Account> findOneByUsername(String usernameOrEmail) {
-        return accountService.findOneByUsername(usernameOrEmail);
+    private Optional<User> findOneByUsername(String usernameOrEmail) {
+        return userService.findOneByUsername(usernameOrEmail);
     }
 
-    private Optional<Account> findOneByEmail(@Email String usernameOrEmail) {
-        return accountService.findOneByEmail(usernameOrEmail);
+    private Optional<User> findOneByEmail(@Email String usernameOrEmail) {
+        return userService.findOneByEmail(usernameOrEmail);
     }
 
-    private User user(final Account account) {
-        return account
+    private org.springframework.security.core.userdetails.User user(final User user) {
+        return user
                 .getRoles()
                 .stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(collectingAndThen(
                         toList(),
-                        grantedAuthorities -> user(account, grantedAuthorities)
+                        grantedAuthorities -> user(user, grantedAuthorities)
                 ));
     }
 }

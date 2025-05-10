@@ -1,7 +1,7 @@
 package br.com.rafaelbiasi.blog.ui.controller.admin;
 
-import br.com.rafaelbiasi.blog.application.data.AccountData;
 import br.com.rafaelbiasi.blog.application.data.PostData;
+import br.com.rafaelbiasi.blog.application.data.UserData;
 import br.com.rafaelbiasi.blog.application.facade.PostFacade;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,6 @@ import java.util.Optional;
 import static br.com.rafaelbiasi.blog.infrastructure.exception.ResourceNotFoundExceptionFactory.postNotFound;
 import static br.com.rafaelbiasi.blog.infrastructure.exception.ResourceNotFoundExceptionFactory.throwPostNotFound;
 import static br.com.rafaelbiasi.blog.infrastructure.util.ControllerUtil.expand;
-import static java.util.function.Predicate.not;
 
 @Slf4j
 @Controller
@@ -96,7 +95,8 @@ public class AdminPostController {
             BindingResult result,
             Model model,
             @RequestParam("file") MultipartFile file,
-            Principal principal) {
+            Principal principal
+    ) {
         log.info(
                 "Saving the post. Parameters [{}={}, {}={}]",
                 "Post", post,
@@ -106,14 +106,10 @@ public class AdminPostController {
             model.addAttribute("post", post);
             return FORM_VIEW;
         }
-        Optional.of(post)
-                .map(PostData::getCode)
-                .ifPresentOrElse(
-                        (code) -> create(post, file, principal),
-                        () -> save(post, file)
-                );
-        return expand(REDIRECT_ADMIN_POST_EDIT, Map.of("code", post.getCode()));
-
+        PostData postDataSaved = post.getCode() == null
+                ? create(post, file, principal)
+                : save(post, file);
+        return expand(REDIRECT_ADMIN_POST_EDIT, Map.of("code", postDataSaved.getCode()));
     }
 
     @PostMapping("/delete/{code}/")
@@ -129,24 +125,22 @@ public class AdminPostController {
         return REDIRECT_ADMIN_POST_LIST;
     }
 
-    private void create(PostData post, MultipartFile file, Principal principal) {
+    private PostData create(PostData post, MultipartFile file, Principal principal) {
         log.info("Creating a new post.");
-        post.setAuthor(AccountData.builder()
+        post.setAuthor(UserData.builder()
                 .username(principal.getName())
                 .build());
-        save(post, file);
+        return save(post, file);
     }
 
-    private void save(PostData post, MultipartFile multipartFile) {
+    private PostData save(PostData post, MultipartFile multipartFile) {
         log.info(
                 "Save the post. Parameters [{}={}]",
                 "Code", post.getCode()
         );
-        Optional.ofNullable(multipartFile)
-                .filter(not(MultipartFile::isEmpty))
-                .ifPresentOrElse(
-                        (file) -> postFacade.save(post, file),
-                        () -> postFacade.save(post)
-                );
+        if (multipartFile == null) {
+            return postFacade.save(post);
+        }
+        return postFacade.save(post, multipartFile);
     }
 }

@@ -1,8 +1,8 @@
 package br.com.rafaelbiasi.blog.application.facade.impl;
 
+import br.com.rafaelbiasi.blog.application.data.PostData;
 import br.com.rafaelbiasi.blog.application.facade.FileFacade;
 import br.com.rafaelbiasi.blog.application.facade.PostFacade;
-import br.com.rafaelbiasi.blog.application.data.PostData;
 import br.com.rafaelbiasi.blog.application.mapper.PostMapper;
 import br.com.rafaelbiasi.blog.domain.model.Post;
 import br.com.rafaelbiasi.blog.domain.service.PostService;
@@ -36,17 +36,17 @@ public class PostFacadeImpl implements PostFacade {
 
     @Override
     public List<PostData> findAll() {
-        return postService.findAll().stream().map(postMapper::postToPostDataWithoutComments).toList();
+        return postService.findAll().stream().map(postMapper::toDataWithoutComments).toList();
     }
 
     @Override
     public Page<PostData> findAll(final Pageable pageable) {
         requireNonNull(pageable, "The Pageable has a null value.");
-        return postService.findAll(pageable).map(postMapper::postToPostDataWithoutComments);
+        return postService.findAll(pageable).map(postMapper::toDataWithoutComments);
     }
 
     public Optional<PostData> findById(final long id) {
-        return postService.findById(id).map(postMapper::postToPostData);
+        return postService.findById(id).map(postMapper::toData);
     }
 
     @Override
@@ -87,17 +87,17 @@ public class PostFacadeImpl implements PostFacade {
     public Optional<PostData> findByCode(final String code) {
         requireNonNull(code, "The Code has a null value.");
         return postService.findById(SqidsUtil.decodeId(code))
-                .map(postMapper::postToPostData);
+                .map(postMapper::toData);
     }
 
     private PostData update(final PostData postData, final Post post) {
-        postMapper.updatePostFromData(postData, post);
+        postMapper.updateModelFromData(postData, post);
         val updatedPost = postService.save(post);
-        return postMapper.postToPostData(updatedPost);
+        return postMapper.toData(updatedPost);
     }
 
     private PostData create(final PostData postData) {
-        val createdPost = postService.save(postMapper.postDataToPost(postData));
-        return postMapper.postToPostData(createdPost);
+        val createdPost = postService.save(postMapper.toModel(postData));
+        return postMapper.toData(createdPost);
     }
 }

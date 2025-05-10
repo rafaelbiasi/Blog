@@ -1,14 +1,15 @@
 package br.com.rafaelbiasi.blog.infrastructure.initial;
 
-import br.com.rafaelbiasi.blog.domain.model.Account;
 import br.com.rafaelbiasi.blog.domain.model.Post;
 import br.com.rafaelbiasi.blog.domain.model.Role;
-import br.com.rafaelbiasi.blog.domain.service.AccountService;
+import br.com.rafaelbiasi.blog.domain.model.User;
 import br.com.rafaelbiasi.blog.domain.service.FileService;
 import br.com.rafaelbiasi.blog.domain.service.PostService;
 import br.com.rafaelbiasi.blog.domain.service.RoleService;
+import br.com.rafaelbiasi.blog.domain.service.UserService;
 import br.com.rafaelbiasi.blog.infrastructure.util.LogId;
 import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.boot.CommandLineRunner;
@@ -18,24 +19,13 @@ import java.util.HashSet;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class InitialData implements CommandLineRunner {
 
     private final FileService fileService;
     private final PostService postService;
-    private final AccountService accountService;
+    private final UserService userService;
     private final RoleService roleService;
-
-    public InitialData(
-            final FileService fileService,
-            final PostService postService,
-            final AccountService accountService,
-            final RoleService roleService
-    ) {
-        this.fileService = fileService;
-        this.postService = postService;
-        this.accountService = accountService;
-        this.roleService = roleService;
-    }
 
     @Override
     public void run(final String... args) {
@@ -46,17 +36,17 @@ public class InitialData implements CommandLineRunner {
                 fileService.init();
                 log.info("File service initialization completed");
                 val roles = createRoles();
-                val accounts = createAccounts(roles);
-                createPosts(accounts);
+                val users = createUsers(roles);
+                createPosts(users);
             }
         } finally {
             LogId.endLogId();
         }
     }
 
-    private AccountsResult createAccounts(final RolesResult roles) {
-        log.info("Creating default accounts");
-        val user = createAccount(
+    private UsersResult createUsers(final RolesResult roles) {
+        log.info("Creating default users");
+        val user = createUser(
                 "User",
                 "Resu",
                 "user@domain.com",
@@ -64,7 +54,7 @@ public class InitialData implements CommandLineRunner {
                 "resu",
                 roles.user()
         );
-        val admin = createAccount(
+        val admin = createUser(
                 "Admin",
                 "Nimda",
                 "admin@domain.com",
@@ -72,7 +62,7 @@ public class InitialData implements CommandLineRunner {
                 "nimda",
                 roles.admin()
         );
-        val guest = createAccount(
+        val guest = createUser(
                 "Guest",
                 "Tseug",
                 "guest@domain.com",
@@ -80,10 +70,10 @@ public class InitialData implements CommandLineRunner {
                 "tseug",
                 roles.guest()
         );
-        return AccountsResult.builder().user(user).admin(admin).guest(guest).build();
+        return UsersResult.builder().user(user).admin(admin).guest(guest).build();
     }
 
-    private void createPosts(AccountsResult result) {
+    private void createPosts(UsersResult result) {
         log.info("Creating default posts");
         createPost(
                 result.user(), "A Dança dos Relógios Flexíveis",
@@ -277,7 +267,7 @@ public class InitialData implements CommandLineRunner {
         return role;
     }
 
-    private Account createAccount(
+    private User createUser(
             final String userFirst,
             final String userLast,
             final String mail,
@@ -285,7 +275,7 @@ public class InitialData implements CommandLineRunner {
             final String password,
             final Role role
     ) {
-        val account = Account
+        val user = User
                 .builder()
                 .email(mail)
                 .username(username)
@@ -295,14 +285,14 @@ public class InitialData implements CommandLineRunner {
                 .build();
         val roles = new HashSet<Role>();
         roles.add(role);
-        account.setRoles(roles);
-        accountService.save(account);
-        log.debug("Account created: {}", username);
-        return account;
+        user.setRoles(roles);
+        userService.save(user);
+        log.debug("User created: {}", username);
+        return user;
     }
 
     private void createPost(
-            final Account account,
+            final User user,
             final String title,
             final String body,
             final String imageFilePath
@@ -311,7 +301,7 @@ public class InitialData implements CommandLineRunner {
                 .builder()
                 .title(title)
                 .body(body)
-                .author(account)
+                .author(user)
                 .imageFilePath(imageFilePath)
                 .build();
         postService.save(post);
@@ -327,7 +317,7 @@ public class InitialData implements CommandLineRunner {
     }
 
     @Builder
-    record AccountsResult(Account user, Account admin, Account guest) {
+    record UsersResult(User user, User admin, User guest) {
     }
 
     @Builder

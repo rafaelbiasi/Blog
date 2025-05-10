@@ -22,7 +22,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class WebSecurityConfig {
 
     @Value("${security.encoding-strength}")
-    final int strength = 14;
+    final int strength = 12;
 
     @Bean
     public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
@@ -42,10 +42,8 @@ public class WebSecurityConfig {
             final AuthorizeHttpRequestsConfigurer<HttpSecurity>
                     .AuthorizationManagerRequestMatcherRegistry auth
     ) {
-        auth.requestMatchers("/**")
-                .permitAll()
-                .requestMatchers("/admin/**")
-                .authenticated();
+        auth.requestMatchers("/admin/**").authenticated()
+                .anyRequest().permitAll();
     }
 
     private void formAuth(final FormLoginConfigurer<HttpSecurity> form) {

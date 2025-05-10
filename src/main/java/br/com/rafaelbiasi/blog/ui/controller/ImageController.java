@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-
 import static br.com.rafaelbiasi.blog.infrastructure.exception.ResourceNotFoundExceptionFactory.imageFileNotFound;
 import static java.util.Optional.ofNullable;
 import static java.util.function.Predicate.not;

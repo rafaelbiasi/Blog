@@ -36,20 +36,20 @@ public class Post extends ItemEntity {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "author_id", referencedColumnName = "id", nullable = false)
-    private Account author;
+    private User author;
     @Builder.Default
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments = new HashSet<>();
+
+    @Override
+    public int getTypeCode() {
+        return TYPE_CODE;
+    }
 
     protected void onCreate() {
         super.onCreate();
         if (ofNullable(getSlugifiedTitle()).isEmpty()) {
             setSlugifiedTitle(slugify.slugify(title));
         }
-    }
-
-    @Override
-    public int getTypeCode() {
-        return TYPE_CODE;
     }
 }

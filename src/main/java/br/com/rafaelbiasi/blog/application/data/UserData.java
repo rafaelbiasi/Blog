@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -13,12 +14,12 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class AccountData {
+public class UserData {
 
     private static final String ROLE_ADMIN = "ROLE_ADMIN";
 
     @EqualsAndHashCode.Include
-    private Long code;
+    private String code;
     @Email(message = "Invalid e-mail")
     @NotBlank(message = "Provide the e-mail")
     private String email;
@@ -37,5 +38,17 @@ public class AccountData {
 
     public String getName() {
         return getFirstName() + " " + getLastName();
+    }
+
+    public String getRolesString() {
+        return String.join(",", roles.stream().map(RoleData::getName).toArray(String[]::new));
+    }
+
+    public List<String> getRolesStr() {
+        return roles.stream().map(RoleData::getCode).toList();
+    }
+
+    public void setRolesStr(List<String> roles) {
+        roles.stream().map(RoleData::new).forEach(this.roles::add);
     }
 }

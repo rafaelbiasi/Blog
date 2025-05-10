@@ -22,7 +22,7 @@ public class PostData {
     @NotBlank(message = "Provide a Body")
     private String body;
     private String imageFilePath;
-    private AccountData author;
+    private UserData author;
     @Builder.Default
     private Set<CommentData> comments = new HashSet<>();
     private LocalDateTime creation;

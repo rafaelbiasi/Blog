@@ -17,9 +17,9 @@
             <li class="nav-item" sec:authorize="!isAuthenticated()">
                 <a class="nav-link" th:href="@{/auth/}" th:text="#{base.authentication}">Authentication</a>
             </li>
-            <!--            <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">-->
-            <!--                <a class="nav-link" th:href="@{/admin/}" th:text="#{base.admin}">Admin Panel</a>-->
-            <!--            </li>-->
+            <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+                <a class="nav-link" th:href="@{/admin/}" th:text="#{base.admin}">Admin Panel</a>
+            </li>
         </ul>
     </div>
 </nav>

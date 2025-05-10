@@ -13,9 +13,13 @@ import java.time.LocalDateTime;
 public class RoleData {
 
     @EqualsAndHashCode.Include
-    private Long code;
+    private String code;
     @NotBlank(message = "Provide a Role name")
     private String name;
     private LocalDateTime creation;
     private LocalDateTime modified;
+
+    public RoleData(String code) {
+        this.code = code;
+    }
 }
