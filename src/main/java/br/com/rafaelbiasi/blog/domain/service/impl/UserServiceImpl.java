@@ -2,9 +2,9 @@ package br.com.rafaelbiasi.blog.domain.service.impl;
 
 import br.com.rafaelbiasi.blog.domain.model.RegistrationResponse;
 import br.com.rafaelbiasi.blog.domain.model.User;
+import br.com.rafaelbiasi.blog.domain.repository.UserRepository;
 import br.com.rafaelbiasi.blog.domain.service.RoleService;
 import br.com.rafaelbiasi.blog.domain.service.UserService;
-import br.com.rafaelbiasi.blog.infrastructure.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

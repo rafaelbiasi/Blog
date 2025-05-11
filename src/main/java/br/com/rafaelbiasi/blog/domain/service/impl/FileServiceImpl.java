@@ -1,7 +1,7 @@
 package br.com.rafaelbiasi.blog.domain.service.impl;
 
+import br.com.rafaelbiasi.blog.domain.repository.FileRepository;
 import br.com.rafaelbiasi.blog.domain.service.FileService;
-import br.com.rafaelbiasi.blog.infrastructure.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

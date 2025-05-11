@@ -1,10 +1,10 @@
 package br.com.rafaelbiasi.blog.domain.service.impl;
 
 import br.com.rafaelbiasi.blog.domain.model.Comment;
+import br.com.rafaelbiasi.blog.domain.repository.CommentRepository;
 import br.com.rafaelbiasi.blog.domain.service.CommentService;
 import br.com.rafaelbiasi.blog.domain.service.PostService;
 import br.com.rafaelbiasi.blog.domain.service.UserService;
-import br.com.rafaelbiasi.blog.infrastructure.repository.CommentRepository;
 import br.com.rafaelbiasi.blog.infrastructure.util.SqidsUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,14 +1,12 @@
 package br.com.rafaelbiasi.blog.infrastructure.repository;
 
 import br.com.rafaelbiasi.blog.domain.model.User;
+import br.com.rafaelbiasi.blog.domain.repository.UserRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends BlogRepository<User> {
+public interface UserJpaRepository extends BlogRepository<User>, UserRepository {
 
-    Optional<User> findOneByEmailIgnoreCase(String email);
-
-    Optional<User> findOneByUsernameIgnoreCase(String username);
 }
