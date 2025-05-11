@@ -1,7 +1,7 @@
 package br.com.rafaelbiasi.blog.application.mapper;
 
 import br.com.rafaelbiasi.blog.application.data.UserData;
-import br.com.rafaelbiasi.blog.domain.model.User;
+import br.com.rafaelbiasi.blog.core.domain.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;

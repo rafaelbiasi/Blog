@@ -5,10 +5,10 @@ import br.com.rafaelbiasi.blog.application.data.UserData;
 import br.com.rafaelbiasi.blog.application.facade.UserFacade;
 import br.com.rafaelbiasi.blog.application.mapper.RoleMapper;
 import br.com.rafaelbiasi.blog.application.mapper.UserMapper;
-import br.com.rafaelbiasi.blog.domain.model.RegistrationResponse;
-import br.com.rafaelbiasi.blog.domain.model.User;
-import br.com.rafaelbiasi.blog.domain.service.RoleService;
-import br.com.rafaelbiasi.blog.domain.service.UserService;
+import br.com.rafaelbiasi.blog.core.domain.model.RegistrationResponse;
+import br.com.rafaelbiasi.blog.core.domain.model.User;
+import br.com.rafaelbiasi.blog.core.domain.service.RoleService;
+import br.com.rafaelbiasi.blog.core.domain.service.UserService;
 import br.com.rafaelbiasi.blog.infrastructure.util.SqidsUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class UserFacadeImpl implements UserFacade {
     private final RoleMapper roleMapper;
 
     @Override
-    public Page<UserData> findAll(PageRequest pageable) {
+    public Page<UserData> findAll(Pageable pageable) {
         requireNonNull(pageable, "The Pageable has a null value.");
         return userService.findAll(pageable).map(userMapper::toData);
     }

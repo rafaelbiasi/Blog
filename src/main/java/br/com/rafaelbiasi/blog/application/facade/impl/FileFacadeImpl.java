@@ -1,7 +1,7 @@
 package br.com.rafaelbiasi.blog.application.facade.impl;
 
 import br.com.rafaelbiasi.blog.application.facade.FileFacade;
-import br.com.rafaelbiasi.blog.domain.service.FileService;
+import br.com.rafaelbiasi.blog.core.domain.service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.core.io.Resource;

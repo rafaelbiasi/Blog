@@ -5,7 +5,7 @@ import br.com.rafaelbiasi.blog.application.data.PostData;
 import br.com.rafaelbiasi.blog.application.data.UserData;
 import br.com.rafaelbiasi.blog.application.facade.CommentFacade;
 import br.com.rafaelbiasi.blog.application.mapper.CommentMapper;
-import br.com.rafaelbiasi.blog.domain.service.CommentService;
+import br.com.rafaelbiasi.blog.core.domain.service.CommentService;
 import br.com.rafaelbiasi.blog.infrastructure.util.SqidsUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
