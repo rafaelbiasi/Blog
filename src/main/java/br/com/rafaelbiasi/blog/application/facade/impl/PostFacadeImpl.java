@@ -6,6 +6,7 @@ import br.com.rafaelbiasi.blog.application.facade.PostFacade;
 import br.com.rafaelbiasi.blog.application.mapper.PostMapper;
 import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
 import br.com.rafaelbiasi.blog.core.domain.model.PostModel;
+import br.com.rafaelbiasi.blog.core.domain.model.SimpleFile;
 import br.com.rafaelbiasi.blog.core.domain.service.PostService;
 import br.com.rafaelbiasi.blog.infrastructure.util.SqidsUtil;
 import jakarta.transaction.Transactional;
@@ -73,12 +74,12 @@ public class PostFacadeImpl implements PostFacade {
 	@Override
 	public PostData save(
 			final PostData postData,
-			final MultipartFile file
+			final SimpleFile file
 	) {
 		requireNonNull(postData, "The Post has a null value.");
 		requireNonNull(file, "The File has a null value.");
 		val originalFilename = of(file)
-				.map(MultipartFile::getOriginalFilename)
+				.map(SimpleFile::getOriginalFilename)
 				.filter(not(String::isBlank));
 		originalFilename.ifPresent(postData::setImageFilePath);
 		val savedPostData = save(postData);

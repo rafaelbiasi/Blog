@@ -1,6 +1,7 @@
 package br.com.rafaelbiasi.blog.application.facade;
 
 import br.com.rafaelbiasi.blog.application.data.PostData;
+import br.com.rafaelbiasi.blog.core.domain.model.SimpleFile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,7 +21,7 @@ public interface PostFacade {
 
 	PostData save(
 			final PostData post,
-			final MultipartFile file
+			final SimpleFile file
 	);
 
 	boolean delete(final String code);

@@ -1,11 +1,11 @@
 package br.com.rafaelbiasi.blog.ui.controller;
 
 import br.com.rafaelbiasi.blog.application.facade.FileFacade;
+import br.com.rafaelbiasi.blog.core.domain.model.SimpleResource;
 import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
-import org.springframework.core.io.Resource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
 
 import static br.com.rafaelbiasi.blog.infrastructure.exception.ResourceNotFoundExceptionFactory.imageFileNotFound;
 import static java.util.Optional.ofNullable;
@@ -23,50 +25,28 @@ import static java.util.function.Predicate.not;
 @RequiredArgsConstructor
 @RequestMapping("/images/")
 public class ImageController {
-
 	private final FileFacade fileService;
 	private final ServletContext servletContext;
 
 	@GetMapping("/{id}/")
-	public ResponseEntity<Resource> image(final @PathVariable("id") String imageUri) {
-		log.info(
-				"Fetching image. Parameters [{}={}]",
-				"Image URI", imageUri
-		);
-		return ofNullable(imageUri)
+	public ResponseEntity<InputStreamResource> image(@PathVariable("id") String imageUri) throws IOException {
+		log.info("Fetching image. Parameters [{}={}]", "Image URI", imageUri);
+		SimpleResource resource = ofNullable(imageUri)
 				.filter(not(String::isBlank))
 				.flatMap(fileService::load)
-				.map(this::resourceResponseEntity)
 				.orElseThrow(() -> imageFileNotFound(imageUri));
-	}
 
-	private static String inlineFilename(final Resource image) {
-		return "inline; filename=\"" + image.getFilename() + "\"";
-	}
+		String contentType = mediaType(resource.getFilename());
+		log.info("Image fetched. [{}={}, {}={}]", "File name", resource.getFilename(), "Content type", contentType);
 
-	private ResponseEntity<Resource> resourceResponseEntity(final Resource resource) {
-		val contentType = mediaType(resource);
-		log.info(
-				"Image fetched. [{}={}, {}={}]",
-				"File name", resource.getFilename(),
-				"Content type", contentType
-		);
 		return ResponseEntity.ok()
-				.contentType(contentType)
-				.header(HttpHeaders.CONTENT_DISPOSITION, inlineFilename(resource))
-				.body(resource);
+				.contentType(MediaType.parseMediaType(contentType))
+				.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+				.body(new InputStreamResource(resource.getInputStream()));
 	}
 
-	private MediaType mediaType(final Resource resource) {
-		val mimeType = servletContext.getMimeType(resource.getFilename());
-		log.debug(
-				"Getting image mime type. [{}={}, {}={}]",
-				"File name", resource.getFilename(),
-				"Mine type", mimeType
-		);
-		return mimeType != null
-				? MediaType.parseMediaType(mimeType)
-				: MediaType.APPLICATION_OCTET_STREAM;
+	private String mediaType(String filename) {
+		String mimeType = servletContext.getMimeType(filename);
+		return mimeType != null ? mimeType : MediaType.APPLICATION_OCTET_STREAM_VALUE;
 	}
-
 }

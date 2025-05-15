@@ -8,7 +8,7 @@
     <form enctype="multipart/form-data" method="post"
           th:action="@{/admin/post/save/}"
           th:object="${post}">
-        <input th:field="*{code}" type="hidden"/>
+        <input th:if="${post.code} != null" th:field="*{code}" type="hidden"/>
         <div class="mb-3">
             <label class="form-label" for="title">Título</label>
             <input class="form-control" id="title" placeholder="Título da Postagem" th:field="*{title}" type="text">

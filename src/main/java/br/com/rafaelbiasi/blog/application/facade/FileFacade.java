@@ -1,13 +1,13 @@
 package br.com.rafaelbiasi.blog.application.facade;
 
-import org.springframework.core.io.Resource;
-import org.springframework.web.multipart.MultipartFile;
+import br.com.rafaelbiasi.blog.core.domain.model.SimpleFile;
+import br.com.rafaelbiasi.blog.core.domain.model.SimpleResource;
 
 import java.util.Optional;
 
 public interface FileFacade {
 
-	Optional<Resource> load(final String imageUri);
+	Optional<SimpleResource> load(final String imageUri);
 
-	void save(final MultipartFile file);
+	void save(final SimpleFile file);
 }

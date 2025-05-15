@@ -1,17 +1,17 @@
 package br.com.rafaelbiasi.blog.core.domain.service;
 
-import org.springframework.core.io.Resource;
-import org.springframework.web.multipart.MultipartFile;
+import br.com.rafaelbiasi.blog.core.domain.model.SimpleFile;
+import br.com.rafaelbiasi.blog.core.domain.model.SimpleResource;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Optional;
 
 public interface FileService {
 
 	void init() throws IOException;
 
-	void save(final MultipartFile file) throws IOException;
+	void save(final SimpleFile file) throws IOException;
 
-	Optional<Resource> load(final String filename) throws MalformedURLException;
+	Optional<SimpleResource> load(final String filename) throws IOException;
+
 }

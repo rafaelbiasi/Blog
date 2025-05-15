@@ -3,6 +3,7 @@ package br.com.rafaelbiasi.blog.ui.controller.admin;
 import br.com.rafaelbiasi.blog.application.data.PostData;
 import br.com.rafaelbiasi.blog.application.data.UserData;
 import br.com.rafaelbiasi.blog.application.facade.PostFacade;
+import br.com.rafaelbiasi.blog.core.domain.model.SimpleFile;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.Map;
 import java.util.Optional;
@@ -96,7 +98,7 @@ public class AdminPostController {
 			Model model,
 			@RequestParam("file") MultipartFile file,
 			Principal principal
-	) {
+	) throws IOException {
 		log.info(
 				"Saving the post. Parameters [{}={}, {}={}]",
 				"Post", post,
@@ -106,9 +108,10 @@ public class AdminPostController {
 			model.addAttribute("post", post);
 			return FORM_VIEW;
 		}
+		SimpleFile simplefile = new SimpleFile(file.getOriginalFilename(), file.getInputStream());
 		PostData postDataSaved = post.getCode() == null
-				? create(post, file, principal)
-				: save(post, file);
+				? create(post, simplefile, principal)
+				: save(post, simplefile);
 		return expand(REDIRECT_ADMIN_POST_EDIT, Map.of("code", postDataSaved.getCode()));
 	}
 
@@ -125,7 +128,7 @@ public class AdminPostController {
 		return REDIRECT_ADMIN_POST_LIST;
 	}
 
-	private PostData create(PostData post, MultipartFile file, Principal principal) {
+	private PostData create(PostData post, SimpleFile file, Principal principal) {
 		log.info("Creating a new post.");
 		post.setAuthor(UserData.builder()
 				.username(principal.getName())
@@ -133,7 +136,7 @@ public class AdminPostController {
 		return save(post, file);
 	}
 
-	private PostData save(PostData post, MultipartFile multipartFile) {
+	private PostData save(PostData post, SimpleFile multipartFile) {
 		log.info(
 				"Save the post. Parameters [{}={}]",
 				"Code", post.getCode()
