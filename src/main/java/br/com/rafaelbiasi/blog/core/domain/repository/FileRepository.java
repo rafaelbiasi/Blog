@@ -1,11 +1,7 @@
 package br.com.rafaelbiasi.blog.core.domain.repository;
 
-import org.springframework.core.io.Resource;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URI;
 import java.nio.file.Path;
 
 public interface FileRepository {
@@ -19,5 +15,4 @@ public interface FileRepository {
 
 	Path resolve(final String originalFilename);
 
-	Resource getUrlResource(final URI uri) throws MalformedURLException;
 }
