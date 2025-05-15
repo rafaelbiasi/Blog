@@ -23,33 +23,33 @@ import static java.util.Optional.ofNullable;
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class PostEntity extends ItemEntity {
 
-    private static final int TYPE_CODE = 1;
-    private static final Slugify slugify = Slugify.builder().build();
+	private static final int TYPE_CODE = 1;
+	private static final Slugify slugify = Slugify.builder().build();
 
-    @Column(unique = true, nullable = false)
-    private String slugifiedTitle;
-    @Column(nullable = false)
-    private String title;
-    @Column(columnDefinition = "TEXT")
-    private String body;
-    private String imageFilePath;
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "author_id", referencedColumnName = "id", nullable = false)
-    private UserEntity author;
-    @Builder.Default
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<CommentEntity> comments = new HashSet<>();
+	@Column(unique = true, nullable = false)
+	private String slugifiedTitle;
+	@Column(nullable = false)
+	private String title;
+	@Column(columnDefinition = "TEXT")
+	private String body;
+	private String imageFilePath;
+	@NotNull
+	@ManyToOne
+	@JoinColumn(name = "author_id", referencedColumnName = "id", nullable = false)
+	private UserEntity author;
+	@Builder.Default
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<CommentEntity> comments = new HashSet<>();
 
-    @Override
-    public int getTypeCode() {
-        return TYPE_CODE;
-    }
+	@Override
+	public int getTypeCode() {
+		return TYPE_CODE;
+	}
 
-    protected void onCreate() {
-        super.onCreate();
-        if (ofNullable(getSlugifiedTitle()).isEmpty()) {
-            setSlugifiedTitle(slugify.slugify(title));
-        }
-    }
+	protected void onCreate() {
+		super.onCreate();
+		if (ofNullable(getSlugifiedTitle()).isEmpty()) {
+			setSlugifiedTitle(slugify.slugify(title));
+		}
+	}
 }

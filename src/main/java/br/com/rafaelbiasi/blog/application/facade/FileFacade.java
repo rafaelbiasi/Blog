@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface FileFacade {
 
-    Optional<Resource> load(final String imageUri);
+	Optional<Resource> load(final String imageUri);
 
-    void save(final MultipartFile file);
+	void save(final MultipartFile file);
 }

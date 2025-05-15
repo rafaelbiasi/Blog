@@ -19,26 +19,26 @@ import java.time.LocalDateTime;
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 public abstract class ItemEntity {
 
-    @Id
-    @EqualsAndHashCode.Include
-    @GeneratedValue(generator = "tsid_gen")
-    @TSIDKeyIdGenerator
-    private Long id;
-    @Column(nullable = false)
-    private LocalDateTime creation;
-    @Column(nullable = false)
-    private LocalDateTime modified;
+	@Id
+	@EqualsAndHashCode.Include
+	@GeneratedValue(generator = "tsid_gen")
+	@TSIDKeyIdGenerator
+	private Long id;
+	@Column(nullable = false)
+	private LocalDateTime creation;
+	@Column(nullable = false)
+	private LocalDateTime modified;
 
-    public abstract int getTypeCode();
+	public abstract int getTypeCode();
 
-    @PrePersist
-    protected void onCreate() {
-        creation = LocalDateTime.now();
-        modified = creation;
-    }
+	@PrePersist
+	protected void onCreate() {
+		creation = LocalDateTime.now();
+		modified = creation;
+	}
 
-    @PreUpdate
-    protected void onUpdate() {
-        modified = LocalDateTime.now();
-    }
+	@PreUpdate
+	protected void onUpdate() {
+		modified = LocalDateTime.now();
+	}
 }

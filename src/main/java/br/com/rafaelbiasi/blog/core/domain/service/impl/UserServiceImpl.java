@@ -1,17 +1,13 @@
 package br.com.rafaelbiasi.blog.core.domain.service.impl;
 
-import br.com.rafaelbiasi.blog.core.domain.model.RegistrationResponse;
-import br.com.rafaelbiasi.blog.core.domain.model.User;
+import br.com.rafaelbiasi.blog.core.domain.model.PageModel;
+import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
+import br.com.rafaelbiasi.blog.core.domain.model.RegistrationResponseModel;
+import br.com.rafaelbiasi.blog.core.domain.model.UserModel;
 import br.com.rafaelbiasi.blog.core.domain.repository.UserRepository;
+import br.com.rafaelbiasi.blog.core.domain.service.PasswordEncoderService;
 import br.com.rafaelbiasi.blog.core.domain.service.RoleService;
 import br.com.rafaelbiasi.blog.core.domain.service.UserService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -19,76 +15,81 @@ import java.util.Optional;
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.of;
 
-@Slf4j
-@Service
-@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository;
-    private final RoleService roleService;
+	private final PasswordEncoderService passwordEncoderService;
+	private final UserRepository userRepository;
+	private final RoleService roleService;
 
-    @Override
-    public Optional<User> findById(final long id) {
-        return userRepository.findById(id);
-    }
+	public UserServiceImpl(final PasswordEncoderService passwordEncoderService,
+						   final UserRepository userRepository,
+						   final RoleService roleService) {
+		this.passwordEncoderService = passwordEncoderService;
+		this.userRepository = userRepository;
+		this.roleService = roleService;
+	}
 
-    @Override
-    public void delete(final User user) {
-        userRepository.delete(user);
-    }
+	@Override
+	public Optional<UserModel> findById(final long id) {
+		return userRepository.findById(id);
+	}
 
-    @Override
-    public User save(final User user) {
-        requireNonNull(user, "The User has a null value.");
-        of(user).filter(User::isNew)
-                .filter(User::hasNoHoles)
-                .ifPresent(acc -> roleService
-                        .findByName("ROLE_USER")
-                        .map(Collections::singleton)
-                        .ifPresent(acc::setRoles)
-                );
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
-    }
+	@Override
+	public void delete(final UserModel user) {
+		userRepository.delete(user);
+	}
 
-    @Override
-    public Page<User> findAll(Pageable pageable) {
-        requireNonNull(pageable, "The Pageable has a null value.");
-        return userRepository.findAll(pageable);
-    }
+	@Override
+	public UserModel save(final UserModel user) {
+		requireNonNull(user, "The User has a null value.");
+		of(user).filter(UserModel::isNew)
+				.filter(UserModel::hasNoHoles)
+				.ifPresent(acc -> roleService
+						.findByName("ROLE_USER")
+						.map(Collections::singleton)
+						.ifPresent(acc::setRoles)
+				);
+		user.setPassword(passwordEncoderService.encode(user.getPassword()));
+		return userRepository.save(user);
+	}
 
-    @Override
-    public Optional<User> findOneByEmail(final String email) {
-        requireNonNull(email, "The E-mail has a null value.");
-        return userRepository.findOneByEmailIgnoreCase(email);
-    }
+	@Override
+	public PageModel<UserModel> findAll(PageRequestModel pageable) {
+		requireNonNull(pageable, "The Pageable has a null value.");
+		return userRepository.findAll(pageable);
+	}
 
-    @Override
-    public Optional<User> findOneByUsername(final String username) {
-        requireNonNull(username, "The Username has a null value.");
-        return userRepository.findOneByUsernameIgnoreCase(username);
-    }
+	@Override
+	public Optional<UserModel> findOneByEmail(final String email) {
+		requireNonNull(email, "The E-mail has a null value.");
+		return userRepository.findOneByEmailIgnoreCase(email);
+	}
 
-    @Override
-    public void registerUser(final User user) {
-        requireNonNull(user, "The User has a null value.");
-        save(user);
-    }
+	@Override
+	public Optional<UserModel> findOneByUsername(final String username) {
+		requireNonNull(username, "The Username has a null value.");
+		return userRepository.findOneByUsernameIgnoreCase(username);
+	}
 
-    @Override
-    public RegistrationResponse checkEmailAndUsernameExists(final User user) {
-        return RegistrationResponse.builder()
-                .emailExists(isEmailExists(user))
-                .usernameExists(isUsernameExists(user))
-                .build();
-    }
+	@Override
+	public void registerUser(final UserModel user) {
+		requireNonNull(user, "The User has a null value.");
+		save(user);
+	}
 
-    private boolean isUsernameExists(final User user) {
-        return userRepository.findOneByUsernameIgnoreCase(user.getUsername()).isPresent();
-    }
+	@Override
+	public RegistrationResponseModel checkEmailAndUsernameExists(final UserModel user) {
+		return RegistrationResponseModel.builder()
+				.emailExists(isEmailExists(user))
+				.usernameExists(isUsernameExists(user))
+				.build();
+	}
 
-    private boolean isEmailExists(final User user) {
-        return userRepository.findOneByEmailIgnoreCase(user.getEmail()).isPresent();
-    }
+	private boolean isUsernameExists(final UserModel user) {
+		return userRepository.findOneByUsernameIgnoreCase(user.getUsername()).isPresent();
+	}
+
+	private boolean isEmailExists(final UserModel user) {
+		return userRepository.findOneByEmailIgnoreCase(user.getEmail()).isPresent();
+	}
 }

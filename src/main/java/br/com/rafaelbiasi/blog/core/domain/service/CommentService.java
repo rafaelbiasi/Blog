@@ -1,16 +1,16 @@
 package br.com.rafaelbiasi.blog.core.domain.service;
 
-import br.com.rafaelbiasi.blog.core.domain.model.Comment;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import br.com.rafaelbiasi.blog.core.domain.model.CommentModel;
+import br.com.rafaelbiasi.blog.core.domain.model.PageModel;
+import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
 
 import java.util.Optional;
 
-public interface CommentService extends EntityService<Comment> {
+public interface CommentService extends EntityService<CommentModel> {
 
-    Optional<Comment> findByCode(final String code);
+	Optional<CommentModel> findByCode(final String code);
 
-    Comment save(final Comment comment);
+	CommentModel save(final CommentModel comment);
 
-    Page<Comment> findAll(PageRequest pageable);
+	PageModel<CommentModel> findAll(PageRequestModel pageable);
 }

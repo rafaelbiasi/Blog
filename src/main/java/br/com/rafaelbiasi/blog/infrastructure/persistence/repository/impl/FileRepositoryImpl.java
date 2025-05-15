@@ -18,32 +18,32 @@ import java.nio.file.Paths;
 @RequiredArgsConstructor
 public class FileRepositoryImpl implements FileRepository {
 
-    private final Path root;
+	private final Path root;
 
-    public FileRepositoryImpl() {
-        this(Paths.get("./uploads"));
-    }
+	public FileRepositoryImpl() {
+		this(Paths.get("./uploads"));
+	}
 
-    @Override
-    public void copy(
-            final InputStream inputStream,
-            final Path target
-    ) throws IOException {
-        Files.copy(inputStream, target);
-    }
+	@Override
+	public void copy(
+			final InputStream inputStream,
+			final Path target
+	) throws IOException {
+		Files.copy(inputStream, target);
+	}
 
-    @Override
-    public void createDirectories() throws IOException {
-        Files.createDirectories(root);
-    }
+	@Override
+	public void createDirectories() throws IOException {
+		Files.createDirectories(root);
+	}
 
-    @Override
-    public Path resolve(final String originalFilename) {
-        return root.resolve(originalFilename);
-    }
+	@Override
+	public Path resolve(final String originalFilename) {
+		return root.resolve(originalFilename);
+	}
 
-    @Override
-    public Resource getUrlResource(final URI uri) throws MalformedURLException {
-        return new UrlResource(uri);
-    }
+	@Override
+	public Resource getUrlResource(final URI uri) throws MalformedURLException {
+		return new UrlResource(uri);
+	}
 }

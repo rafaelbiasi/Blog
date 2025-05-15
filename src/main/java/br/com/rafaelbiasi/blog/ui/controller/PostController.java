@@ -26,63 +26,63 @@ import static java.util.Optional.ofNullable;
 @RequestMapping("/post/")
 public class PostController {
 
-    public static final String REDIRECT_POST = "redirect:/post/{code}/{slugifiedTitle}/";
+	public static final String REDIRECT_POST = "redirect:/post/{code}/{slugifiedTitle}/";
 
-    private static final String POST_VIEW = "post/post";
+	private static final String POST_VIEW = "post/post";
 
-    private final PostFacade postFacade;
+	private final PostFacade postFacade;
 
-    @GetMapping("/{code}/{slugifiedTitle}/")
-    public String post(
-            final @PathVariable String code,
-            final @PathVariable String slugifiedTitle,
-            final Model model,
-            final HttpServletRequest request
-    ) {
-        log.info(
-                "Entering the post page. Parameters [{}={}]",
-                "Code", code
-        );
-        postFacade.findByCode(code).ifPresentOrElse(
-                post -> addToModelAttribute(model, request, post),
-                () -> throwPostNotFound(code)
-        );
-        return POST_VIEW;
-    }
+	@GetMapping("/{code}/{slugifiedTitle}/")
+	public String post(
+			final @PathVariable String code,
+			final @PathVariable String slugifiedTitle,
+			final Model model,
+			final HttpServletRequest request
+	) {
+		log.info(
+				"Entering the post page. Parameters [{}={}]",
+				"Code", code
+		);
+		postFacade.findByCode(code).ifPresentOrElse(
+				post -> addToModelAttribute(model, request, post),
+				() -> throwPostNotFound(code)
+		);
+		return POST_VIEW;
+	}
 
-    @GetMapping("/{code}/")
-    public String post(
-            final @PathVariable String code,
-            final Model model,
-            final HttpServletRequest request
-    ) {
-        PostData postData = postFacade.findByCode(code).orElseThrow(() -> postNotFound(code));
-        return expand(REDIRECT_POST, Map.of(
-                "code", postData.getCode(),
-                "slugifiedTitle", postData.getSlugifiedTitle()
-        ));
-    }
+	@GetMapping("/{code}/")
+	public String post(
+			final @PathVariable String code,
+			final Model model,
+			final HttpServletRequest request
+	) {
+		PostData postData = postFacade.findByCode(code).orElseThrow(() -> postNotFound(code));
+		return expand(REDIRECT_POST, Map.of(
+				"code", postData.getCode(),
+				"slugifiedTitle", postData.getSlugifiedTitle()
+		));
+	}
 
-    private void addToModelAttribute(
-            final Model model,
-            final HttpServletRequest request,
-            final PostData post
-    ) {
-        model.addAttribute("post", post);
-        addFlashAttributeWhenError(model, request);
-        addCommentAttribute(model);
-    }
+	private void addToModelAttribute(
+			final Model model,
+			final HttpServletRequest request,
+			final PostData post
+	) {
+		model.addAttribute("post", post);
+		addFlashAttributeWhenError(model, request);
+		addCommentAttribute(model);
+	}
 
-    private void addFlashAttributeWhenError(
-            final Model model,
-            final HttpServletRequest request
-    ) {
-        ofNullable(RequestContextUtils.getInputFlashMap(request)).ifPresent(model::addAllAttributes);
-    }
+	private void addFlashAttributeWhenError(
+			final Model model,
+			final HttpServletRequest request
+	) {
+		ofNullable(RequestContextUtils.getInputFlashMap(request)).ifPresent(model::addAllAttributes);
+	}
 
-    private void addCommentAttribute(final Model model) {
-        if (!model.containsAttribute("comment")) {
-            model.addAttribute("comment", new CommentData());
-        }
-    }
+	private void addCommentAttribute(final Model model) {
+		if (!model.containsAttribute("comment")) {
+			model.addAttribute("comment", new CommentData());
+		}
+	}
 }

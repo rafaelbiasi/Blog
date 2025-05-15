@@ -6,10 +6,10 @@ import java.util.Map;
 
 public class ControllerUtil {
 
-    public static String expand(
-            final String redirectPost,
-            final Map<String, ?> uriVariables
-    ) {
-        return new UriTemplate(redirectPost).expand(uriVariables).toString();
-    }
+	public static String expand(
+			final String redirectPost,
+			final Map<String, ?> uriVariables
+	) {
+		return new UriTemplate(redirectPost).expand(uriVariables).toString();
+	}
 }

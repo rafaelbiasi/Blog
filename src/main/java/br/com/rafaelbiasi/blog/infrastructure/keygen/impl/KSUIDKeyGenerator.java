@@ -9,11 +9,11 @@ import org.hibernate.id.IdentifierGenerator;
 @Slf4j
 public class KSUIDKeyGenerator implements IdentifierGenerator {
 
-    @Override
-    public Object generate(
-            final SharedSessionContractImplementor session,
-            final Object object
-    ) throws HibernateException {
-        return KsuidCreator.getKsuid().toString();
-    }
+	@Override
+	public Object generate(
+			final SharedSessionContractImplementor session,
+			final Object object
+	) throws HibernateException {
+		return KsuidCreator.getKsuid().toString();
+	}
 }

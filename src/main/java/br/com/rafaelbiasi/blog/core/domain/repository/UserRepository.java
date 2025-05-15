@@ -1,23 +1,22 @@
 package br.com.rafaelbiasi.blog.core.domain.repository;
 
-import br.com.rafaelbiasi.blog.core.domain.model.User;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.NoRepositoryBean;
+import br.com.rafaelbiasi.blog.core.domain.model.PageModel;
+import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
+import br.com.rafaelbiasi.blog.core.domain.model.UserModel;
 
 import java.util.Optional;
 
 public interface UserRepository {
 
-	Optional<User> findOneByEmailIgnoreCase(String email);
+	Optional<UserModel> findOneByEmailIgnoreCase(String email);
 
-	Optional<User> findOneByUsernameIgnoreCase(String username);
+	Optional<UserModel> findOneByUsernameIgnoreCase(String username);
 
-	Optional<User> findById(long id);
+	Optional<UserModel> findById(long id);
 
-	void delete(User user);
+	void delete(UserModel user);
 
-	User save(User user);
+	UserModel save(UserModel user);
 
-	Page<User> findAll(Pageable pageable);
+	PageModel<UserModel> findAll(PageRequestModel pageable);
 }

@@ -7,11 +7,11 @@ import org.hibernate.id.IdentifierGenerator;
 
 public class ULIDKeyGenerator implements IdentifierGenerator {
 
-    @Override
-    public Object generate(
-            final SharedSessionContractImplementor session,
-            final Object object
-    ) throws HibernateException {
-        return UlidCreator.getUlid().toString();
-    }
+	@Override
+	public Object generate(
+			final SharedSessionContractImplementor session,
+			final Object object
+	) throws HibernateException {
+		return UlidCreator.getUlid().toString();
+	}
 }

@@ -1,6 +1,6 @@
 package br.com.rafaelbiasi.blog.infrastructure.persistence.repository.impl;
 
-import br.com.rafaelbiasi.blog.core.domain.model.Role;
+import br.com.rafaelbiasi.blog.core.domain.model.RoleModel;
 import br.com.rafaelbiasi.blog.core.domain.repository.RoleRepository;
 import br.com.rafaelbiasi.blog.infrastructure.persistence.mapper.RoleEntityMapper;
 import br.com.rafaelbiasi.blog.infrastructure.persistence.repository.RoleJpaRepository;
@@ -18,27 +18,27 @@ public class RoleRepositoryImpl implements RoleRepository {
 	private final RoleEntityMapper entityMapper;
 
 	@Override
-	public Optional<Role> findByName(String name) {
+	public Optional<RoleModel> findByName(String name) {
 		return repository.findByName(name).map(entityMapper::toModel);
 	}
 
 	@Override
-	public Optional<Role> findById(long id) {
+	public Optional<RoleModel> findById(long id) {
 		return repository.findById(id).map(entityMapper::toModel);
 	}
 
 	@Override
-	public void delete(Role role) {
+	public void delete(RoleModel role) {
 		repository.delete(entityMapper.toEntity(role));
 	}
 
 	@Override
-	public Role save(Role role) {
+	public RoleModel save(RoleModel role) {
 		return entityMapper.toModel(repository.save(entityMapper.toEntity(role)));
 	}
 
 	@Override
-	public List<Role> findAll() {
+	public List<RoleModel> findAll() {
 		return repository.findAll().stream().map(entityMapper::toModel).toList();
 	}
 }

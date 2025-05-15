@@ -12,18 +12,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/auth/")
 public class AuthController {
 
-    private static final String AUTH_VIEW = "user/auth";
+	private static final String AUTH_VIEW = "user/auth";
 
-    @GetMapping("/")
-    public String auth() {
-        log.info("Entering the auth page.");
-        return AUTH_VIEW;
-    }
+	@GetMapping("/")
+	public String auth() {
+		log.info("Entering the auth page.");
+		return AUTH_VIEW;
+	}
 
-    @PostMapping("/error/")
-    public String error(final Model model) {
-        model.addAttribute("authError", true);
-        return AUTH_VIEW;
-    }
+	@PostMapping("/error/")
+	public String error(final Model model) {
+		model.addAttribute("authError", true);
+		return AUTH_VIEW;
+	}
 
 }

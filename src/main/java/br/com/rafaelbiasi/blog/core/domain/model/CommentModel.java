@@ -3,14 +3,12 @@ package br.com.rafaelbiasi.blog.core.domain.model;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Comment {
-
-	private static final int TYPE_CODE = 4;
+public class CommentModel {
 
 	private Long id;
 	private String text;
-	private User author;
-	private Post post;
+	private UserModel author;
+	private PostModel post;
 	private LocalDateTime creation;
 	private LocalDateTime modified;
 
@@ -30,19 +28,19 @@ public class Comment {
 		this.text = text;
 	}
 
-	public User getAuthor() {
+	public UserModel getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(User author) {
+	public void setAuthor(UserModel author) {
 		this.author = author;
 	}
 
-	public Post getPost() {
+	public PostModel getPost() {
 		return post;
 	}
 
-	public void setPost(Post post) {
+	public void setPost(PostModel post) {
 		this.post = post;
 	}
 
@@ -63,9 +61,14 @@ public class Comment {
 	}
 
 	@Override
+	public int hashCode() {
+		return id != null ? Objects.hash(id) : Objects.hash(text, author, post);
+	}
+
+	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
-		Comment comment = (Comment) o;
+		CommentModel comment = (CommentModel) o;
 		if (id != null && comment.id != null) {
 			return Objects.equals(id, comment.id);
 		}
@@ -73,10 +76,5 @@ public class Comment {
 		return Objects.equals(text, comment.text) &&
 				Objects.equals(author, comment.author) &&
 				Objects.equals(post, comment.post);
-	}
-
-	@Override
-	public int hashCode() {
-		return id != null ? Objects.hash(id) : Objects.hash(text, author, post);
 	}
 }

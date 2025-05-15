@@ -3,7 +3,7 @@ package br.com.rafaelbiasi.blog.core.domain.model;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Role {
+public class RoleModel {
 
 	private static final int TYPE_CODE = 3;
 
@@ -12,20 +12,20 @@ public class Role {
 	private LocalDateTime creation;
 	private LocalDateTime modified;
 
-	public Role() {
+	public RoleModel() {
 	}
 
-	public Role(String name) {
+	public RoleModel(String name) {
 		this.name = name;
 	}
 
-	public Role(String name, LocalDateTime creation, LocalDateTime modified) {
+	public RoleModel(String name, LocalDateTime creation, LocalDateTime modified) {
 		this.name = name;
 		this.creation = creation;
 		this.modified = modified;
 	}
 
-	public Role(Long id, String name, LocalDateTime creation, LocalDateTime modified) {
+	public RoleModel(Long id, String name, LocalDateTime creation, LocalDateTime modified) {
 		this.id = id;
 		this.name = name;
 		this.creation = creation;
@@ -65,17 +65,17 @@ public class Role {
 	}
 
 	@Override
+	public int hashCode() {
+		return id != null ? Objects.hash(id) : Objects.hash(name);
+	}
+
+	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
-		Role role = (Role) o;
+		RoleModel role = (RoleModel) o;
 		if (id != null && role.id != null) {
 			return Objects.equals(id, role.id);
 		}
 		return Objects.equals(name, role.name);
-	}
-
-	@Override
-	public int hashCode() {
-		return id != null ? Objects.hash(id) : Objects.hash(name);
 	}
 }

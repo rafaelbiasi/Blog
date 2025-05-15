@@ -1,15 +1,15 @@
 package br.com.rafaelbiasi.blog.core.domain.service;
 
-import br.com.rafaelbiasi.blog.core.domain.model.Post;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import br.com.rafaelbiasi.blog.core.domain.model.PageModel;
+import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
+import br.com.rafaelbiasi.blog.core.domain.model.PostModel;
 
 import java.util.List;
 
-public interface PostService extends EntityService<Post> {
+public interface PostService extends EntityService<PostModel> {
 
-    List<Post> findAll();
+	List<PostModel> findAll();
 
-    Page<Post> findAll(final Pageable pageable);
+	PageModel<PostModel> findAll(final PageRequestModel pageable);
 
 }

@@ -23,51 +23,51 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RssFeedController {
 
-    private final PostFacade postFacade;
+	private final PostFacade postFacade;
 
-    @GetMapping(path = "/rss")
-    public Channel rssFeed(final HttpServletRequest request) {
-        log.info("Accessing RSS feed");
-        val baseUrl = ServletUriComponentsBuilder.fromRequestUri(request)
-                .replacePath(null)
-                .build()
-                .toUriString();
-        val channel = createChannel(baseUrl);
-        val pageable = PageRequest.of(0, 20);
-        val items = postFacade.findAll(pageable).stream()
-                .map(post -> createItem(post, baseUrl))
-                .collect(Collectors.toList());
-        log.info("Number of RSS items created: {}", items.size());
-        channel.setItems(items);
-        return channel;
-    }
+	@GetMapping(path = "/rss")
+	public Channel rssFeed(final HttpServletRequest request) {
+		log.info("Accessing RSS feed");
+		val baseUrl = ServletUriComponentsBuilder.fromRequestUri(request)
+				.replacePath(null)
+				.build()
+				.toUriString();
+		val channel = createChannel(baseUrl);
+		val pageable = PageRequest.of(0, 20);
+		val items = postFacade.findAll(pageable).stream()
+				.map(post -> createItem(post, baseUrl))
+				.collect(Collectors.toList());
+		log.info("Number of RSS items created: {}", items.size());
+		channel.setItems(items);
+		return channel;
+	}
 
-    private Channel createChannel(final String baseUrl) {
-        val channel = new Channel("rss_2.0");
-        channel.setTitle("Spring Boot Blog Application");
-        channel.setDescription("Spring Boot Blog Application");
-        channel.setLink(baseUrl);
-        channel.setUri(baseUrl);
-        channel.setGenerator("Rome Tools");
-        channel.setPubDate(new Date());
-        log.debug("RSS Channel created with title: {}", channel.getTitle());
-        return channel;
-    }
+	private Channel createChannel(final String baseUrl) {
+		val channel = new Channel("rss_2.0");
+		channel.setTitle("Spring Boot Blog Application");
+		channel.setDescription("Spring Boot Blog Application");
+		channel.setLink(baseUrl);
+		channel.setUri(baseUrl);
+		channel.setGenerator("Rome Tools");
+		channel.setPubDate(new Date());
+		log.debug("RSS Channel created with title: {}", channel.getTitle());
+		return channel;
+	}
 
-    private Item createItem(
-            final PostData post,
-            final String baseUrl
-    ) {
-        log.debug("Creating RSS item for post: {}", post.getTitle());
-        val item = new Item();
-        item.setAuthor(post.getAuthor().getName());
-        item.setLink(baseUrl + "/post/" + post.getCode());
-        item.setTitle(post.getTitle());
-        item.setPubDate(Date.from(post.getModified().atZone(ZoneId.systemDefault()).toInstant()));
-        val description = new Description();
-        description.setValue(post.getBody());
-        item.setDescription(description);
-        log.debug("RSS item created for post: {}", post.getTitle());
-        return item;
-    }
+	private Item createItem(
+			final PostData post,
+			final String baseUrl
+	) {
+		log.debug("Creating RSS item for post: {}", post.getTitle());
+		val item = new Item();
+		item.setAuthor(post.getAuthor().getName());
+		item.setLink(baseUrl + "/post/" + post.getCode());
+		item.setTitle(post.getTitle());
+		item.setPubDate(Date.from(post.getModified().atZone(ZoneId.systemDefault()).toInstant()));
+		val description = new Description();
+		description.setValue(post.getBody());
+		item.setDescription(description);
+		log.debug("RSS item created for post: {}", post.getTitle());
+		return item;
+	}
 }

@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class User {
+public class UserModel {
 
 	private Long id;
 	private String email;
@@ -13,15 +13,15 @@ public class User {
 	private String password;
 	private String firstName;
 	private String lastName;
-	private Set<Post> posts = new HashSet<>();
-	private Set<Role> roles = new HashSet<>();
+	private Set<PostModel> posts = new HashSet<>();
+	private Set<RoleModel> roles = new HashSet<>();
 	private LocalDateTime creation;
 	private LocalDateTime modified;
 
-	public User() {
+	public UserModel() {
 	}
 
-	public User(String email, String username, String password, String firstName, String lastName) {
+	public UserModel(String email, String username, String password, String firstName, String lastName) {
 		this.email = email;
 		this.username = username;
 		this.password = password;
@@ -29,7 +29,7 @@ public class User {
 		this.lastName = lastName;
 	}
 
-	public User(String email, String username, String password, String firstName, String lastName, Set<Post> posts, Set<Role> roles) {
+	public UserModel(String email, String username, String password, String firstName, String lastName, Set<PostModel> posts, Set<RoleModel> roles) {
 		this.email = email;
 		this.username = username;
 		this.password = password;
@@ -39,7 +39,7 @@ public class User {
 		this.roles = roles;
 	}
 
-	public User(String email, String username, String password, String firstName, String lastName, Set<Post> posts, Set<Role> roles, LocalDateTime creation, LocalDateTime modified) {
+	public UserModel(String email, String username, String password, String firstName, String lastName, Set<PostModel> posts, Set<RoleModel> roles, LocalDateTime creation, LocalDateTime modified) {
 		this.email = email;
 		this.username = username;
 		this.password = password;
@@ -51,7 +51,7 @@ public class User {
 		this.modified = modified;
 	}
 
-	public User(Long id, String email, String username, String password, String firstName, String lastName, Set<Post> posts, Set<Role> roles, LocalDateTime creation, LocalDateTime modified) {
+	public UserModel(Long id, String email, String username, String password, String firstName, String lastName, Set<PostModel> posts, Set<RoleModel> roles, LocalDateTime creation, LocalDateTime modified) {
 		this.id = id;
 		this.email = email;
 		this.username = username;
@@ -112,19 +112,19 @@ public class User {
 		this.lastName = lastName;
 	}
 
-	public Set<Post> getPosts() {
+	public Set<PostModel> getPosts() {
 		return posts;
 	}
 
-	public void setPosts(Set<Post> posts) {
+	public void setPosts(Set<PostModel> posts) {
 		this.posts = posts;
 	}
 
-	public Set<Role> getRoles() {
+	public Set<RoleModel> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(Set<Role> roles) {
+	public void setRoles(Set<RoleModel> roles) {
 		this.roles = roles;
 	}
 
@@ -157,19 +157,19 @@ public class User {
 	}
 
 	@Override
+	public int hashCode() {
+		return id != null ? Objects.hash(id) : Objects.hash(email, username);
+	}
+
+	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
-		User user = (User) o;
+		UserModel user = (UserModel) o;
 		if (id != null && user.id != null) {
 			return Objects.equals(id, user.id);
 		}
 
 		return Objects.equals(email, user.email) &&
 				Objects.equals(username, user.username);
-	}
-
-	@Override
-	public int hashCode() {
-		return id != null ? Objects.hash(id) : Objects.hash(email, username);
 	}
 }

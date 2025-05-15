@@ -21,55 +21,55 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/register/")
 public class RegisterController {
 
-    public static final String REGISTER_VIEW = "user/register";
+	public static final String REGISTER_VIEW = "user/register";
 
-    private static final String REDIRECT_HOME = "redirect:/";
+	private static final String REDIRECT_HOME = "redirect:/";
 
-    private final UserFacade userFacade;
+	private final UserFacade userFacade;
 
-    @GetMapping("/")
-    public String register(final Model model) {
-        log.info("Entering register page.");
-        model.addAttribute("user", new UserData());
-        return REGISTER_VIEW;
-    }
+	@GetMapping("/")
+	public String register(final Model model) {
+		log.info("Entering register page.");
+		model.addAttribute("user", new UserData());
+		return REGISTER_VIEW;
+	}
 
-    @PostMapping("/")
-    public String register(
-            final @Valid @ModelAttribute("user") UserData userData,
-            final BindingResult result,
-            final Model model
-    ) {
-        log.info("Saving new user. Parameters: [{}={}]", "UserData", userData);
-        checkError(result, userData);
-        if (result.hasErrors()) {
-            model.addAttribute("user", userData);
-            return REGISTER_VIEW;
-        }
-        userFacade.registerUser(userData);
-        return REDIRECT_HOME;
-    }
+	@PostMapping("/")
+	public String register(
+			final @Valid @ModelAttribute("user") UserData userData,
+			final BindingResult result,
+			final Model model
+	) {
+		log.info("Saving new user. Parameters: [{}={}]", "UserData", userData);
+		checkError(result, userData);
+		if (result.hasErrors()) {
+			model.addAttribute("user", userData);
+			return REGISTER_VIEW;
+		}
+		userFacade.registerUser(userData);
+		return REDIRECT_HOME;
+	}
 
-    private void checkError(
-            final BindingResult result,
-            final UserData userData
-    ) {
-        val registrationResponse = userFacade.checkEmailAndUsernameExists(userData);
-        if (registrationResponse.success()) {
-            return;
-        }
-        if (registrationResponse.usernameExists()) {
-            result.addError(new FieldError(
-                    "user",
-                    "username",
-                    "Another user has already registered this username."));
-        }
-        if (registrationResponse.emailExists()) {
-            result.addError(new FieldError(
-                    "user",
-                    "email",
-                    "Another user has already registered this e-mail."
-            ));
-        }
-    }
+	private void checkError(
+			final BindingResult result,
+			final UserData userData
+	) {
+		val registrationResponse = userFacade.checkEmailAndUsernameExists(userData);
+		if (registrationResponse.success()) {
+			return;
+		}
+		if (registrationResponse.usernameExists()) {
+			result.addError(new FieldError(
+					"user",
+					"username",
+					"Another user has already registered this username."));
+		}
+		if (registrationResponse.emailExists()) {
+			result.addError(new FieldError(
+					"user",
+					"email",
+					"Another user has already registered this e-mail."
+			));
+		}
+	}
 }

@@ -10,20 +10,20 @@ import java.util.Optional;
 
 public interface PostFacade {
 
-    List<PostData> findAll();
+	List<PostData> findAll();
 
-    Page<PostData> findAll(final Pageable pageable);
+	Page<PostData> findAll(final Pageable pageable);
 
-    Optional<PostData> findById(final long id);
+	Optional<PostData> findById(final long id);
 
-    PostData save(final PostData post);
+	PostData save(final PostData post);
 
-    PostData save(
-            final PostData post,
-            final MultipartFile file
-    );
+	PostData save(
+			final PostData post,
+			final MultipartFile file
+	);
 
-    boolean delete(final String code);
+	boolean delete(final String code);
 
-    Optional<PostData> findByCode(final String code);
+	Optional<PostData> findByCode(final String code);
 }

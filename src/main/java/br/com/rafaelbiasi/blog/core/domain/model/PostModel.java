@@ -5,29 +5,29 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class Post {
+public class PostModel {
 
 	private Long id;
 	private String slugifiedTitle;
 	private String title;
 	private String body;
 	private String imageFilePath;
-	private User author;
-	private Set<Comment> comments = new HashSet<>();
+	private UserModel author;
+	private Set<CommentModel> comments = new HashSet<>();
 	private LocalDateTime creation;
 	private LocalDateTime modified;
 
-	public Post() {
+	public PostModel() {
 	}
 
-	public Post(String title, String body, String imageFilePath, User author) {
+	public PostModel(String title, String body, String imageFilePath, UserModel author) {
 		this.title = title;
 		this.body = body;
 		this.imageFilePath = imageFilePath;
 		this.author = author;
 	}
 
-	public Post(String slugifiedTitle, String title, String body, String imageFilePath, User author) {
+	public PostModel(String slugifiedTitle, String title, String body, String imageFilePath, UserModel author) {
 		this.slugifiedTitle = slugifiedTitle;
 		this.title = title;
 		this.body = body;
@@ -35,7 +35,7 @@ public class Post {
 		this.author = author;
 	}
 
-	public Post(String slugifiedTitle, String title, String body, String imageFilePath, User author, Set<Comment> comments) {
+	public PostModel(String slugifiedTitle, String title, String body, String imageFilePath, UserModel author, Set<CommentModel> comments) {
 		this.slugifiedTitle = slugifiedTitle;
 		this.title = title;
 		this.body = body;
@@ -44,7 +44,7 @@ public class Post {
 		this.comments = comments;
 	}
 
-	public Post(Long id, String slugifiedTitle, String title, String body, String imageFilePath, User author, Set<Comment> comments, LocalDateTime creation, LocalDateTime modified) {
+	public PostModel(Long id, String slugifiedTitle, String title, String body, String imageFilePath, UserModel author, Set<CommentModel> comments, LocalDateTime creation, LocalDateTime modified) {
 		this.id = id;
 		this.slugifiedTitle = slugifiedTitle;
 		this.title = title;
@@ -96,19 +96,19 @@ public class Post {
 		this.imageFilePath = imageFilePath;
 	}
 
-	public User getAuthor() {
+	public UserModel getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(User author) {
+	public void setAuthor(UserModel author) {
 		this.author = author;
 	}
 
-	public Set<Comment> getComments() {
+	public Set<CommentModel> getComments() {
 		return comments;
 	}
 
-	public void setComments(Set<Comment> comments) {
+	public void setComments(Set<CommentModel> comments) {
 		this.comments = comments;
 	}
 
@@ -129,19 +129,19 @@ public class Post {
 	}
 
 	@Override
+	public int hashCode() {
+		return id != null ? Objects.hash(id) : Objects.hash(slugifiedTitle);
+
+	}
+
+	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
-		Post post = (Post) o;
+		PostModel post = (PostModel) o;
 		if (id != null && post.id != null) {
 			return Objects.equals(id, post.id);
 		}
 
 		return Objects.equals(slugifiedTitle, post.slugifiedTitle);
-	}
-
-	@Override
-	public int hashCode() {
-		return id != null ? Objects.hash(id) : Objects.hash(slugifiedTitle);
-
 	}
 }

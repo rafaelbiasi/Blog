@@ -18,13 +18,13 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class RoleEntity extends ItemEntity {
 
-    private static final int TYPE_CODE = 3;
+	private static final int TYPE_CODE = 3;
 
-    @Column(length = 16, nullable = false)
-    private String name;
+	@Column(length = 16, nullable = false)
+	private String name;
 
-    @Override
-    public int getTypeCode() {
-        return TYPE_CODE;
-    }
+	@Override
+	public int getTypeCode() {
+		return TYPE_CODE;
+	}
 }

@@ -11,14 +11,14 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 @RequiredArgsConstructor
 public class BlogApplication implements WebMvcConfigurer {
 
-    private final LocaleChangeInterceptor localeChangeInterceptor;
+	private final LocaleChangeInterceptor localeChangeInterceptor;
 
-    public static void main(final String[] args) {
-        SpringApplication.run(BlogApplication.class, args);
-    }
+	public static void main(final String[] args) {
+		SpringApplication.run(BlogApplication.class, args);
+	}
 
-    @Override
-    public void addInterceptors(final InterceptorRegistry interceptorRegistry) {
-        interceptorRegistry.addInterceptor(localeChangeInterceptor);
-    }
+	@Override
+	public void addInterceptors(final InterceptorRegistry interceptorRegistry) {
+		interceptorRegistry.addInterceptor(localeChangeInterceptor);
+	}
 }

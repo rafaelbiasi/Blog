@@ -7,11 +7,11 @@ import org.hibernate.id.IdentifierGenerator;
 
 public class UUDIv7KeyGenerator implements IdentifierGenerator {
 
-    @Override
-    public Object generate(
-            final SharedSessionContractImplementor session,
-            final Object object
-    ) throws HibernateException {
-        return UuidCreator.getTimeOrderedEpoch().toString().replace("-", "").toUpperCase();
-    }
+	@Override
+	public Object generate(
+			final SharedSessionContractImplementor session,
+			final Object object
+	) throws HibernateException {
+		return UuidCreator.getTimeOrderedEpoch().toString().replace("-", "").toUpperCase();
+	}
 }

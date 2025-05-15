@@ -13,18 +13,18 @@ import java.util.TimeZone;
 @Configuration
 public class LocaleConfig {
 
-    @Bean
-    public LocaleResolver localeResolver() {
-        val localeResolver = new CookieLocaleResolver();
-        localeResolver.setDefaultLocale(Locale.US);
-        localeResolver.setDefaultTimeZone(TimeZone.getTimeZone("UTC"));
-        return localeResolver;
-    }
+	@Bean
+	public LocaleResolver localeResolver() {
+		val localeResolver = new CookieLocaleResolver();
+		localeResolver.setDefaultLocale(Locale.US);
+		localeResolver.setDefaultTimeZone(TimeZone.getTimeZone("UTC"));
+		return localeResolver;
+	}
 
-    @Bean
-    public LocaleChangeInterceptor localeChangeInterceptor() {
-        val localeChangeInterceptor = new LocaleChangeInterceptor();
-        localeChangeInterceptor.setParamName("lang");
-        return localeChangeInterceptor;
-    }
+	@Bean
+	public LocaleChangeInterceptor localeChangeInterceptor() {
+		val localeChangeInterceptor = new LocaleChangeInterceptor();
+		localeChangeInterceptor.setParamName("lang");
+		return localeChangeInterceptor;
+	}
 }

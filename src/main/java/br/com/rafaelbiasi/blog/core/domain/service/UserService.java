@@ -1,22 +1,21 @@
 package br.com.rafaelbiasi.blog.core.domain.service;
 
-import br.com.rafaelbiasi.blog.core.domain.model.RegistrationResponse;
-import br.com.rafaelbiasi.blog.core.domain.model.User;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import br.com.rafaelbiasi.blog.core.domain.model.PageModel;
+import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
+import br.com.rafaelbiasi.blog.core.domain.model.RegistrationResponseModel;
+import br.com.rafaelbiasi.blog.core.domain.model.UserModel;
 
 import java.util.Optional;
 
-public interface UserService extends EntityService<User> {
+public interface UserService extends EntityService<UserModel> {
 
-    Page<User> findAll(Pageable pageable);
+	PageModel<UserModel> findAll(PageRequestModel pageable);
 
-    Optional<User> findOneByEmail(final String email);
+	Optional<UserModel> findOneByEmail(final String email);
 
-    Optional<User> findOneByUsername(final String username);
+	Optional<UserModel> findOneByUsername(final String username);
 
-    void registerUser(final User user);
+	void registerUser(final UserModel user);
 
-    RegistrationResponse checkEmailAndUsernameExists(final User user);
+	RegistrationResponseModel checkEmailAndUsernameExists(final UserModel user);
 }

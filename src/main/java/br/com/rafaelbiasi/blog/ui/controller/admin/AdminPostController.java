@@ -29,118 +29,118 @@ import static br.com.rafaelbiasi.blog.infrastructure.util.ControllerUtil.expand;
 @RequestMapping("/admin/post/")
 public class AdminPostController {
 
-    public static final String REDIRECT_ADMIN_POST_LIST = "redirect:/admin/post/";
-    public static final String REDIRECT_ADMIN_POST_EDIT = "redirect:/admin/post/edit/{code}/";
+	public static final String REDIRECT_ADMIN_POST_LIST = "redirect:/admin/post/";
+	public static final String REDIRECT_ADMIN_POST_EDIT = "redirect:/admin/post/edit/{code}/";
 
-    private static final String LIST_VIEW = "admin/post/list";
-    private static final String FORM_VIEW = "admin/post/form";
+	private static final String LIST_VIEW = "admin/post/list";
+	private static final String FORM_VIEW = "admin/post/form";
 
-    private final PostFacade postFacade;
+	private final PostFacade postFacade;
 
-    @GetMapping({"/", "/page/{page}/"})
-    public String list(@PathVariable(name = "page", required = false) Optional<Integer> pageNumberOpt,
-                       @RequestParam(value = "size", defaultValue = "5") int size,
-                       Model model) {
-        log.info(
-                "Entering the home page. Parameters [{}={}, {}={}]",
-                "Page number", pageNumberOpt.orElse(null),
-                "Size", size
-        );
-        val page = pageNumberOpt.map(pn -> pn - 1).orElse(0);
-        val pageable = PageRequest.of(page, size);
-        log.debug(
-                "Fetching page posts. [{}={}]",
-                "Pageable", pageable
-        );
-        val postsPage = postFacade.findAll(pageable);
-        log.info(
-                "Fetched posts. [{}={}, {}={}, {}={}]",
-                "Total Pages", postsPage.getTotalPages(),
-                "Page number", postsPage.getNumber(),
-                "Posts list size", postsPage.getContent().size()
-        );
-        model.addAttribute("posts", postsPage.getContent());
-        model.addAttribute("currentPage", postsPage.getNumber());
-        model.addAttribute("totalPages", postsPage.getTotalPages());
-        model.addAttribute("size", size);
-        return LIST_VIEW;
-    }
+	@GetMapping({"/", "/page/{page}/"})
+	public String list(@PathVariable(name = "page", required = false) Optional<Integer> pageNumberOpt,
+					   @RequestParam(value = "size", defaultValue = "5") int size,
+					   Model model) {
+		log.info(
+				"Entering the home page. Parameters [{}={}, {}={}]",
+				"Page number", pageNumberOpt.orElse(null),
+				"Size", size
+		);
+		val page = pageNumberOpt.map(pn -> pn - 1).orElse(0);
+		val pageable = PageRequest.of(page, size);
+		log.debug(
+				"Fetching page posts. [{}={}]",
+				"Pageable", pageable
+		);
+		val postsPage = postFacade.findAll(pageable);
+		log.info(
+				"Fetched posts. [{}={}, {}={}, {}={}]",
+				"Total Pages", postsPage.getTotalPages(),
+				"Page number", postsPage.getNumber(),
+				"Posts list size", postsPage.getContent().size()
+		);
+		model.addAttribute("posts", postsPage.getContent());
+		model.addAttribute("currentPage", postsPage.getNumber());
+		model.addAttribute("totalPages", postsPage.getTotalPages());
+		model.addAttribute("size", size);
+		return LIST_VIEW;
+	}
 
-    @GetMapping("/edit/{code}/")
-    @PreAuthorize("isAuthenticated()")
-    public String edit(@PathVariable String code, Model model) {
-        log.info(
-                "Entering the post edit page. Parameters [{}={}]",
-                "Code", code
-        );
-        postFacade.findByCode(code).ifPresentOrElse(
-                post -> model.addAttribute("post", post),
-                () -> throwPostNotFound(code)
-        );
-        return FORM_VIEW;
-    }
+	@GetMapping("/edit/{code}/")
+	@PreAuthorize("isAuthenticated()")
+	public String edit(@PathVariable String code, Model model) {
+		log.info(
+				"Entering the post edit page. Parameters [{}={}]",
+				"Code", code
+		);
+		postFacade.findByCode(code).ifPresentOrElse(
+				post -> model.addAttribute("post", post),
+				() -> throwPostNotFound(code)
+		);
+		return FORM_VIEW;
+	}
 
-    @GetMapping("/create/")
-    @PreAuthorize("isAuthenticated()")
-    public String create(Model model) {
-        log.info("Entering the new post page.");
-        model.addAttribute("post", new PostData());
-        return FORM_VIEW;
-    }
+	@GetMapping("/create/")
+	@PreAuthorize("isAuthenticated()")
+	public String create(Model model) {
+		log.info("Entering the new post page.");
+		model.addAttribute("post", new PostData());
+		return FORM_VIEW;
+	}
 
-    @PostMapping("/save/")
-    @PreAuthorize("isAuthenticated()")
-    public String save(
-            @Valid @ModelAttribute("post") PostData post,
-            BindingResult result,
-            Model model,
-            @RequestParam("file") MultipartFile file,
-            Principal principal
-    ) {
-        log.info(
-                "Saving the post. Parameters [{}={}, {}={}]",
-                "Post", post,
-                "File", file
-        );
-        if (result.hasErrors()) {
-            model.addAttribute("post", post);
-            return FORM_VIEW;
-        }
-        PostData postDataSaved = post.getCode() == null
-                ? create(post, file, principal)
-                : save(post, file);
-        return expand(REDIRECT_ADMIN_POST_EDIT, Map.of("code", postDataSaved.getCode()));
-    }
+	@PostMapping("/save/")
+	@PreAuthorize("isAuthenticated()")
+	public String save(
+			@Valid @ModelAttribute("post") PostData post,
+			BindingResult result,
+			Model model,
+			@RequestParam("file") MultipartFile file,
+			Principal principal
+	) {
+		log.info(
+				"Saving the post. Parameters [{}={}, {}={}]",
+				"Post", post,
+				"File", file
+		);
+		if (result.hasErrors()) {
+			model.addAttribute("post", post);
+			return FORM_VIEW;
+		}
+		PostData postDataSaved = post.getCode() == null
+				? create(post, file, principal)
+				: save(post, file);
+		return expand(REDIRECT_ADMIN_POST_EDIT, Map.of("code", postDataSaved.getCode()));
+	}
 
-    @PostMapping("/delete/{code}/")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String delete(@PathVariable String code) {
-        log.info(
-                "Deleting the post. Parameters [{}={}]",
-                "Code", code
-        );
-        if (!postFacade.delete(code)) {
-            throw postNotFound(code);
-        }
-        return REDIRECT_ADMIN_POST_LIST;
-    }
+	@PostMapping("/delete/{code}/")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public String delete(@PathVariable String code) {
+		log.info(
+				"Deleting the post. Parameters [{}={}]",
+				"Code", code
+		);
+		if (!postFacade.delete(code)) {
+			throw postNotFound(code);
+		}
+		return REDIRECT_ADMIN_POST_LIST;
+	}
 
-    private PostData create(PostData post, MultipartFile file, Principal principal) {
-        log.info("Creating a new post.");
-        post.setAuthor(UserData.builder()
-                .username(principal.getName())
-                .build());
-        return save(post, file);
-    }
+	private PostData create(PostData post, MultipartFile file, Principal principal) {
+		log.info("Creating a new post.");
+		post.setAuthor(UserData.builder()
+				.username(principal.getName())
+				.build());
+		return save(post, file);
+	}
 
-    private PostData save(PostData post, MultipartFile multipartFile) {
-        log.info(
-                "Save the post. Parameters [{}={}]",
-                "Code", post.getCode()
-        );
-        if (multipartFile == null) {
-            return postFacade.save(post);
-        }
-        return postFacade.save(post, multipartFile);
-    }
+	private PostData save(PostData post, MultipartFile multipartFile) {
+		log.info(
+				"Save the post. Parameters [{}={}]",
+				"Code", post.getCode()
+		);
+		if (multipartFile == null) {
+			return postFacade.save(post);
+		}
+		return postFacade.save(post, multipartFile);
+	}
 }

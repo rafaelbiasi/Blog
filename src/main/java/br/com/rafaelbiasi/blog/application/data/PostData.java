@@ -14,17 +14,17 @@ import java.util.Set;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class PostData {
 
-    @EqualsAndHashCode.Include
-    private String code;
-    private String slugifiedTitle;
-    @NotBlank(message = "Provide a title")
-    private String title;
-    @NotBlank(message = "Provide a Body")
-    private String body;
-    private String imageFilePath;
-    private UserData author;
-    @Builder.Default
-    private Set<CommentData> comments = new HashSet<>();
-    private LocalDateTime creation;
-    private LocalDateTime modified;
+	@EqualsAndHashCode.Include
+	private String code;
+	private String slugifiedTitle;
+	@NotBlank(message = "Provide a title")
+	private String title;
+	@NotBlank(message = "Provide a Body")
+	private String body;
+	private String imageFilePath;
+	private UserData author;
+	@Builder.Default
+	private Set<CommentData> comments = new HashSet<>();
+	private LocalDateTime creation;
+	private LocalDateTime modified;
 }

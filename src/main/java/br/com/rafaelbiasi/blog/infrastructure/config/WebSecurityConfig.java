@@ -21,38 +21,38 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
-    @Value("${security.encoding-strength}")
-    final int strength = 12;
+	@Value("${security.encoding-strength}")
+	final int strength = 12;
 
-    @Bean
-    public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
-        return http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(this::authorizeHttpRequests)
-                .formLogin(this::formAuth)
-                .logout(LogoutConfigurer::permitAll)
-                .build();
-    }
+	@Bean
+	public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
+		return http.csrf(AbstractHttpConfigurer::disable)
+				.authorizeHttpRequests(this::authorizeHttpRequests)
+				.formLogin(this::formAuth)
+				.logout(LogoutConfigurer::permitAll)
+				.build();
+	}
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(strength);
-    }
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder(strength);
+	}
 
-    private void authorizeHttpRequests(
-            final AuthorizeHttpRequestsConfigurer<HttpSecurity>
-                    .AuthorizationManagerRequestMatcherRegistry auth
-    ) {
-        auth.requestMatchers("/admin/**").authenticated()
-                .anyRequest().permitAll();
-    }
+	private void authorizeHttpRequests(
+			final AuthorizeHttpRequestsConfigurer<HttpSecurity>
+					.AuthorizationManagerRequestMatcherRegistry auth
+	) {
+		auth.requestMatchers("/admin/**").authenticated()
+				.anyRequest().permitAll();
+	}
 
-    private void formAuth(final FormLoginConfigurer<HttpSecurity> form) {
-        form.loginPage("/auth/")
-                .loginProcessingUrl("/auth/")
-                .usernameParameter("user")
-                .passwordParameter("password")
-                .defaultSuccessUrl("/")
-                .failureForwardUrl("/auth/error/")
-                .permitAll();
-    }
+	private void formAuth(final FormLoginConfigurer<HttpSecurity> form) {
+		form.loginPage("/auth/")
+				.loginProcessingUrl("/auth/")
+				.usernameParameter("user")
+				.passwordParameter("password")
+				.defaultSuccessUrl("/")
+				.failureForwardUrl("/auth/error/")
+				.permitAll();
+	}
 }

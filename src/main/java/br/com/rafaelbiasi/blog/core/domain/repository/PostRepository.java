@@ -1,22 +1,21 @@
 package br.com.rafaelbiasi.blog.core.domain.repository;
 
-import br.com.rafaelbiasi.blog.core.domain.model.Post;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.NoRepositoryBean;
+import br.com.rafaelbiasi.blog.core.domain.model.PageModel;
+import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
+import br.com.rafaelbiasi.blog.core.domain.model.PostModel;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface PostRepository {
 
-	Optional<Post> findById(long id);
+	Optional<PostModel> findById(long id);
 
-	void delete(Post post);
+	void delete(PostModel post);
 
-	Post save(Post post);
+	PostModel save(PostModel post);
 
-	List<Post> findAll();
+	List<PostModel> findAll();
 
-	Page<Post> findAll(Pageable pageable);
+	PageModel<PostModel> findAll(PageRequestModel pageable);
 }
