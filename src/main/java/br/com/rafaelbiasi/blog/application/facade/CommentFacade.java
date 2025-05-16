@@ -1,8 +1,8 @@
 package br.com.rafaelbiasi.blog.application.facade;
 
 import br.com.rafaelbiasi.blog.application.data.CommentData;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import br.com.rafaelbiasi.blog.core.domain.model.PageModel;
+import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
 
 import java.security.Principal;
 import java.util.Optional;
@@ -16,7 +16,7 @@ public interface CommentFacade {
 
 	boolean delete(final String code);
 
-	Page<CommentData> findAll(Pageable pageable);
+	PageModel<CommentData> findAll(PageRequestModel pageable);
 
 	Optional<CommentData> findByCode(String code);
 }

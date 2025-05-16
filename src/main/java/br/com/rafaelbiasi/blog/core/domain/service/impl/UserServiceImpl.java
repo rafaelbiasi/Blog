@@ -8,6 +8,7 @@ import br.com.rafaelbiasi.blog.core.domain.repository.UserRepository;
 import br.com.rafaelbiasi.blog.core.domain.service.PasswordEncoderService;
 import br.com.rafaelbiasi.blog.core.domain.service.RoleService;
 import br.com.rafaelbiasi.blog.core.domain.service.UserService;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -35,6 +36,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public void delete(final UserModel user) {
 		userRepository.delete(user);
 	}

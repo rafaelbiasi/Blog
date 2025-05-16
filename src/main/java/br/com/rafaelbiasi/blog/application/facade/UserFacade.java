@@ -2,16 +2,16 @@ package br.com.rafaelbiasi.blog.application.facade;
 
 import br.com.rafaelbiasi.blog.application.data.RoleData;
 import br.com.rafaelbiasi.blog.application.data.UserData;
+import br.com.rafaelbiasi.blog.core.domain.model.PageModel;
+import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
 import br.com.rafaelbiasi.blog.core.domain.model.RegistrationResponseModel;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface UserFacade {
 
-	Page<UserData> findAll(Pageable pageable);
+	PageModel<UserData> findAll(PageRequestModel pageable);
 
 	Optional<UserData> findByCode(String code);
 

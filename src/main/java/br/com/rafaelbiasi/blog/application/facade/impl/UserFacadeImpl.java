@@ -5,6 +5,7 @@ import br.com.rafaelbiasi.blog.application.data.UserData;
 import br.com.rafaelbiasi.blog.application.facade.UserFacade;
 import br.com.rafaelbiasi.blog.application.mapper.RoleMapper;
 import br.com.rafaelbiasi.blog.application.mapper.UserMapper;
+import br.com.rafaelbiasi.blog.core.domain.model.PageModel;
 import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
 import br.com.rafaelbiasi.blog.core.domain.model.RegistrationResponseModel;
 import br.com.rafaelbiasi.blog.core.domain.model.UserModel;
@@ -15,10 +16,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -39,38 +36,27 @@ public class UserFacadeImpl implements UserFacade {
 	private final RoleMapper roleMapper;
 
 	@Override
-	public Page<UserData> findAll(Pageable pageable) {
+	public PageModel<UserData> findAll(PageRequestModel pageable) {
 		requireNonNull(pageable, "The Pageable has a null value.");
-		val map = userService.findAll(PageRequestModel.of(
-				pageable.getPageNumber(),
-				pageable.getPageSize()
-		)).map(userMapper::toData);
-		val pageRequestModel = map.getPageable();
-		return new PageImpl<>(map.content(), PageRequest.of(
-				pageRequestModel.pageNumber(),
-				pageRequestModel.pageSize()
-		), map.total());
+		return userService.findAll(pageable).map(userMapper::toData);
 	}
 
 	@Override
 	public Optional<UserData> findByCode(String code) {
 		requireNonNull(code, "The Code has a null value.");
-		return userService.findById(SqidsUtil.decodeId(code))
-				.map(userMapper::toData);
+		return userService.findById(SqidsUtil.decodeId(code)).map(userMapper::toData);
 	}
 
 	@Override
 	public Optional<UserData> findOneByEmail(final String email) {
 		requireNonNull(email, "The E-mail has a null value.");
-		return userService.findOneByEmail(email)
-				.map(userMapper::toData);
+		return userService.findOneByEmail(email).map(userMapper::toData);
 	}
 
 	@Override
 	public Optional<UserData> findOneByUsername(final String username) {
 		requireNonNull(username, "The Username has a null value.");
-		return userService.findOneByUsername(username)
-				.map(userMapper::toData);
+		return userService.findOneByUsername(username).map(userMapper::toData);
 	}
 
 	@Override

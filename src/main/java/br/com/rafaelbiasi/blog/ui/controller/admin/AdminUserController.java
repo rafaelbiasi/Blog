@@ -3,11 +3,11 @@ package br.com.rafaelbiasi.blog.ui.controller.admin;
 import br.com.rafaelbiasi.blog.application.data.RoleData;
 import br.com.rafaelbiasi.blog.application.data.UserData;
 import br.com.rafaelbiasi.blog.application.facade.UserFacade;
+import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,22 +46,25 @@ public class AdminUserController {
 				"Size", size
 		);
 		val page = pageNumberOpt.map(pn -> pn - 1).orElse(0);
-		val pageable = PageRequest.of(page, size);
+		val pageable = PageRequestModel.of(page, size);
 		log.debug(
 				"Fetching page users. [{}={}]",
 				"Pageable", pageable
 		);
 		val usersPage = userFacade.findAll(pageable);
+		val content = usersPage.content();
+		val number = usersPage.number();
+		val totalPages = usersPage.totalPages();
 		log.info(
 				"Fetched users. [{}={}, {}={}, {}={}]",
-				"Total Pages", usersPage.getTotalPages(),
-				"Page number", usersPage.getNumber(),
-				"Users list size", usersPage.getContent().size()
+				"Total Pages", totalPages,
+				"Page number", number,
+				"Users list size", content.size()
 		);
-		model.addAttribute("users", usersPage.getContent());
-		model.addAttribute("currentPage", usersPage.getNumber());
-		model.addAttribute("totalPages", usersPage.getTotalPages());
-		model.addAttribute("size", size);
+		model.addAttribute("users", content)
+		.addAttribute("currentPage", number)
+		.addAttribute("totalPages", totalPages)
+		.addAttribute("size", size);
 		return LIST_VIEW;
 	}
 

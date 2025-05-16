@@ -2,11 +2,11 @@ package br.com.rafaelbiasi.blog.ui.controller.admin;
 
 import br.com.rafaelbiasi.blog.application.data.CommentData;
 import br.com.rafaelbiasi.blog.application.facade.CommentFacade;
+import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,22 +44,25 @@ public class AdminCommentController {
 				"Size", size
 		);
 		val page = pageNumberOpt.map(pn -> pn - 1).orElse(0);
-		val pageable = PageRequest.of(page, size);
+		val pageable = PageRequestModel.of(page, size);
 		log.debug(
 				"Fetching page comments. [{}={}]",
 				"Pageable", pageable
 		);
 		val commentsPage = commentFacade.findAll(pageable);
+		val content = commentsPage.content();
+		val number = commentsPage.number();
+		val totalPages = commentsPage.totalPages();
 		log.info(
 				"Fetched comments. [{}={}, {}={}, {}={}]",
-				"Total Pages", commentsPage.getTotalPages(),
-				"Page number", commentsPage.getNumber(),
-				"Comments list size", commentsPage.getContent().size()
+				"Total Pages", totalPages,
+				"Page number", number,
+				"Comments list size", content.size()
 		);
-		model.addAttribute("comments", commentsPage.getContent());
-		model.addAttribute("currentPage", commentsPage.getNumber());
-		model.addAttribute("totalPages", commentsPage.getTotalPages());
-		model.addAttribute("size", size);
+		model.addAttribute("comments", content)
+				.addAttribute("currentPage", number)
+				.addAttribute("totalPages", totalPages)
+				.addAttribute("size", size);
 		return LIST_VIEW;
 	}
 

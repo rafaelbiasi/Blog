@@ -2,6 +2,7 @@ package br.com.rafaelbiasi.blog.ui.controller;
 
 import br.com.rafaelbiasi.blog.application.data.PostData;
 import br.com.rafaelbiasi.blog.application.facade.PostFacade;
+import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
 import com.rometools.rome.feed.rss.Channel;
 import com.rometools.rome.feed.rss.Description;
 import com.rometools.rome.feed.rss.Item;
@@ -33,7 +34,7 @@ public class RssFeedController {
 				.build()
 				.toUriString();
 		val channel = createChannel(baseUrl);
-		val pageable = PageRequest.of(0, 20);
+		val pageable = PageRequestModel.of(0, 20);
 		val items = postFacade.findAll(pageable).stream()
 				.map(post -> createItem(post, baseUrl))
 				.collect(Collectors.toList());

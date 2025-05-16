@@ -3,12 +3,12 @@ package br.com.rafaelbiasi.blog.ui.controller.admin;
 import br.com.rafaelbiasi.blog.application.data.PostData;
 import br.com.rafaelbiasi.blog.application.data.UserData;
 import br.com.rafaelbiasi.blog.application.facade.PostFacade;
+import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
 import br.com.rafaelbiasi.blog.core.domain.model.SimpleFile;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,22 +49,25 @@ public class AdminPostController {
 				"Size", size
 		);
 		val page = pageNumberOpt.map(pn -> pn - 1).orElse(0);
-		val pageable = PageRequest.of(page, size);
+		val pageable = PageRequestModel.of(page, size);
 		log.debug(
 				"Fetching page posts. [{}={}]",
 				"Pageable", pageable
 		);
 		val postsPage = postFacade.findAll(pageable);
+		val content = postsPage.content();
+		val number = postsPage.number();
+		val totalPages = postsPage.totalPages();
 		log.info(
 				"Fetched posts. [{}={}, {}={}, {}={}]",
-				"Total Pages", postsPage.getTotalPages(),
-				"Page number", postsPage.getNumber(),
-				"Posts list size", postsPage.getContent().size()
+				"Total Pages", totalPages,
+				"Page number", number,
+				"Posts list size", content.size()
 		);
-		model.addAttribute("posts", postsPage.getContent());
-		model.addAttribute("currentPage", postsPage.getNumber());
-		model.addAttribute("totalPages", postsPage.getTotalPages());
-		model.addAttribute("size", size);
+		model.addAttribute("posts", content)
+				.addAttribute("currentPage", number)
+				.addAttribute("totalPages", totalPages)
+				.addAttribute("size", size);
 		return LIST_VIEW;
 	}
 
