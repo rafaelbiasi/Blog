@@ -1,12 +1,12 @@
 package br.com.rafaelbiasi.blog.infrastructure.initial;
 
-import br.com.rafaelbiasi.blog.core.domain.model.PostModel;
-import br.com.rafaelbiasi.blog.core.domain.model.RoleModel;
-import br.com.rafaelbiasi.blog.core.domain.model.UserModel;
-import br.com.rafaelbiasi.blog.core.domain.service.FileService;
-import br.com.rafaelbiasi.blog.core.domain.service.PostService;
-import br.com.rafaelbiasi.blog.core.domain.service.RoleService;
-import br.com.rafaelbiasi.blog.core.domain.service.UserService;
+import br.com.rafaelbiasi.blog.core.model.Post;
+import br.com.rafaelbiasi.blog.core.model.Role;
+import br.com.rafaelbiasi.blog.core.model.User;
+import br.com.rafaelbiasi.blog.core.service.FileService;
+import br.com.rafaelbiasi.blog.core.service.PostService;
+import br.com.rafaelbiasi.blog.core.service.RoleService;
+import br.com.rafaelbiasi.blog.core.service.UserService;
 import br.com.rafaelbiasi.blog.infrastructure.util.LogId;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -263,23 +263,23 @@ public class InitialData implements CommandLineRunner {
 		);
 	}
 
-	private RoleModel createRole(final String name) {
-		val role = new RoleModel(name);
+	private Role createRole(final String name) {
+		val role = new Role(name);
 		roleService.save(role);
 		log.debug("Role created: {}", name);
 		return role;
 	}
 
-	private UserModel createUser(
+	private User createUser(
 			final String userFirst,
 			final String userLast,
 			final String mail,
 			final String username,
 			final String password,
-			final RoleModel role
+			final Role role
 	) {
-		val user = new UserModel(mail, username, password, userFirst, userLast);
-		val roles = new HashSet<RoleModel>();
+		val user = new User(mail, username, password, userFirst, userLast);
+		val roles = new HashSet<Role>();
 		roles.add(role);
 		user.setRoles(roles);
 		userService.save(user);
@@ -288,12 +288,12 @@ public class InitialData implements CommandLineRunner {
 	}
 
 	private void createPost(
-			final UserModel user,
+			final User user,
 			final String title,
 			final String body,
 			final String imageFilePath
 	) {
-		val post = new PostModel(title, body, imageFilePath, user);
+		val post = new Post(title, body, imageFilePath, user);
 		postService.save(post);
 		log.debug("Post created: {}", title);
 	}
@@ -307,10 +307,10 @@ public class InitialData implements CommandLineRunner {
 	}
 
 	@Builder
-	record UsersResult(UserModel user, UserModel admin, UserModel guest) {
+	record UsersResult(User user, User admin, User guest) {
 	}
 
 	@Builder
-	record RolesResult(RoleModel user, RoleModel admin, RoleModel guest) {
+	record RolesResult(Role user, Role admin, Role guest) {
 	}
 }

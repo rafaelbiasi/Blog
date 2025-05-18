@@ -1,13 +1,13 @@
-package br.com.rafaelbiasi.blog.core.domain.service.impl;
+package br.com.rafaelbiasi.blog.core.service.impl;
 
-import br.com.rafaelbiasi.blog.core.domain.model.PageModel;
-import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
-import br.com.rafaelbiasi.blog.core.domain.model.RegistrationResponseModel;
-import br.com.rafaelbiasi.blog.core.domain.model.UserModel;
-import br.com.rafaelbiasi.blog.core.domain.repository.UserRepository;
-import br.com.rafaelbiasi.blog.core.domain.service.PasswordEncoderService;
-import br.com.rafaelbiasi.blog.core.domain.service.RoleService;
-import br.com.rafaelbiasi.blog.core.domain.service.UserService;
+import br.com.rafaelbiasi.blog.core.vo.SimplePage;
+import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
+import br.com.rafaelbiasi.blog.core.vo.RegistrationResponse;
+import br.com.rafaelbiasi.blog.core.model.User;
+import br.com.rafaelbiasi.blog.core.repository.UserRepository;
+import br.com.rafaelbiasi.blog.core.service.PasswordEncoderService;
+import br.com.rafaelbiasi.blog.core.service.RoleService;
+import br.com.rafaelbiasi.blog.core.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.Collections;
@@ -31,21 +31,21 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<UserModel> findById(final long id) {
+	public Optional<User> findById(final long id) {
 		return userRepository.findById(id);
 	}
 
 	@Override
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public void delete(final UserModel user) {
+	public void delete(final User user) {
 		userRepository.delete(user);
 	}
 
 	@Override
-	public UserModel save(final UserModel user) {
+	public User save(final User user) {
 		requireNonNull(user, "The User has a null value.");
-		of(user).filter(UserModel::isNew)
-				.filter(UserModel::hasNoHoles)
+		of(user).filter(User::isNew)
+				.filter(User::hasNoHoles)
 				.ifPresent(acc -> roleService
 						.findByName("ROLE_USER")
 						.map(Collections::singleton)
@@ -56,42 +56,42 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public PageModel<UserModel> findAll(PageRequestModel pageable) {
+	public SimplePage<User> findAll(SimplePageRequest pageable) {
 		requireNonNull(pageable, "The Pageable has a null value.");
 		return userRepository.findAll(pageable);
 	}
 
 	@Override
-	public Optional<UserModel> findOneByEmail(final String email) {
+	public Optional<User> findOneByEmail(final String email) {
 		requireNonNull(email, "The E-mail has a null value.");
 		return userRepository.findOneByEmailIgnoreCase(email);
 	}
 
 	@Override
-	public Optional<UserModel> findOneByUsername(final String username) {
+	public Optional<User> findOneByUsername(final String username) {
 		requireNonNull(username, "The Username has a null value.");
 		return userRepository.findOneByUsernameIgnoreCase(username);
 	}
 
 	@Override
-	public void registerUser(final UserModel user) {
+	public void registerUser(final User user) {
 		requireNonNull(user, "The User has a null value.");
 		save(user);
 	}
 
 	@Override
-	public RegistrationResponseModel checkEmailAndUsernameExists(final UserModel user) {
-		return RegistrationResponseModel.builder()
+	public RegistrationResponse checkEmailAndUsernameExists(final User user) {
+		return RegistrationResponse.builder()
 				.emailExists(isEmailExists(user))
 				.usernameExists(isUsernameExists(user))
 				.build();
 	}
 
-	private boolean isUsernameExists(final UserModel user) {
+	private boolean isUsernameExists(final User user) {
 		return userRepository.findOneByUsernameIgnoreCase(user.getUsername()).isPresent();
 	}
 
-	private boolean isEmailExists(final UserModel user) {
+	private boolean isEmailExists(final User user) {
 		return userRepository.findOneByEmailIgnoreCase(user.getEmail()).isPresent();
 	}
 }

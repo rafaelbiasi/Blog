@@ -1,8 +1,8 @@
-package br.com.rafaelbiasi.blog.core.domain.service.impl;
+package br.com.rafaelbiasi.blog.core.service.impl;
 
-import br.com.rafaelbiasi.blog.core.domain.model.RoleModel;
-import br.com.rafaelbiasi.blog.core.domain.repository.RoleRepository;
-import br.com.rafaelbiasi.blog.core.domain.service.RoleService;
+import br.com.rafaelbiasi.blog.core.model.Role;
+import br.com.rafaelbiasi.blog.core.repository.RoleRepository;
+import br.com.rafaelbiasi.blog.core.service.RoleService;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,28 +18,28 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
-	public Optional<RoleModel> findById(final long id) {
+	public Optional<Role> findById(final long id) {
 		return roleRepository.findById(id);
 	}
 
 	@Override
-	public void delete(final RoleModel role) {
+	public void delete(final Role role) {
 		roleRepository.delete(role);
 	}
 
 	@Override
-	public RoleModel save(final RoleModel role) {
+	public Role save(final Role role) {
 		requireNonNull(role, "The Role has a null value.");
 		return roleRepository.save(role);
 	}
 
 	@Override
-	public Optional<RoleModel> findByName(final String name) {
+	public Optional<Role> findByName(final String name) {
 		return roleRepository.findByName(name);
 	}
 
 	@Override
-	public List<RoleModel> findAll() {
+	public List<Role> findAll() {
 		return roleRepository.findAll();
 	}
 }

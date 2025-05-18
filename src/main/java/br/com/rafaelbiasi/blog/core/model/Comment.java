@@ -1,14 +1,14 @@
-package br.com.rafaelbiasi.blog.core.domain.model;
+package br.com.rafaelbiasi.blog.core.model;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class CommentModel {
+public class Comment {
 
 	private Long id;
 	private String text;
-	private UserModel author;
-	private PostModel post;
+	private User author;
+	private Post post;
 	private LocalDateTime creation;
 	private LocalDateTime modified;
 
@@ -28,19 +28,19 @@ public class CommentModel {
 		this.text = text;
 	}
 
-	public UserModel getAuthor() {
+	public User getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(UserModel author) {
+	public void setAuthor(User author) {
 		this.author = author;
 	}
 
-	public PostModel getPost() {
+	public Post getPost() {
 		return post;
 	}
 
-	public void setPost(PostModel post) {
+	public void setPost(Post post) {
 		this.post = post;
 	}
 
@@ -68,7 +68,7 @@ public class CommentModel {
 	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
-		CommentModel comment = (CommentModel) o;
+		Comment comment = (Comment) o;
 		if (id != null && comment.id != null) {
 			return Objects.equals(id, comment.id);
 		}

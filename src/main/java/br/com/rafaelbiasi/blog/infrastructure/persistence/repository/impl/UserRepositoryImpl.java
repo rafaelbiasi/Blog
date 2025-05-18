@@ -1,9 +1,9 @@
 package br.com.rafaelbiasi.blog.infrastructure.persistence.repository.impl;
 
-import br.com.rafaelbiasi.blog.core.domain.model.PageModel;
-import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
-import br.com.rafaelbiasi.blog.core.domain.model.UserModel;
-import br.com.rafaelbiasi.blog.core.domain.repository.UserRepository;
+import br.com.rafaelbiasi.blog.core.model.User;
+import br.com.rafaelbiasi.blog.core.vo.SimplePage;
+import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
+import br.com.rafaelbiasi.blog.core.repository.UserRepository;
 import br.com.rafaelbiasi.blog.infrastructure.persistence.mapper.UserEntityMapper;
 import br.com.rafaelbiasi.blog.infrastructure.persistence.repository.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,34 +21,34 @@ public class UserRepositoryImpl implements UserRepository {
 	private final UserEntityMapper entityMapper;
 
 	@Override
-	public Optional<UserModel> findOneByEmailIgnoreCase(String email) {
+	public Optional<User> findOneByEmailIgnoreCase(String email) {
 		return repository.findOneByEmailIgnoreCase(email).map(entityMapper::toModel);
 	}
 
 	@Override
-	public Optional<UserModel> findOneByUsernameIgnoreCase(String username) {
+	public Optional<User> findOneByUsernameIgnoreCase(String username) {
 		return repository.findOneByUsernameIgnoreCase(username).map(entityMapper::toModel);
 	}
 
 	@Override
-	public Optional<UserModel> findById(long id) {
+	public Optional<User> findById(long id) {
 		return repository.findById(id).map(entityMapper::toModel);
 	}
 
 	@Override
-	public void delete(UserModel user) {
+	public void delete(User user) {
 		repository.delete(entityMapper.toEntity(user));
 	}
 
 	@Override
-	public UserModel save(UserModel user) {
+	public User save(User user) {
 		return entityMapper.toModel(repository.save(entityMapper.toEntity(user)));
 	}
 
 	@Override
-	public PageModel<UserModel> findAll(PageRequestModel pageable) {
-		Page<UserModel> page = repository.findAll(PageRequest.of(pageable.pageNumber(), pageable.pageSize()))
+	public SimplePage<User> findAll(SimplePageRequest pageable) {
+		Page<User> page = repository.findAll(PageRequest.of(pageable.pageNumber(), pageable.pageSize()))
 				.map(entityMapper::toModel);
-		return PageModel.of(page.getContent(), pageable, page.getTotalElements());
+		return SimplePage.of(page.getContent(), pageable, page.getTotalElements());
 	}
 }

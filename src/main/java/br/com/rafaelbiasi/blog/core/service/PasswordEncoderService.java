@@ -1,4 +1,4 @@
-package br.com.rafaelbiasi.blog.core.domain.service;
+package br.com.rafaelbiasi.blog.core.service;
 
 public interface PasswordEncoderService {
 	

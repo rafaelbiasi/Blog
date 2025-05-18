@@ -1,6 +1,6 @@
-package br.com.rafaelbiasi.blog.core.domain.model;
+package br.com.rafaelbiasi.blog.core.vo;
 
-public record RegistrationResponseModel(
+public record RegistrationResponse(
 		boolean usernameExists,
 		boolean emailExists) {
 
@@ -30,8 +30,8 @@ public record RegistrationResponseModel(
 			return this;
 		}
 
-		public RegistrationResponseModel build() {
-			return new RegistrationResponseModel(this.usernameExists, this.emailExists);
+		public RegistrationResponse build() {
+			return new RegistrationResponse(this.usernameExists, this.emailExists);
 		}
 
 		public String toString() {

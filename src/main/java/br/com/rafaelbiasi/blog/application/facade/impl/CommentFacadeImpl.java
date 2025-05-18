@@ -5,9 +5,9 @@ import br.com.rafaelbiasi.blog.application.data.PostData;
 import br.com.rafaelbiasi.blog.application.data.UserData;
 import br.com.rafaelbiasi.blog.application.facade.CommentFacade;
 import br.com.rafaelbiasi.blog.application.mapper.CommentMapper;
-import br.com.rafaelbiasi.blog.core.domain.model.PageModel;
-import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
-import br.com.rafaelbiasi.blog.core.domain.service.CommentService;
+import br.com.rafaelbiasi.blog.core.vo.SimplePage;
+import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
+import br.com.rafaelbiasi.blog.core.service.CommentService;
 import br.com.rafaelbiasi.blog.infrastructure.util.SqidsUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -53,7 +53,7 @@ public class CommentFacadeImpl implements CommentFacade {
 	}
 
 	@Override
-	public PageModel<CommentData> findAll(PageRequestModel pageable) {
+	public SimplePage<CommentData> findAll(SimplePageRequest pageable) {
 		requireNonNull(pageable, "The Pageable has a null value.");
 		return commentService.findAll(pageable).map(commentMapper::toData);
 	}

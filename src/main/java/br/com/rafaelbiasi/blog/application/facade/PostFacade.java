@@ -1,9 +1,9 @@
 package br.com.rafaelbiasi.blog.application.facade;
 
 import br.com.rafaelbiasi.blog.application.data.PostData;
-import br.com.rafaelbiasi.blog.core.domain.model.PageModel;
-import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
-import br.com.rafaelbiasi.blog.core.domain.model.SimpleFile;
+import br.com.rafaelbiasi.blog.core.vo.SimplePage;
+import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
+import br.com.rafaelbiasi.blog.core.vo.SimpleFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +12,7 @@ public interface PostFacade {
 
 	List<PostData> findAll();
 
-	PageModel<PostData> findAll(final PageRequestModel pageable);
+	SimplePage<PostData> findAll(final SimplePageRequest pageable);
 
 	Optional<PostData> findById(final long id);
 

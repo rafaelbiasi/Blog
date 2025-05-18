@@ -1,9 +1,9 @@
 package br.com.rafaelbiasi.blog.infrastructure.persistence.repository.impl;
 
-import br.com.rafaelbiasi.blog.core.domain.model.CommentModel;
-import br.com.rafaelbiasi.blog.core.domain.model.PageModel;
-import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
-import br.com.rafaelbiasi.blog.core.domain.repository.CommentRepository;
+import br.com.rafaelbiasi.blog.core.model.Comment;
+import br.com.rafaelbiasi.blog.core.vo.SimplePage;
+import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
+import br.com.rafaelbiasi.blog.core.repository.CommentRepository;
 import br.com.rafaelbiasi.blog.infrastructure.persistence.mapper.CommentEntityMapper;
 import br.com.rafaelbiasi.blog.infrastructure.persistence.repository.CommentJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,24 +21,24 @@ public class CommentRepositoryImpl implements CommentRepository {
 	private final CommentEntityMapper entityMapper;
 
 	@Override
-	public Optional<CommentModel> findById(long id) {
+	public Optional<Comment> findById(long id) {
 		return repository.findById(id).map(entityMapper::toModel);
 	}
 
 	@Override
-	public void delete(CommentModel comment) {
+	public void delete(Comment comment) {
 		repository.delete(entityMapper.toEntity(comment));
 	}
 
 	@Override
-	public CommentModel save(CommentModel comment) {
+	public Comment save(Comment comment) {
 		return entityMapper.toModel(repository.save(entityMapper.toEntity(comment)));
 	}
 
 	@Override
-	public PageModel<CommentModel> findAll(PageRequestModel pageable) {
+	public SimplePage<Comment> findAll(SimplePageRequest pageable) {
 		val page = repository.findAll(PageRequest.of(pageable.pageNumber(), pageable.pageSize()))
 				.map(entityMapper::toModel);
-		return PageModel.of(page.getContent(), pageable, page.getTotalElements());
+		return SimplePage.of(page.getContent(), pageable, page.getTotalElements());
 	}
 }

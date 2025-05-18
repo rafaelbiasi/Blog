@@ -1,9 +1,9 @@
 package br.com.rafaelbiasi.blog.infrastructure.persistence.repository.impl;
 
-import br.com.rafaelbiasi.blog.core.domain.model.PageModel;
-import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
-import br.com.rafaelbiasi.blog.core.domain.model.PostModel;
-import br.com.rafaelbiasi.blog.core.domain.repository.PostRepository;
+import br.com.rafaelbiasi.blog.core.model.Post;
+import br.com.rafaelbiasi.blog.core.vo.SimplePage;
+import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
+import br.com.rafaelbiasi.blog.core.repository.PostRepository;
 import br.com.rafaelbiasi.blog.infrastructure.persistence.mapper.PostEntityMapper;
 import br.com.rafaelbiasi.blog.infrastructure.persistence.repository.PostJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,29 +22,29 @@ public class PostRepositoryImpl implements PostRepository {
 	private final PostEntityMapper entityMapper;
 
 	@Override
-	public Optional<PostModel> findById(long id) {
+	public Optional<Post> findById(long id) {
 		return repository.findById(id).map(entityMapper::toModel);
 	}
 
 	@Override
-	public void delete(PostModel post) {
+	public void delete(Post post) {
 		repository.delete(entityMapper.toEntity(post));
 	}
 
 	@Override
-	public PostModel save(PostModel post) {
+	public Post save(Post post) {
 		return entityMapper.toModel(repository.save(entityMapper.toEntity(post)));
 	}
 
 	@Override
-	public List<PostModel> findAll() {
+	public List<Post> findAll() {
 		return repository.findAll().stream().map(entityMapper::toModelWithoutComments).toList();
 	}
 
 	@Override
-	public PageModel<PostModel> findAll(PageRequestModel pageable) {
-		Page<PostModel> page = repository.findAll(PageRequest.of(pageable.pageNumber(), pageable.pageSize()))
+	public SimplePage<Post> findAll(SimplePageRequest pageable) {
+		Page<Post> page = repository.findAll(PageRequest.of(pageable.pageNumber(), pageable.pageSize()))
 				.map(entityMapper::toModelWithoutComments);
-		return PageModel.of(page.getContent(), pageable, page.getTotalElements());
+		return SimplePage.of(page.getContent(), pageable, page.getTotalElements());
 	}
 }

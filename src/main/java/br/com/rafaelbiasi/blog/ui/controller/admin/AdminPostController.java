@@ -3,8 +3,8 @@ package br.com.rafaelbiasi.blog.ui.controller.admin;
 import br.com.rafaelbiasi.blog.application.data.PostData;
 import br.com.rafaelbiasi.blog.application.data.UserData;
 import br.com.rafaelbiasi.blog.application.facade.PostFacade;
-import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
-import br.com.rafaelbiasi.blog.core.domain.model.SimpleFile;
+import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
+import br.com.rafaelbiasi.blog.core.vo.SimpleFile;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,7 +49,7 @@ public class AdminPostController {
 				"Size", size
 		);
 		val page = pageNumberOpt.map(pn -> pn - 1).orElse(0);
-		val pageable = PageRequestModel.of(page, size);
+		val pageable = SimplePageRequest.of(page, size);
 		log.debug(
 				"Fetching page posts. [{}={}]",
 				"Pageable", pageable

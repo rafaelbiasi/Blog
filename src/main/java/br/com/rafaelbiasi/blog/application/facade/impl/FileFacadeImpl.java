@@ -1,9 +1,9 @@
 package br.com.rafaelbiasi.blog.application.facade.impl;
 
 import br.com.rafaelbiasi.blog.application.facade.FileFacade;
-import br.com.rafaelbiasi.blog.core.domain.model.SimpleFile;
-import br.com.rafaelbiasi.blog.core.domain.model.SimpleResource;
-import br.com.rafaelbiasi.blog.core.domain.service.FileService;
+import br.com.rafaelbiasi.blog.core.vo.SimpleFile;
+import br.com.rafaelbiasi.blog.core.vo.SimpleResource;
+import br.com.rafaelbiasi.blog.core.service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;

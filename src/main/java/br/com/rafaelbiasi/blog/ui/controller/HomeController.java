@@ -1,8 +1,7 @@
 package br.com.rafaelbiasi.blog.ui.controller;
 
-import br.com.rafaelbiasi.blog.application.data.PostData;
 import br.com.rafaelbiasi.blog.application.facade.PostFacade;
-import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
+import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -40,7 +38,7 @@ public class HomeController {
 				"Size", size
 		);
 		val page = pageNumberOpt.map(pn -> pn - 1).orElse(0);
-		val pageable = PageRequestModel.of(page, size);
+		val pageable = SimplePageRequest.of(page, size);
 		log.debug(
 				"Fetching page posts. [{}={}]",
 				"Pageable", pageable

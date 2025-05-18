@@ -1,7 +1,7 @@
 package br.com.rafaelbiasi.blog.ui.controller;
 
 import br.com.rafaelbiasi.blog.application.facade.FileFacade;
-import br.com.rafaelbiasi.blog.core.domain.model.SimpleResource;
+import br.com.rafaelbiasi.blog.core.vo.SimpleResource;
 import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

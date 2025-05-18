@@ -1,9 +1,9 @@
-package br.com.rafaelbiasi.blog.core.domain.service.impl;
+package br.com.rafaelbiasi.blog.core.service.impl;
 
-import br.com.rafaelbiasi.blog.core.domain.model.SimpleFile;
-import br.com.rafaelbiasi.blog.core.domain.model.SimpleResource;
-import br.com.rafaelbiasi.blog.core.domain.repository.FileRepository;
-import br.com.rafaelbiasi.blog.core.domain.service.FileService;
+import br.com.rafaelbiasi.blog.core.vo.SimpleFile;
+import br.com.rafaelbiasi.blog.core.vo.SimpleResource;
+import br.com.rafaelbiasi.blog.core.repository.FileRepository;
+import br.com.rafaelbiasi.blog.core.service.FileService;
 
 import java.io.IOException;
 import java.io.InputStream;

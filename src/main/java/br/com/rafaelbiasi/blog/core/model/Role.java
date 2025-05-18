@@ -1,9 +1,9 @@
-package br.com.rafaelbiasi.blog.core.domain.model;
+package br.com.rafaelbiasi.blog.core.model;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class RoleModel {
+public class Role {
 
 	private static final int TYPE_CODE = 3;
 
@@ -12,20 +12,20 @@ public class RoleModel {
 	private LocalDateTime creation;
 	private LocalDateTime modified;
 
-	public RoleModel() {
+	public Role() {
 	}
 
-	public RoleModel(String name) {
+	public Role(String name) {
 		this.name = name;
 	}
 
-	public RoleModel(String name, LocalDateTime creation, LocalDateTime modified) {
+	public Role(String name, LocalDateTime creation, LocalDateTime modified) {
 		this.name = name;
 		this.creation = creation;
 		this.modified = modified;
 	}
 
-	public RoleModel(Long id, String name, LocalDateTime creation, LocalDateTime modified) {
+	public Role(Long id, String name, LocalDateTime creation, LocalDateTime modified) {
 		this.id = id;
 		this.name = name;
 		this.creation = creation;
@@ -72,7 +72,7 @@ public class RoleModel {
 	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
-		RoleModel role = (RoleModel) o;
+		Role role = (Role) o;
 		if (id != null && role.id != null) {
 			return Objects.equals(id, role.id);
 		}

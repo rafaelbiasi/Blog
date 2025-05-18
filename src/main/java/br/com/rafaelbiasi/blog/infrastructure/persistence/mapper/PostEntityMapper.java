@@ -1,6 +1,6 @@
 package br.com.rafaelbiasi.blog.infrastructure.persistence.mapper;
 
-import br.com.rafaelbiasi.blog.core.domain.model.PostModel;
+import br.com.rafaelbiasi.blog.core.model.Post;
 import br.com.rafaelbiasi.blog.infrastructure.persistence.entity.PostEntity;
 import org.mapstruct.*;
 
@@ -14,13 +14,13 @@ import org.mapstruct.*;
 )
 public interface PostEntityMapper {
 
-	PostEntity toEntity(PostModel post);
+	PostEntity toEntity(Post post);
 
 	@Mapping(target = "comments", qualifiedByName = "CommentWithoutPost")
-	PostModel toModel(PostEntity postEntity);
+	Post toModel(PostEntity postEntity);
 
 	@Named("PostWithoutComments")
 	@Mapping(target = "comments", ignore = true)
-	PostModel toModelWithoutComments(PostEntity post);
+	Post toModelWithoutComments(PostEntity post);
 
 }

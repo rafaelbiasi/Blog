@@ -1,7 +1,7 @@
 package br.com.rafaelbiasi.blog.infrastructure.service;
 
-import br.com.rafaelbiasi.blog.core.domain.model.UserModel;
-import br.com.rafaelbiasi.blog.core.domain.service.UserService;
+import br.com.rafaelbiasi.blog.core.model.User;
+import br.com.rafaelbiasi.blog.core.service.UserService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -32,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	}
 
 	private static org.springframework.security.core.userdetails.User user(
-			final UserModel user,
+			final User user,
 			final List<SimpleGrantedAuthority> grantedAuthorities
 	) {
 		return new org.springframework.security.core.userdetails.User(
@@ -42,15 +42,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		);
 	}
 
-	private Optional<UserModel> findOneByUsername(String usernameOrEmail) {
+	private Optional<User> findOneByUsername(String usernameOrEmail) {
 		return userService.findOneByUsername(usernameOrEmail);
 	}
 
-	private Optional<UserModel> findOneByEmail(String usernameOrEmail) {
+	private Optional<User> findOneByEmail(String usernameOrEmail) {
 		return userService.findOneByEmail(usernameOrEmail);
 	}
 
-	private org.springframework.security.core.userdetails.User user(final UserModel user) {
+	private org.springframework.security.core.userdetails.User user(final User user) {
 		return user
 				.getRoles()
 				.stream()

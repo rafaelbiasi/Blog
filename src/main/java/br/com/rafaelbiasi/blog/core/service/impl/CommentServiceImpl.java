@@ -1,12 +1,12 @@
-package br.com.rafaelbiasi.blog.core.domain.service.impl;
+package br.com.rafaelbiasi.blog.core.service.impl;
 
-import br.com.rafaelbiasi.blog.core.domain.model.CommentModel;
-import br.com.rafaelbiasi.blog.core.domain.model.PageModel;
-import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
-import br.com.rafaelbiasi.blog.core.domain.repository.CommentRepository;
-import br.com.rafaelbiasi.blog.core.domain.service.CommentService;
-import br.com.rafaelbiasi.blog.core.domain.service.PostService;
-import br.com.rafaelbiasi.blog.core.domain.service.UserService;
+import br.com.rafaelbiasi.blog.core.model.Comment;
+import br.com.rafaelbiasi.blog.core.vo.SimplePage;
+import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
+import br.com.rafaelbiasi.blog.core.repository.CommentRepository;
+import br.com.rafaelbiasi.blog.core.service.CommentService;
+import br.com.rafaelbiasi.blog.core.service.PostService;
+import br.com.rafaelbiasi.blog.core.service.UserService;
 import br.com.rafaelbiasi.blog.infrastructure.util.SqidsUtil;
 import org.springframework.security.access.prepost.PreAuthorize;
 
@@ -31,24 +31,24 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	public Optional<CommentModel> findById(final long id) {
+	public Optional<Comment> findById(final long id) {
 		return commentRepository.findById(id);
 	}
 
 	@Override
 	@PreAuthorize("hasRole('ROLE_ADMIN') or #comment.author.username == authentication.principal.username")
 	//move PreAuthorize
-	public void delete(final CommentModel comment) {
+	public void delete(final Comment comment) {
 		commentRepository.delete(comment);
 	}
 
 	@Override
-	public Optional<CommentModel> findByCode(final String code) {
+	public Optional<Comment> findByCode(final String code) {
 		return commentRepository.findById(SqidsUtil.decodeId(code));
 	}
 
 	@Override
-	public CommentModel save(final CommentModel comment) {
+	public Comment save(final Comment comment) {
 		final String username = comment.getAuthor().getUsername();
 		final Long id = comment.getPost().getId();
 		userService.findOneByUsername(username)
@@ -59,7 +59,7 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	public PageModel<CommentModel> findAll(PageRequestModel pageable) {
+	public SimplePage<Comment> findAll(SimplePageRequest pageable) {
 		requireNonNull(pageable, "The Pageable has a null value.");
 		return commentRepository.findAll(pageable);
 	}

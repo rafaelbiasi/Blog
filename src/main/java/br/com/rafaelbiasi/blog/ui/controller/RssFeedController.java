@@ -2,7 +2,7 @@ package br.com.rafaelbiasi.blog.ui.controller;
 
 import br.com.rafaelbiasi.blog.application.data.PostData;
 import br.com.rafaelbiasi.blog.application.facade.PostFacade;
-import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
+import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
 import com.rometools.rome.feed.rss.Channel;
 import com.rometools.rome.feed.rss.Description;
 import com.rometools.rome.feed.rss.Item;
@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -34,7 +33,7 @@ public class RssFeedController {
 				.build()
 				.toUriString();
 		val channel = createChannel(baseUrl);
-		val pageable = PageRequestModel.of(0, 20);
+		val pageable = SimplePageRequest.of(0, 20);
 		val items = postFacade.findAll(pageable).stream()
 				.map(post -> createItem(post, baseUrl))
 				.collect(Collectors.toList());

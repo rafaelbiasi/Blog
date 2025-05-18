@@ -1,6 +1,6 @@
 package br.com.rafaelbiasi.blog.infrastructure.persistence.mapper;
 
-import br.com.rafaelbiasi.blog.core.domain.model.CommentModel;
+import br.com.rafaelbiasi.blog.core.model.Comment;
 import br.com.rafaelbiasi.blog.infrastructure.persistence.entity.CommentEntity;
 import org.mapstruct.*;
 
@@ -14,12 +14,12 @@ import org.mapstruct.*;
 )
 public interface CommentEntityMapper {
 
-	CommentEntity toEntity(CommentModel comment);
+	CommentEntity toEntity(Comment comment);
 
-	CommentModel toModel(CommentEntity commentEntity);
+	Comment toModel(CommentEntity commentEntity);
 
 	@Named("CommentWithoutPost")
 	@Mapping(target = "post", ignore = true)
-	CommentModel toModelWithoutPost(CommentEntity comment);
+	Comment toModelWithoutPost(CommentEntity comment);
 
 }

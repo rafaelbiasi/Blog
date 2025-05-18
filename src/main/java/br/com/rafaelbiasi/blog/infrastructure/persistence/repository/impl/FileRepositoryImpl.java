@@ -1,6 +1,6 @@
 package br.com.rafaelbiasi.blog.infrastructure.persistence.repository.impl;
 
-import br.com.rafaelbiasi.blog.core.domain.repository.FileRepository;
+import br.com.rafaelbiasi.blog.core.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

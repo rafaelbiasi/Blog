@@ -1,8 +1,8 @@
 package br.com.rafaelbiasi.blog.application.facade;
 
 import br.com.rafaelbiasi.blog.application.data.CommentData;
-import br.com.rafaelbiasi.blog.core.domain.model.PageModel;
-import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
+import br.com.rafaelbiasi.blog.core.vo.SimplePage;
+import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
 
 import java.security.Principal;
 import java.util.Optional;
@@ -16,7 +16,7 @@ public interface CommentFacade {
 
 	boolean delete(final String code);
 
-	PageModel<CommentData> findAll(PageRequestModel pageable);
+	SimplePage<CommentData> findAll(SimplePageRequest pageable);
 
 	Optional<CommentData> findByCode(String code);
 }

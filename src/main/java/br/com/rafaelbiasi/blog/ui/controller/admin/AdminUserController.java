@@ -3,7 +3,7 @@ package br.com.rafaelbiasi.blog.ui.controller.admin;
 import br.com.rafaelbiasi.blog.application.data.RoleData;
 import br.com.rafaelbiasi.blog.application.data.UserData;
 import br.com.rafaelbiasi.blog.application.facade.UserFacade;
-import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
+import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +46,7 @@ public class AdminUserController {
 				"Size", size
 		);
 		val page = pageNumberOpt.map(pn -> pn - 1).orElse(0);
-		val pageable = PageRequestModel.of(page, size);
+		val pageable = SimplePageRequest.of(page, size);
 		log.debug(
 				"Fetching page users. [{}={}]",
 				"Pageable", pageable

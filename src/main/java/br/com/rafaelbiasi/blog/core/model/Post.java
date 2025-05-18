@@ -1,50 +1,33 @@
-package br.com.rafaelbiasi.blog.core.domain.model;
+package br.com.rafaelbiasi.blog.core.model;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class PostModel {
+public class Post {
 
 	private Long id;
 	private String slugifiedTitle;
 	private String title;
 	private String body;
 	private String imageFilePath;
-	private UserModel author;
-	private Set<CommentModel> comments = new HashSet<>();
+	private User author;
+	private Set<Comment> comments = new HashSet<>();
 	private LocalDateTime creation;
 	private LocalDateTime modified;
 
-	public PostModel() {
+	public Post() {
 	}
 
-	public PostModel(String title, String body, String imageFilePath, UserModel author) {
+	public Post(String title, String body, String imageFilePath, User author) {
 		this.title = title;
 		this.body = body;
 		this.imageFilePath = imageFilePath;
 		this.author = author;
 	}
 
-	public PostModel(String slugifiedTitle, String title, String body, String imageFilePath, UserModel author) {
-		this.slugifiedTitle = slugifiedTitle;
-		this.title = title;
-		this.body = body;
-		this.imageFilePath = imageFilePath;
-		this.author = author;
-	}
-
-	public PostModel(String slugifiedTitle, String title, String body, String imageFilePath, UserModel author, Set<CommentModel> comments) {
-		this.slugifiedTitle = slugifiedTitle;
-		this.title = title;
-		this.body = body;
-		this.imageFilePath = imageFilePath;
-		this.author = author;
-		this.comments = comments;
-	}
-
-	public PostModel(Long id, String slugifiedTitle, String title, String body, String imageFilePath, UserModel author, Set<CommentModel> comments, LocalDateTime creation, LocalDateTime modified) {
+	public Post(Long id, String slugifiedTitle, String title, String body, String imageFilePath, User author, Set<Comment> comments, LocalDateTime creation, LocalDateTime modified) {
 		this.id = id;
 		this.slugifiedTitle = slugifiedTitle;
 		this.title = title;
@@ -96,19 +79,19 @@ public class PostModel {
 		this.imageFilePath = imageFilePath;
 	}
 
-	public UserModel getAuthor() {
+	public User getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(UserModel author) {
+	public void setAuthor(User author) {
 		this.author = author;
 	}
 
-	public Set<CommentModel> getComments() {
+	public Set<Comment> getComments() {
 		return comments;
 	}
 
-	public void setComments(Set<CommentModel> comments) {
+	public void setComments(Set<Comment> comments) {
 		this.comments = comments;
 	}
 
@@ -130,18 +113,18 @@ public class PostModel {
 
 	@Override
 	public int hashCode() {
-		return id != null ? Objects.hash(id) : Objects.hash(slugifiedTitle);
+		return id != null ? Objects.hash(id) : Objects.hash(title);
 
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
-		PostModel post = (PostModel) o;
+		Post post = (Post) o;
 		if (id != null && post.id != null) {
 			return Objects.equals(id, post.id);
 		}
 
-		return Objects.equals(slugifiedTitle, post.slugifiedTitle);
+		return Objects.equals(title, post.title);
 	}
 }

@@ -1,4 +1,4 @@
-package br.com.rafaelbiasi.blog.core.domain.model;
+package br.com.rafaelbiasi.blog.core.vo;
 
 import java.io.InputStream;
 

@@ -1,7 +1,7 @@
 package br.com.rafaelbiasi.blog.application.facade;
 
-import br.com.rafaelbiasi.blog.core.domain.model.SimpleFile;
-import br.com.rafaelbiasi.blog.core.domain.model.SimpleResource;
+import br.com.rafaelbiasi.blog.core.vo.SimpleFile;
+import br.com.rafaelbiasi.blog.core.vo.SimpleResource;
 
 import java.util.Optional;
 

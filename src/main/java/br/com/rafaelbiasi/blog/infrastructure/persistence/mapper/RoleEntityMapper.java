@@ -1,6 +1,6 @@
 package br.com.rafaelbiasi.blog.infrastructure.persistence.mapper;
 
-import br.com.rafaelbiasi.blog.core.domain.model.RoleModel;
+import br.com.rafaelbiasi.blog.core.model.Role;
 import br.com.rafaelbiasi.blog.infrastructure.persistence.entity.RoleEntity;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -12,7 +12,7 @@ import org.mapstruct.MappingConstants;
 )
 public interface RoleEntityMapper {
 
-	RoleEntity toEntity(RoleModel role);
+	RoleEntity toEntity(Role role);
 
-	RoleModel toModel(RoleEntity roleEntity);
+	Role toModel(RoleEntity roleEntity);
 }

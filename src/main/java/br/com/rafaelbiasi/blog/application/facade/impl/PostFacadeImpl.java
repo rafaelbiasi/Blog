@@ -4,11 +4,11 @@ import br.com.rafaelbiasi.blog.application.data.PostData;
 import br.com.rafaelbiasi.blog.application.facade.FileFacade;
 import br.com.rafaelbiasi.blog.application.facade.PostFacade;
 import br.com.rafaelbiasi.blog.application.mapper.PostMapper;
-import br.com.rafaelbiasi.blog.core.domain.model.PageModel;
-import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
-import br.com.rafaelbiasi.blog.core.domain.model.PostModel;
-import br.com.rafaelbiasi.blog.core.domain.model.SimpleFile;
-import br.com.rafaelbiasi.blog.core.domain.service.PostService;
+import br.com.rafaelbiasi.blog.core.vo.SimplePage;
+import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
+import br.com.rafaelbiasi.blog.core.model.Post;
+import br.com.rafaelbiasi.blog.core.vo.SimpleFile;
+import br.com.rafaelbiasi.blog.core.service.PostService;
 import br.com.rafaelbiasi.blog.infrastructure.util.SqidsUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class PostFacadeImpl implements PostFacade {
 	}
 
 	@Override
-	public PageModel<PostData> findAll(final PageRequestModel pageable) {
+	public SimplePage<PostData> findAll(final SimplePageRequest pageable) {
 		requireNonNull(pageable, "The Pageable has a null value.");
 		return postService.findAll(pageable).map(postMapper::toDataWithoutComments);
 	}
@@ -89,7 +89,7 @@ public class PostFacadeImpl implements PostFacade {
 		return postService.findById(SqidsUtil.decodeId(code)).map(postMapper::toData);
 	}
 
-	private PostData update(final PostData postData, final PostModel post) {
+	private PostData update(final PostData postData, final Post post) {
 		postMapper.updateModelFromData(postData, post);
 		val updatedPost = postService.save(post);
 		return postMapper.toData(updatedPost);

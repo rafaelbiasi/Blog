@@ -1,4 +1,4 @@
-package br.com.rafaelbiasi.blog.core.domain.repository;
+package br.com.rafaelbiasi.blog.core.repository;
 
 import java.io.IOException;
 import java.io.InputStream;

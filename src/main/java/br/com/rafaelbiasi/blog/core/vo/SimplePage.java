@@ -1,4 +1,4 @@
-package br.com.rafaelbiasi.blog.core.domain.model;
+package br.com.rafaelbiasi.blog.core.vo;
 
 import java.util.Iterator;
 import java.util.List;
@@ -11,10 +11,10 @@ import java.util.stream.StreamSupport;
 
 import static java.util.Objects.requireNonNull;
 
-public record PageModel<T>(List<T> content, PageRequestModel pageRequest, long total) {
+public record SimplePage<T>(List<T> content, SimplePageRequest pageRequest, long total) {
 
-	public static <T> PageModel<T> of(List<T> content, PageRequestModel pageable, long totalElements) {
-		return new PageModel<>(content, pageable, totalElements);
+	public static <T> SimplePage<T> of(List<T> content, SimplePageRequest pageable, long totalElements) {
+		return new SimplePage<>(content, pageable, totalElements);
 	}
 
 	public long number() {
@@ -29,11 +29,11 @@ public record PageModel<T>(List<T> content, PageRequestModel pageRequest, long t
 		return pageRequest.isPaged() ? pageRequest.pageSize() : content.size();
 	}
 
-	public <U> PageModel<U> map(Function<? super T, ? extends U> converter) {
-		return PageModel.of(getConvertedContent(converter), pageable(), total);
+	public <U> SimplePage<U> map(Function<? super T, ? extends U> converter) {
+		return SimplePage.of(getConvertedContent(converter), pageable(), total);
 	}
 
-	public PageRequestModel pageable() {
+	public SimplePageRequest pageable() {
 		return pageRequest;
 	}
 

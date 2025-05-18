@@ -1,7 +1,7 @@
 package br.com.rafaelbiasi.blog.application.mapper;
 
 import br.com.rafaelbiasi.blog.application.data.CommentData;
-import br.com.rafaelbiasi.blog.core.domain.model.CommentModel;
+import br.com.rafaelbiasi.blog.core.model.Comment;
 import org.mapstruct.*;
 
 @Mapper(
@@ -16,16 +16,16 @@ import org.mapstruct.*;
 public interface CommentMapper {
 
 	@Mapping(source = "id", target = "code", qualifiedByName = "idToSqidsCode")
-	CommentData toData(CommentModel comment);
+	CommentData toData(Comment comment);
 
 	@Named("CommentWithoutPost")
 	@Mapping(target = "post", ignore = true)
 	@Mapping(source = "id", target = "code", qualifiedByName = "idToSqidsCode")
-	CommentData toDataWithoutPost(CommentModel comment);
+	CommentData toDataWithoutPost(Comment comment);
 
 	@Mapping(target = "creation", ignore = true)
 	@Mapping(target = "modified", ignore = true)
 	@Mapping(source = "code", target = "id", qualifiedByName = "sqidsCodeToId")
-	CommentModel toModel(CommentData commentData);
+	Comment toModel(CommentData commentData);
 
 }

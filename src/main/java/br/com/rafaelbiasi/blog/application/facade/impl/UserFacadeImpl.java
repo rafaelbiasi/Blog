@@ -5,12 +5,12 @@ import br.com.rafaelbiasi.blog.application.data.UserData;
 import br.com.rafaelbiasi.blog.application.facade.UserFacade;
 import br.com.rafaelbiasi.blog.application.mapper.RoleMapper;
 import br.com.rafaelbiasi.blog.application.mapper.UserMapper;
-import br.com.rafaelbiasi.blog.core.domain.model.PageModel;
-import br.com.rafaelbiasi.blog.core.domain.model.PageRequestModel;
-import br.com.rafaelbiasi.blog.core.domain.model.RegistrationResponseModel;
-import br.com.rafaelbiasi.blog.core.domain.model.UserModel;
-import br.com.rafaelbiasi.blog.core.domain.service.RoleService;
-import br.com.rafaelbiasi.blog.core.domain.service.UserService;
+import br.com.rafaelbiasi.blog.core.vo.SimplePage;
+import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
+import br.com.rafaelbiasi.blog.core.vo.RegistrationResponse;
+import br.com.rafaelbiasi.blog.core.model.User;
+import br.com.rafaelbiasi.blog.core.service.RoleService;
+import br.com.rafaelbiasi.blog.core.service.UserService;
 import br.com.rafaelbiasi.blog.infrastructure.util.SqidsUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class UserFacadeImpl implements UserFacade {
 	private final RoleMapper roleMapper;
 
 	@Override
-	public PageModel<UserData> findAll(PageRequestModel pageable) {
+	public SimplePage<UserData> findAll(SimplePageRequest pageable) {
 		requireNonNull(pageable, "The Pageable has a null value.");
 		return userService.findAll(pageable).map(userMapper::toData);
 	}
@@ -76,7 +76,7 @@ public class UserFacadeImpl implements UserFacade {
 	}
 
 	@Override
-	public RegistrationResponseModel checkEmailAndUsernameExists(final UserData userData) {
+	public RegistrationResponse checkEmailAndUsernameExists(final UserData userData) {
 		requireNonNull(userData, "The User has a null value.");
 		return userService.checkEmailAndUsernameExists(userMapper.toModel(userData));
 	}
@@ -94,7 +94,7 @@ public class UserFacadeImpl implements UserFacade {
 		return roleService.findAll().stream().map(roleMapper::toData).toList();
 	}
 
-	private UserData update(final UserData userData, final UserModel user) {
+	private UserData update(final UserData userData, final User user) {
 		requireNonNull(userData, "The User has a null value.");
 		userMapper.updateModelFromData(userData, user);
 		val updatedPost = userService.save(user);
