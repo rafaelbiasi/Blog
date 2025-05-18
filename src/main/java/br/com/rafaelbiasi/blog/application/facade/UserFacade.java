@@ -2,9 +2,9 @@ package br.com.rafaelbiasi.blog.application.facade;
 
 import br.com.rafaelbiasi.blog.application.data.RoleData;
 import br.com.rafaelbiasi.blog.application.data.UserData;
+import br.com.rafaelbiasi.blog.core.vo.RegistrationResponse;
 import br.com.rafaelbiasi.blog.core.vo.SimplePage;
 import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
-import br.com.rafaelbiasi.blog.core.vo.RegistrationResponse;
 
 import java.util.List;
 import java.util.Optional;

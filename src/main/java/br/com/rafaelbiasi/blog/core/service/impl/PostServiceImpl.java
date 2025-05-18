@@ -1,12 +1,11 @@
 package br.com.rafaelbiasi.blog.core.service.impl;
 
 import br.com.rafaelbiasi.blog.core.model.Post;
-import br.com.rafaelbiasi.blog.core.vo.SimplePage;
-import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
 import br.com.rafaelbiasi.blog.core.repository.PostRepository;
 import br.com.rafaelbiasi.blog.core.service.PostService;
 import br.com.rafaelbiasi.blog.core.service.UserService;
-import org.springframework.security.access.prepost.PreAuthorize;
+import br.com.rafaelbiasi.blog.core.vo.SimplePage;
+import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
 
 import java.util.List;
 import java.util.Optional;

@@ -62,9 +62,9 @@ public class AdminUserController {
 				"Users list size", content.size()
 		);
 		model.addAttribute("users", content)
-		.addAttribute("currentPage", number)
-		.addAttribute("totalPages", totalPages)
-		.addAttribute("size", size);
+				.addAttribute("currentPage", number)
+				.addAttribute("totalPages", totalPages)
+				.addAttribute("size", size);
 		return LIST_VIEW;
 	}
 

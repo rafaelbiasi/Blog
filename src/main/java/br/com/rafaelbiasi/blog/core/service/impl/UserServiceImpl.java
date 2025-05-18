@@ -1,13 +1,13 @@
 package br.com.rafaelbiasi.blog.core.service.impl;
 
-import br.com.rafaelbiasi.blog.core.vo.SimplePage;
-import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
-import br.com.rafaelbiasi.blog.core.vo.RegistrationResponse;
 import br.com.rafaelbiasi.blog.core.model.User;
 import br.com.rafaelbiasi.blog.core.repository.UserRepository;
 import br.com.rafaelbiasi.blog.core.service.PasswordEncoderService;
 import br.com.rafaelbiasi.blog.core.service.RoleService;
 import br.com.rafaelbiasi.blog.core.service.UserService;
+import br.com.rafaelbiasi.blog.core.vo.RegistrationResponse;
+import br.com.rafaelbiasi.blog.core.vo.SimplePage;
+import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.Collections;

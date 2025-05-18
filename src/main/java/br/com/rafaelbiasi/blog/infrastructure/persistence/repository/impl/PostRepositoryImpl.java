@@ -1,9 +1,9 @@
 package br.com.rafaelbiasi.blog.infrastructure.persistence.repository.impl;
 
 import br.com.rafaelbiasi.blog.core.model.Post;
+import br.com.rafaelbiasi.blog.core.repository.PostRepository;
 import br.com.rafaelbiasi.blog.core.vo.SimplePage;
 import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
-import br.com.rafaelbiasi.blog.core.repository.PostRepository;
 import br.com.rafaelbiasi.blog.infrastructure.persistence.mapper.PostEntityMapper;
 import br.com.rafaelbiasi.blog.infrastructure.persistence.repository.PostJpaRepository;
 import lombok.RequiredArgsConstructor;

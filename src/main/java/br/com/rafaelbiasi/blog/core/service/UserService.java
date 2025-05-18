@@ -1,9 +1,9 @@
 package br.com.rafaelbiasi.blog.core.service;
 
 import br.com.rafaelbiasi.blog.core.model.User;
+import br.com.rafaelbiasi.blog.core.vo.RegistrationResponse;
 import br.com.rafaelbiasi.blog.core.vo.SimplePage;
 import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
-import br.com.rafaelbiasi.blog.core.vo.RegistrationResponse;
 
 import java.util.Optional;
 

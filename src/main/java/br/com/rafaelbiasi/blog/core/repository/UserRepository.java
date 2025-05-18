@@ -1,8 +1,8 @@
 package br.com.rafaelbiasi.blog.core.repository;
 
+import br.com.rafaelbiasi.blog.core.model.User;
 import br.com.rafaelbiasi.blog.core.vo.SimplePage;
 import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
-import br.com.rafaelbiasi.blog.core.model.User;
 
 import java.util.Optional;
 

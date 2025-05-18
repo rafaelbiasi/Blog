@@ -1,9 +1,9 @@
 package br.com.rafaelbiasi.blog.infrastructure.persistence.repository.impl;
 
 import br.com.rafaelbiasi.blog.core.model.Comment;
+import br.com.rafaelbiasi.blog.core.repository.CommentRepository;
 import br.com.rafaelbiasi.blog.core.vo.SimplePage;
 import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
-import br.com.rafaelbiasi.blog.core.repository.CommentRepository;
 import br.com.rafaelbiasi.blog.infrastructure.persistence.mapper.CommentEntityMapper;
 import br.com.rafaelbiasi.blog.infrastructure.persistence.repository.CommentJpaRepository;
 import lombok.RequiredArgsConstructor;

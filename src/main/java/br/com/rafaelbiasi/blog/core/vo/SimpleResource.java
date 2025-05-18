@@ -4,19 +4,19 @@ import java.io.InputStream;
 
 public class SimpleResource {
 
-    private final String filename;
-    private final InputStream inputStream;
+	private final String filename;
+	private final InputStream inputStream;
 
-    public SimpleResource(String filename, InputStream inputStream) {
-        this.filename = filename;
-        this.inputStream = inputStream;
-    }
+	public SimpleResource(String filename, InputStream inputStream) {
+		this.filename = filename;
+		this.inputStream = inputStream;
+	}
 
-    public String getFilename() {
-        return filename;
-    }
+	public String getFilename() {
+		return filename;
+	}
 
-    public InputStream getInputStream() {
-        return inputStream;
-    }
+	public InputStream getInputStream() {
+		return inputStream;
+	}
 }

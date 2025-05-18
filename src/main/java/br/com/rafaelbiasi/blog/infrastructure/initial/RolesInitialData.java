@@ -18,13 +18,6 @@ public class RolesInitialData {
 	private final RoleService roleService;
 	private final EntityManager entityManager;
 
-	private Role createRole(final String name) {
-		val role = new Role(name);
-		Role saved = roleService.save(role);
-		log.debug("Role created: {}", name);
-		return saved;
-	}
-
 	public RolesResult createRoles() {
 		log.info("Creating default roles");
 		val user = createRole("ROLE_USER");
@@ -34,6 +27,13 @@ public class RolesInitialData {
 //		entityManager.flush();
 
 		return RolesResult.builder().user(user).admin(admin).guest(guest).build();
+	}
+
+	private Role createRole(final String name) {
+		val role = new Role(name);
+		Role saved = roleService.save(role);
+		log.debug("Role created: {}", name);
+		return saved;
 	}
 
 }

@@ -1,14 +1,13 @@
 package br.com.rafaelbiasi.blog.core.service.impl;
 
 import br.com.rafaelbiasi.blog.core.model.Comment;
-import br.com.rafaelbiasi.blog.core.vo.SimplePage;
-import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
 import br.com.rafaelbiasi.blog.core.repository.CommentRepository;
 import br.com.rafaelbiasi.blog.core.service.CommentService;
 import br.com.rafaelbiasi.blog.core.service.PostService;
 import br.com.rafaelbiasi.blog.core.service.UserService;
+import br.com.rafaelbiasi.blog.core.vo.SimplePage;
+import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
 import br.com.rafaelbiasi.blog.infrastructure.util.SqidsUtil;
-import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.Optional;
 

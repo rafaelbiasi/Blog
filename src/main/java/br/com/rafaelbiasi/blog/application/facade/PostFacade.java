@@ -1,9 +1,9 @@
 package br.com.rafaelbiasi.blog.application.facade;
 
 import br.com.rafaelbiasi.blog.application.data.PostData;
+import br.com.rafaelbiasi.blog.core.vo.SimpleFile;
 import br.com.rafaelbiasi.blog.core.vo.SimplePage;
 import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
-import br.com.rafaelbiasi.blog.core.vo.SimpleFile;
 
 import java.util.List;
 import java.util.Optional;
