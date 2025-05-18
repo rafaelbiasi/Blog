@@ -16,6 +16,7 @@ public interface CommentEntityMapper {
 
 	CommentEntity toEntity(Comment comment);
 
+	@Mapping(target = "post", qualifiedByName = "PostWithoutComments")
 	Comment toModel(CommentEntity commentEntity);
 
 	@Named("CommentWithoutPost")

@@ -14,6 +14,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -76,6 +77,7 @@ public class PostFacadeImpl implements PostFacade {
 	}
 
 	@Override
+	@PreAuthorize("@securityHelper.canDeletePost(#code, authentication)")
 	public boolean delete(final String code) {
 		requireNonNull(code, "The Code has a null value.");
 		val post = postService.findById(SqidsUtil.decodeId(code));

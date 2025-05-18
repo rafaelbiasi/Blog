@@ -30,8 +30,6 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	@PreAuthorize("hasRole('ROLE_ADMIN') or #post.author.username == authentication.principal.username")
-	//move PreAuthorize
 	public void delete(final Post post) {
 		postRepository.delete(post);
 	}

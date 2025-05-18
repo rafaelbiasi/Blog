@@ -12,6 +12,7 @@ import br.com.rafaelbiasi.blog.infrastructure.util.SqidsUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import java.security.Principal;
@@ -45,6 +46,7 @@ public class CommentFacadeImpl implements CommentFacade {
 	}
 
 	@Override
+	@PreAuthorize("@securityHelper.canDeleteComment(#code, authentication)")
 	public boolean delete(final String code) {
 		requireNonNull(code, "The Code has a null value.");
 		val post = commentService.findById(SqidsUtil.decodeId(code));
