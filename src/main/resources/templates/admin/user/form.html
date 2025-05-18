@@ -44,9 +44,9 @@
             <div th:each="role : ${roles}">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox"
+                           th:id="'roleCheckbox_' + ${role.code}"
                            th:field="*{rolesStr}"
-                           th:value="${role.code}"
-                           th:attr="id='roleCheckbox_' + ${role.code}">
+                           th:value="${role.code}">
                     <label class="form-check-label" th:for="'roleCheckbox_' + ${role.code}"
                            th:text="${role.name}">
                         ADMIN_ROLE
