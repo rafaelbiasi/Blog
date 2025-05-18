@@ -13,12 +13,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 import java.util.Optional;
 
 import static br.com.rafaelbiasi.blog.infrastructure.exception.ResourceNotFoundExceptionFactory.commentNotFound;
 import static br.com.rafaelbiasi.blog.infrastructure.exception.ResourceNotFoundExceptionFactory.throwCommentNotFound;
-import static br.com.rafaelbiasi.blog.infrastructure.util.ControllerUtil.expand;
 
 @Slf4j
 @Controller
@@ -126,6 +124,6 @@ public class AdminCommentController {
 				"Save the comment. Parameters [{}={}]",
 				"Code", comment.getCode()
 		);
-        return commentFacade.save(comment);
+		return commentFacade.save(comment);
 	}
 }

@@ -18,12 +18,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.Map;
 import java.util.Optional;
 
 import static br.com.rafaelbiasi.blog.infrastructure.exception.ResourceNotFoundExceptionFactory.postNotFound;
 import static br.com.rafaelbiasi.blog.infrastructure.exception.ResourceNotFoundExceptionFactory.throwPostNotFound;
-import static br.com.rafaelbiasi.blog.infrastructure.util.ControllerUtil.expand;
 
 @Slf4j
 @Controller

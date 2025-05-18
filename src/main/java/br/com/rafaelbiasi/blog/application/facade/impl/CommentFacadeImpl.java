@@ -54,7 +54,7 @@ public class CommentFacadeImpl implements CommentFacade {
 				.map(SqidsUtil::decodeId)
 				.flatMap(commentService::findById)
 				.map(comment -> update(commentData, comment))
-				.orElseGet(() ->  create(commentData));
+				.orElseGet(() -> create(commentData));
 	}
 
 	@Override
