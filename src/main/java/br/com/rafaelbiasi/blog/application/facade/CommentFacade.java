@@ -8,11 +8,13 @@ import java.security.Principal;
 import java.util.Optional;
 
 public interface CommentFacade {
-	void save(
+	CommentData save(
 			final CommentData comment,
 			final String postCode,
 			final Principal principal
 	);
+
+	CommentData save(CommentData comment);
 
 	boolean delete(final String code);
 

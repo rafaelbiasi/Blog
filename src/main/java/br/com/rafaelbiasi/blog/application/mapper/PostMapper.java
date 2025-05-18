@@ -5,6 +5,7 @@ import br.com.rafaelbiasi.blog.core.model.Post;
 import org.mapstruct.*;
 
 @Mapper(
+		nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
 		componentModel = MappingConstants.ComponentModel.SPRING,
 		injectionStrategy = InjectionStrategy.SETTER,
 		uses = {

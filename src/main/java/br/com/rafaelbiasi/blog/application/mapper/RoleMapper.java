@@ -2,15 +2,13 @@ package br.com.rafaelbiasi.blog.application.mapper;
 
 import br.com.rafaelbiasi.blog.application.data.RoleData;
 import br.com.rafaelbiasi.blog.core.model.Role;
-import org.mapstruct.InjectionStrategy;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
+import org.mapstruct.*;
 
 @Mapper(
-		uses = {SqidsConverterMapper.class},
+		nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
 		componentModel = MappingConstants.ComponentModel.SPRING,
-		injectionStrategy = InjectionStrategy.SETTER
+		injectionStrategy = InjectionStrategy.SETTER,
+		uses = {SqidsConverterMapper.class}
 )
 public interface RoleMapper {
 

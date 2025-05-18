@@ -2,12 +2,10 @@ package br.com.rafaelbiasi.blog.application.mapper;
 
 import br.com.rafaelbiasi.blog.application.data.UserData;
 import br.com.rafaelbiasi.blog.core.model.User;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
 @Mapper(
+		nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
 		componentModel = MappingConstants.ComponentModel.SPRING,
 		uses = {
 				SqidsConverterMapper.class,

@@ -26,6 +26,7 @@
             </td>
             <td th:text="${#temporals.format(comment.creation, 'dd/MM/yyyy HH:mm')}">01/01/2024 12:00</td>
             <td>
+                <a class="btn btn-primary btn-sm" th:href="@{|/admin/comment/edit/${comment.code}/|}">Editar</a>
                 <form method="post" style="display:inline;" th:action="@{|/admin/comment/delete/${comment.code}/|}">
                     <button class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja deletar este comentário?');"
                             type="submit">

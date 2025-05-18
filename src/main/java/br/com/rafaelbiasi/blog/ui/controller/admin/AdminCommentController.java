@@ -104,8 +104,8 @@ public class AdminCommentController {
 			model.addAttribute("comment", comment);
 			return FORM_VIEW;
 		}
-		CommentData commentDataSaved = save(comment);
-		return expand(REDIRECT_ADMIN_COMMENT_EDIT, Map.of("code", commentDataSaved.getCode()));
+		save(comment);
+		return REDIRECT_ADMIN_COMMENT_LIST;
 	}
 
 	@PostMapping("/delete/{code}/")
@@ -126,7 +126,6 @@ public class AdminCommentController {
 				"Save the comment. Parameters [{}={}]",
 				"Code", comment.getCode()
 		);
-//        return commentFacade.save(comment);
-		return CommentData.builder().build();
+        return commentFacade.save(comment);
 	}
 }

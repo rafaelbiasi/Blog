@@ -1,12 +1,10 @@
 package br.com.rafaelbiasi.blog.application.mapper;
 
 import br.com.rafaelbiasi.blog.infrastructure.util.SqidsUtil;
-import org.mapstruct.InjectionStrategy;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 
 @Mapper(
+		nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
 		componentModel = MappingConstants.ComponentModel.SPRING,
 		injectionStrategy = InjectionStrategy.SETTER
 )

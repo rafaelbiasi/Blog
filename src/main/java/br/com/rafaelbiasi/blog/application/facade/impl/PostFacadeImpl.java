@@ -57,7 +57,7 @@ public class PostFacadeImpl implements PostFacade {
 				.map(SqidsUtil::decodeId)
 				.flatMap(postService::findById)
 				.map(post -> update(postData, post))
-				.orElse(create(postData));
+				.orElseGet(() -> create(postData));
 	}
 
 	@Override

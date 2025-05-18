@@ -112,8 +112,8 @@ public class AdminUserController {
 			model.addAttribute("user", user);
 			return FORM_VIEW;
 		}
-		UserData userDataSaved = save(user);
-		return expand(REDIRECT_ADMIN_USER_EDIT, Map.of("code", userDataSaved.getCode()));
+		save(user);
+		return REDIRECT_ADMIN_USER_LIST;
 	}
 
 	@PostMapping("/delete/{code}/")

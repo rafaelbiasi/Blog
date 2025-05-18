@@ -5,6 +5,7 @@ import br.com.rafaelbiasi.blog.core.model.Comment;
 import org.mapstruct.*;
 
 @Mapper(
+		nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
 		componentModel = MappingConstants.ComponentModel.SPRING,
 		injectionStrategy = InjectionStrategy.SETTER,
 		uses = {
@@ -27,5 +28,10 @@ public interface CommentMapper {
 	@Mapping(target = "modified", ignore = true)
 	@Mapping(source = "code", target = "id", qualifiedByName = "sqidsCodeToId")
 	Comment toModel(CommentData commentData);
+
+	@Mapping(target = "creation", ignore = true)
+	@Mapping(target = "modified", ignore = true)
+	@Mapping(source = "code", target = "id", qualifiedByName = "sqidsCodeToId")
+	void updateModelFromData(CommentData postData, @MappingTarget Comment post);
 
 }

@@ -15,14 +15,6 @@
             <div class="invalid-feedback" th:errors="*{text}" th:if="${#fields.hasErrors('text')}">Erro no Comentário
             </div>
         </div>
-        <div class="mb-3">
-            <label class="form-label" for="post">Postagem</label>
-            <select class="form-control" id="post" th:field="*{post.code}">
-                code                </option>
-            </select>
-            <div class="invalid-feedback" th:errors="*{post}" th:if="${#fields.hasErrors('post')}">Erro na Postagem
-            </div>
-        </div>
         <button class="btn btn-primary" th:text="${comment.code} != null ? 'Atualizar' : 'Salvar'" type="submit">
             Salvar
         </button>

@@ -115,7 +115,7 @@ public class AdminPostController {
 		PostData postDataSaved = post.getCode() == null
 				? create(post, simplefile, principal)
 				: save(post, simplefile);
-		return expand(REDIRECT_ADMIN_POST_EDIT, Map.of("code", postDataSaved.getCode()));
+		return REDIRECT_ADMIN_POST_LIST;
 	}
 
 	@PostMapping("/delete/{code}/")

@@ -5,6 +5,7 @@ import br.com.rafaelbiasi.blog.application.data.PostData;
 import br.com.rafaelbiasi.blog.application.data.UserData;
 import br.com.rafaelbiasi.blog.application.facade.CommentFacade;
 import br.com.rafaelbiasi.blog.application.mapper.CommentMapper;
+import br.com.rafaelbiasi.blog.core.model.Comment;
 import br.com.rafaelbiasi.blog.core.service.CommentService;
 import br.com.rafaelbiasi.blog.core.vo.SimplePage;
 import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
@@ -19,6 +20,7 @@ import java.security.Principal;
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.Optional.ofNullable;
 
 @Component
 @Transactional
@@ -29,29 +31,39 @@ public class CommentFacadeImpl implements CommentFacade {
 	private final CommentMapper commentMapper;
 
 	@Override
-	public void save(
-			final CommentData comment,
+	public CommentData save(
+			final CommentData commentData,
 			final String postCode,
 			final Principal principal
 	) {
-		requireNonNull(comment, "The Comment has a null value.");
+		requireNonNull(commentData, "The Comment has a null value.");
 		requireNonNull(postCode, "The Post Code has a null value.");
 		requireNonNull(principal, "The Principal has a null value.");
-		comment.setAuthor(
+		commentData.setAuthor(
 				UserData.builder()
 						.username(principal.getName())
 						.build());
-		comment.setPost(PostData.builder().code(postCode).build());
-		commentService.save(commentMapper.toModel(comment));
+		commentData.setPost(PostData.builder().code(postCode).build());
+		return save(commentData);
+	}
+
+	@Override
+	public CommentData save(final CommentData commentData) {
+		requireNonNull(commentData, "The Comment has a null value.");
+		return ofNullable(commentData.getCode())
+				.map(SqidsUtil::decodeId)
+				.flatMap(commentService::findById)
+				.map(comment -> update(commentData, comment))
+				.orElseGet(() ->  create(commentData));
 	}
 
 	@Override
 	@PreAuthorize("@securityHelper.canDeleteComment(#code, authentication)")
 	public boolean delete(final String code) {
 		requireNonNull(code, "The Code has a null value.");
-		val post = commentService.findById(SqidsUtil.decodeId(code));
-		post.ifPresent(commentService::delete);
-		return post.isPresent();
+		val comment = commentService.findById(SqidsUtil.decodeId(code));
+		comment.ifPresent(commentService::delete);
+		return comment.isPresent();
 	}
 
 	@Override
@@ -66,4 +78,14 @@ public class CommentFacadeImpl implements CommentFacade {
 		return commentService.findById(SqidsUtil.decodeId(code)).map(commentMapper::toData);
 	}
 
+	private CommentData update(final CommentData commentData, final Comment comment) {
+		commentMapper.updateModelFromData(commentData, comment);
+		val updatedComment = commentService.save(comment);
+		return commentMapper.toData(updatedComment);
+	}
+
+	private CommentData create(final CommentData commentData) {
+		val createdComment = commentService.save(commentMapper.toModel(commentData));
+		return commentMapper.toData(createdComment);
+	}
 }
