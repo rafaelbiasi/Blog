@@ -30,6 +30,10 @@ public class SecurityHelper {
 				.orElse(false);
 	}
 
+	public boolean canDeleteUser(String code, Authentication authentication) {
+		return hasAdminRole(authentication);
+	}
+
 	private boolean hasAdminRole(Authentication authentication) {
 		return authentication.getAuthorities().stream()
 				.anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));

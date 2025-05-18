@@ -8,7 +8,6 @@ import br.com.rafaelbiasi.blog.core.service.UserService;
 import br.com.rafaelbiasi.blog.core.vo.RegistrationResponse;
 import br.com.rafaelbiasi.blog.core.vo.SimplePage;
 import br.com.rafaelbiasi.blog.core.vo.SimplePageRequest;
-import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -36,7 +35,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public void delete(final User user) {
 		userRepository.delete(user);
 	}
