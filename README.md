@@ -42,21 +42,6 @@ vai além do que seria estritamente necessário para as suas funcionalidades bá
 2. Execute `gradlew bootRun` para iniciar a aplicação.
 3. Acesse a aplicação em `http://localhost:8080`.
 
-## Estrutura da Aplicação
-
-A aplicação segue uma abordagem modular dividida em vários pacotes:
-
-- `config`: Contém classes de configuração para a aplicação, segurança e configuração de dados iniciais.
-- `controller`: Controladores da Web que lidam com solicitações e respostas HTTP.
-- `data`: Objetos de transferência de dados para transferir dados entre processos.
-- `facade`: Implementações do padrão Facade para abstrair subsistemas complexos.
-- `facade.mapper`: Implementações para transformar entidades em modelos/DTOs e vice-versa.
-- `model`: Entidades JPA representando tabelas do banco de dados.
-- `repository`: Repositórios Spring Data JPA para acesso ao banco de dados.
-- `service`: Camada de serviço contendo lógica de negócios.
-- `transformer`: Classes para transformar entidades em modelos/DTOs e vice-versa.
-- `util`: Classes de utilidade.
-
 ## Observação
 
 Textos e imagens de exemplos gerados por IA.
@@ -68,7 +53,7 @@ Textos e imagens de exemplos gerados por IA.
 - ~~Internacionalização/localização~~
 - ~~Comentários~~
 - ~~Melhor estruturação dos templates~~
-- Painel Administrativo
+- ~~Painel Administrativo~~
 - Melhoria no layout (Novo layout, responsividade, acessibilidade, SEO)
 - Tags
 - Busca
