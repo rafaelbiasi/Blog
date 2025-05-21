@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/register/")
 public class RegisterController {
 
-	public static final String REGISTER_VIEW = "user/register";
+	public static final String REGISTER_VIEW = "register";
 
 	private static final String REDIRECT_HOME = "redirect:/";
 

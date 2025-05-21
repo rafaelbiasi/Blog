@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/auth/")
 public class AuthController {
 
-	private static final String AUTH_VIEW = "user/auth";
+	private static final String AUTH_VIEW = "auth";
 
 	@GetMapping("/")
 	public String auth() {

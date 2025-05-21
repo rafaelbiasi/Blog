@@ -18,14 +18,14 @@ public class CustomErrorController implements ErrorController {
 	@RequestMapping("/error/")
 	public String handleError(final HttpServletRequest request) {
 		val statusCode = Integer.parseInt(request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE).toString());
-		return ERROR_VIEW_MAP.getOrDefault(statusCode, "error/generic");
+		return ERROR_VIEW_MAP.getOrDefault(statusCode, "errorGeneric");
 	}
 
 	private static Map<Integer, String> createErrorViewMap() {
 		return Map.of(
-				403, "error/403",
-				404, "error/404",
-				500, "error/500"
+				403, "403",
+				404, "404",
+				500, "500"
 		);
 	}
 }

@@ -28,7 +28,7 @@ public class PostController {
 
 	public static final String REDIRECT_POST = "redirect:/post/{code}/{slugifiedTitle}/";
 
-	private static final String POST_VIEW = "post/post";
+	private static final String POST_VIEW = "post";
 
 	private final PostFacade postFacade;
 
